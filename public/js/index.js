@@ -5,7 +5,7 @@
 
  function Ping ()
   { setTimeout ( function()                                                                         /* Un ping tous les jours */
-     { Send_to_API ( "GET", "/api/ping", null, function ()
+     { Send_to_API ( "GET", "/ping", null, function ()
         { if (WTDWebSocket && WTDWebSocket.readyState != 1)
            { console.log("Ping : websocket status = " + WTDWebSocket.readyState );
              Charger_page_synoptique (Synoptique.syn_id);
@@ -19,7 +19,8 @@
 /* Load_websocket: Appelé pour ouvrir la websocket                                                                            */
 /******************************************************************************************************************************/
  function Load_websocket ()
-  { if (WTDWebSocket && WTDWebSocket.readyState == "OPEN") return;
+  { return;
+if (WTDWebSocket && WTDWebSocket.readyState == "OPEN") return;
     WTDWebSocket = new WebSocket("wss://"+window.location.hostname+":"+window.location.port+"/api/live-motifs", "live-motifs");
     WTDWebSocket.onopen = function (event)
      { $('#idAlertConnexionLost').hide();

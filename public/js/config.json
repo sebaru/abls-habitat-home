@@ -1,9 +1,0 @@
-{
-  "api_url": "https://dev-api.abls-habitat.fr",
-  "realm": "Abls-Habitat",
-  "auth-server-url": "https://idp.abls-habitat.fr/",
-  "ssl-required": "external",
-  "clientId": "dev-abls-habitat-home",
-  "public-client": true,
-  "confidential-port": 0
-}

@@ -154,7 +154,12 @@
                           background-color: #48BBC0;
                         }
       </style>
-      <script> var $ABLS_API = "<?php echo getenv("ABLS_API"); ?>"; </script>
+      <script>
+        var $ABLS_API      = "<?php echo getenv("ABLS_API"); ?>";
+        var $IDP_REALM     = "<?php echo getenv("IDP_REALM"); ?>";
+        var $IDP_URL       = "<?php echo getenv("IDP_URL"); ?>";
+        var $IDP_CLIENT_ID = "<?php echo getenv("IDP_CLIENT_ID"); ?>";
+      </script>
     </head>
 
     <body class="bg-light">
@@ -240,7 +245,6 @@
       <img onclick="Charger_page_synoptique('1')" src="https://static.abls-habitat.fr/img/syn_maison.png" alt="Accueil"
            class="wtd-menu" data-toggle='tooltip' data-placement='bottom' title="Aller à l'accueil">
     </a>
-    <a class="nav-item" href="#" onclick="Common_test('')">TEST</a>
   </ul>
   <ul id="idNavSynoptique" class="navbar-nav d-inline mr-auto"></ul>
 

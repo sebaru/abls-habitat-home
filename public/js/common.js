@@ -1,17 +1,13 @@
-
-/**document.addEventListener('DOMContentLoaded', Load_common, false);*/
-document.addEventListener('DOMContentLoaded', init, false);
+ document.addEventListener('DOMContentLoaded', init, false);
 
  var Charts = new Array();
- var Token = null;
- let Config = null;
+ var Token       = null;
+ var TokenParsed = null;
 
 /**************************************************** Gère l'ID token *********************************************************/
- async function init()
-  { Config = await fetch('js/config.json').then( (response) => { return(response.json()); } );
-    console.debug(Config);
-
-    let keycloak = new Keycloak(Config);
+ function init()
+  { let keycloak = new Keycloak( { "realm": $IDP_REALM, "auth-server-url": $IDP_URL, "clientId": $IDP_CLIENT_ID,
+                                   "ssl-required": "external", "public-client": true, "confidential-port": 0 } );
 
     keycloak.init( { onLoad: "login-required" } )
             .then((auth) =>
@@ -27,6 +23,7 @@ document.addEventListener('DOMContentLoaded', init, false);
                                            TokenParsed = keycloak.tokenParsed;
                                            Token       = keycloak.token;
                                            console.debug (TokenParsed); console.debug (Token);
+                                           Load_common();
                                          }
     keycloak.onAuthLogout   = function() { console.log('logout'); }
     keycloak.onAuthError    = function() { console.log('onAuthError'); }
@@ -36,7 +33,10 @@ document.addEventListener('DOMContentLoaded', init, false);
     setInterval(  () =>
      { keycloak.updateToken(30)
        .then((refreshed) =>
-        { if (refreshed) { console.log('Token refreshed' + refreshed); }
+        { if (refreshed) { console.log('Token refreshed' + refreshed);
+                           TokenParsed = keycloak.tokenParsed;
+                           Token       = keycloak.token;
+                         }
           else
            { console.log ('Token not refreshed, valid for '
                + Math.round(keycloak.tokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000) + ' seconds');
@@ -44,10 +44,6 @@ document.addEventListener('DOMContentLoaded', init, false);
         })
         .catch(() => { console.log('Failed to refresh token'); });
      }, 60000);
-  }
- function Common_test()
-  { Send_to_API ( "POST", "/ping", null, function () { Show_toast_ok("Ping OK"); },
-                                         function () { Show_toast_ko("Ping NOK"); });
   }
 /******************************************************************************************************************************/
  function Show_toast_ok ( message )
@@ -68,8 +64,8 @@ document.addEventListener('DOMContentLoaded', init, false);
     else ContentType = null;
 
     if ( method == "GET" && parametre !== null )
-     { xhr.open(method, Config.api_url+URL+"?"+parametre, true); }
-    else xhr.open(method, Config.api_url+URL, true);
+     { xhr.open(method, $ABLS_API+URL+"?"+parametre, true); }
+    else xhr.open(method, $ABLS_API+URL, true);
 
     if (ContentType != null) { xhr.setRequestHeader('Content-type', ContentType ); }
 
@@ -110,28 +106,32 @@ document.addEventListener('DOMContentLoaded', init, false);
   }
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
  function Load_common ()
-  {
-return;
+  { console.log("debut load_common");
 
-    if (localStorage.getItem("token") === null) { Redirect ("/login" ); return; }
-    Token = JSON.parse(atob(localStorage.getItem("token").split(".")[1]));
+    Send_to_API ( "POST", "/user/profil", null, function( Response )
+     { console.debug(Response);
+       if (localStorage.getItem("domain_uuid") === null)
+        { if (!Response.default_domain_uuid && window.location.pathname !== "/domains") { Redirect("/domains"); return; }
+          if (Response.default_domain_uuid !== null)
+           { localStorage.setItem("domain_uuid", Response.default_domain_uuid );/* Positionne les parametres domain par défaut */
+             localStorage.setItem("domain_name", Response.default_domain_name );
+           }
+        }
+       localStorage.setItem("access_level", parseInt(Response.access_level) );
 
-    if (Token.iat + Token.exp < Date.now()/1000 )
-     { console.log ("token expired, redirecting to /login");
-       localStorage.removeItem("token");
-       Redirect("/login");
-       return;
-     }
+       if (typeof Load_page === 'function') Load_page();
+     }, function () { Show_toast_ko ("Unable to request profil."); } );
 
-    /* add refresh token */
 
-    if (Token.username !== null ) $("#idUsername").text(Token.username);
-                             else $("#idUsername").text(Token.email);
+         if (TokenParsed.name !== null )               $("#idUsername").text(TokenParsed.name);
+    else if (TokenParsed.preferred_username !== null ) $("#idUsername").text(TokenParsed.preferred_username);
+    else if (TokenParsed.given_name !== null )         $("#idUsername").text(TokenParsed.given_name);
+    else if (TokenParsed.email !== null )              $("#idUsername").text(TokenParsed.email);
+    else $("#idUsername").text("Unknown");
 
-    $("#idNavDomainName").text( localStorage.getItem("domain_name") );
-
+    if (localStorage.getItem("domain_name")) $("#idNavDomainName").text( localStorage.getItem("domain_name") );
+                                        else $("#idNavDomainName").text( "Select your domain" );
     $("body").hide().removeClass("d-none").fadeIn();
-    if (typeof Load_page === 'function') Load_page();
   }
 /********************************************* Chargement du synoptique 1 au démarrage ****************************************/
  function Logout ()
@@ -256,8 +256,8 @@ return;
  function Select_Access_level ( id, fonction, selected )
   { retour = "<select id='"+id+"' class='custom-select'"+
              "onchange="+fonction+">";
-    for ( i=0; i<=localStorage.getItem("access_level"); i++ )
-     { retour += "<option value='"+i+"' "+(selected==i ? "selected" : "")+">"+i+"</option>"; }
+    for ( i=localStorage.getItem("access_level")-1; i>=0; i-- )
+     { retour += "<option value='"+i+"' "+(selected==i ? "selected" : "")+">"+i+" - "+Access_level_description[i].name+"</option>"; }
     retour +="</select>";
     return(retour);
   }

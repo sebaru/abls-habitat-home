@@ -1,0 +1,23 @@
+<VirtualHost *:443>
+  ServerName my-abls-home.mydomain
+
+  SSLEngine on
+  SSLCertificateFile /etc/letsencrypt/live/my-abls-console.mydomain/cert.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/my-abls-console.mydomain/privkey.pem
+  SSLCertificateChainFile /etc/letsencrypt/live/my-abls-console.mydomain/chain.pem
+  SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+  SSLCompression      off
+  SSLSessionTickets   off
+  SSLHonorCipherOrder on
+  SSLCipherSuite      ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
+
+  CustomLog "logs/home_access.log" "%v %h %l %u %t \"%r\" %>s %b"
+
+DocumentRoot /var/www/html/abls-console/public
+
+        <Directory "/var/www/html/abls-console/public">
+            AllowOverride All
+            Require all granted
+        </Directory>
+
+</VirtualHost>
