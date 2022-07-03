@@ -18,7 +18,7 @@
                background-attachment: fixed;
                height: 100%;
                background-color: rgba(30,28,56,1.0);
-               padding-top: 90px;
+               /*padding-top: 90px;*/
                overflow-y: scroll;
              }
 
@@ -139,6 +139,8 @@
              }
          }
 
+        .wtd-img-card { object-fit: contain; height: 196px; max-width: 196px; padding: 10px; }
+
         input:focus { outline: 0 0 0 0  !important;
                       box-shadow: 0 0 0 0 !important;
                     }
@@ -162,7 +164,7 @@
       </script>
     </head>
 
-    <body class="bg-light">
+    <body class="bg-dark">
 
 <div class="position-fixed" style="top: 3rem; left: 50%; z-index:9999">
   <div id="idToastStatusOK" data-delay="3000" class="toast hide bg-primary" role="status">
@@ -235,14 +237,16 @@
 </div>
 
 <header>
-	<nav class="navbar navbar-dark navbar-expand-md fixed-top shadow"> <!-- fixed-top -->
+
+
+	<nav class="navbar navbar-dark navbar-expand-md sticky-top shadow mb-2"> <!-- fixed-top -->
 
   <!--<a class="nav-item"><img id="idMasterVignetteActivite" class="wtd-menu mr-1" src=""></a>
   <a class="nav-item"><img id="idMasterVignetteSecuBien" class="wtd-menu mr-1" src=""></a>
   <a class="nav-item"><img id="idMasterVignetteSecuPers" class="wtd-menu mr-1" src=""></a>-->
   <ul class="navbar-nav">
-    <a class="nav-item" href="#" onclick="Charger_page_synoptique('1')">
-      <img onclick="Charger_page_synoptique('1')" src="https://static.abls-habitat.fr/img/syn_maison.png" alt="Accueil"
+    <a class="nav-item" href="#" onclick="Charger_page_synoptique(1)">
+      <img src="https://static.abls-habitat.fr/img/syn_maison.png" alt="Accueil"
            class="wtd-menu" data-toggle='tooltip' data-placement='bottom' title="Aller à l'accueil">
     </a>
   </ul>
@@ -254,13 +258,14 @@
 
   <div class="collapse navbar-collapse" id="navbar-toggled">
     <ul class="navbar-nav ml-auto">
-      <a class="nav-item rounded mr-1" href="/tech/dashboard"><img src="https://static.abls-habitat.fr/img/menu_parametres.png" alt="Parametres" class="wtd-menu"></a>
+      <a class="nav-item rounded mr-1" href="https://console.abls-habitat.fr"><img src="https://static.abls-habitat.fr/img/menu_parametres.png" alt="Console" class="wtd-menu"></a>
       <li class="nav-item dropdown">
         <a class="nav-link rounded align-items-middle dropdown-toggle" href="#" id="navbarUSER" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-user text-white"></i> <span id="idUsername">-</span>
         </a>
 
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarUSER">
+          <a class="dropdown-item" href="/domains"> <i class="fas fa-fort-awesome text-primary"></i> Mes domaines</a>
           <a class="dropdown-item" href="/home/user" id="idHrefUsername" href="#"><i class="fas fa-user text-info"></i> Mon Profil</a>
           <!--<a class="dropdown-item" href="/home/users"><i class="fas fa-users-cog text-info"></i> <span>Utilisateurs</span></a>-->
           <a class="dropdown-item" type="button" onclick="Charger_page_user_sessions()"><i class="fas fa-list text-info"></i> <span>Mes appareils</span></a>
@@ -273,3 +278,4 @@
 
 </nav>
 </header>
+<?php if ( getenv("CI_ENVIRONMENT") == "development" ) { echo "<div class='alert alert-warning'>Instance de DEV</div>"; } ?>

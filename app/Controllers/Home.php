@@ -16,4 +16,5 @@ class Home extends BaseController
     /*return redirect()->to(base_url("/home"));*/
 
  public function index()        { $this->send_page ("index"); }
+ public function domains()      { $this->send_page ("domains"); }
 }
