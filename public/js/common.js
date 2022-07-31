@@ -243,19 +243,19 @@
   { return( Badge ( Access_level_description[level].color, Access_level_description[level].name, level.toString() ) ); }
 /********************************************* Renvoi un Select d'access Level ************************************************/
  function Select ( id, fonction, array, selected )
-  { retour = "<select id='"+id+"' class='custom-select'"+
-             "onchange="+fonction+">";
+  { retour = "<select id='"+id+"' class='custom-select' ";
+    if (fonction) retour += "onchange="+fonction;
+    retour+= ">";
     valeur = array.map ( function(item) { return(item.valeur); } );
     texte  = array.map ( function(item) { return(item.texte); } );
-    for ( i=0; i<valeur.length; i++ )
+    for ( i=0; i<array.length; i++ )
      { retour += "<option value='"+valeur[i]+"' "+(selected==valeur[i] ? "selected" : "")+">"+texte[i]+"</option>"; }
     retour +="</select>";
     return(retour);
   }
 /********************************************* Renvoi un Select d'access Level ************************************************/
  function Select_Access_level ( id, fonction, selected )
-  { retour = "<select id='"+id+"' class='custom-select'"+
-             "onchange="+fonction+">";
+  { retour = "<select id='"+id+"' class='custom-select'"+"onchange="+fonction+">";
     for ( i=localStorage.getItem("access_level")-1; i>=0; i-- )
      { retour += "<option value='"+i+"' "+(selected==i ? "selected" : "")+">"+i+" - "+Access_level_description[i].name+"</option>"; }
     retour +="</select>";
@@ -376,9 +376,7 @@
 
 /********************************* Chargement d'une courbe dans u synoptique 1 au démrrage ************************************/
  function Charger_plusieurs_courbes ( idChart, tableau_map, period )
-  { if (localStorage.getItem("instance_is_master")!="true") return;
-
-    var chartElement = document.getElementById(idChart);
+  { var chartElement = document.getElementById(idChart);
     if (!chartElement) { console.log("Charger_plusieurs_courbes: Erreur chargement chartElement " + json_request ); return; }
 
     if (period===undefined) period="HOUR";
@@ -388,7 +386,7 @@
        period : period
      });
 
-    Send_to_API ( "PUT", "/api/archive/get", json_request, function(Response)
+    Send_to_API ( "POST", "/archive/get", json_request, function(Response)
      { var dates;
        var ctx = chartElement.getContext('2d');
        if (!ctx) { console.log("Charger_plusieurs_courbes: Erreur chargement context " + json_request ); return; }

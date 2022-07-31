@@ -20,7 +20,7 @@
  function Load_Motif_to_canvas ( mode_atelier, Motif, init_mode, init_color, init_cligno )
   {
     var request = new XMLHttpRequest();                         /* Envoie une requete de récupération du SVG associé au motif */
-    request.open("GET", "/img/"+Motif.forme+".svg", true);
+    request.open("GET", "https://static.abls-habitat.fr/img/"+Motif.forme+".svg", true);
     request.onreadystatechange = function()
      { if (request.readyState == 4 && (request.status == 200 || request.status == 0))
        { var svg = request.responseXML.documentElement;
