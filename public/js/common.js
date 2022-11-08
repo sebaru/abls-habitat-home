@@ -110,14 +110,16 @@
 
     Send_to_API ( "POST", "/user/profil", null, function( Response )
      { console.debug(Response);
-       if (localStorage.getItem("domain_uuid") === null)
-        { if (!Response.default_domain_uuid && window.location.pathname !== "/domains") { Redirect("/domains"); return; }
-          if (Response.default_domain_uuid !== null)
-           { localStorage.setItem("domain_uuid", Response.default_domain_uuid );/* Positionne les parametres domain par défaut */
-             localStorage.setItem("domain_name", Response.default_domain_name );
-           }
+       if (Response.default_domain_uuid == null)
+        { localStorage.clear(); }
+       else
+        { localStorage.setItem("domain_uuid", Response.default_domain_uuid );/* Positionne les parametres domain par défaut */
+          localStorage.setItem("domain_name", Response.default_domain_name );
+          localStorage.setItem("access_level", parseInt(Response.access_level) );
+          $("#idNavDomainName").text( localStorage.getItem("domain_name") );
         }
-       localStorage.setItem("access_level", parseInt(Response.access_level) );
+
+       if (Response.default_domain_uuid == null && window.location.pathname !== "/domains") { Redirect("/domains"); return; }
 
        if (typeof Load_page === 'function') Load_page();
      }, function () { Show_toast_ko ("Unable to request profil."); } );
@@ -129,19 +131,13 @@
     else if (TokenParsed.email !== null )              $("#idUsername").text(TokenParsed.email);
     else $("#idUsername").text("Unknown");
 
-    if (localStorage.getItem("domain_name")) $("#idNavDomainName").text( localStorage.getItem("domain_name") );
-                                        else $("#idNavDomainName").text( "Select your domain" );
+
+
     $("body").hide().removeClass("d-none").fadeIn();
   }
 /********************************************* Chargement du synoptique 1 au démarrage ****************************************/
  function Logout ()
-  { Send_to_API ( "POST", "/user/disconnect", null, function()
-     { localStorage.removeItem("token");
-       Show_toast_ok ("Vous avez été déconnecté.");
-       setTimeout ( function () { Redirect("/login") }, 2000 );
-     }, function()
-     { Show_toast_ko ("Déconnexion impossible."); });
-  }
+  { Redirect ( $IDP_URL+"/realms/"+$IDP_REALM+"/protocol/openid-connect/logout" ); }
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
  function Show_Error ( message )
   { if (message == "Not Connected") { Logout(); }
@@ -327,18 +323,16 @@
   }
 /********************************* Chargement d'une courbe dans u synoptique 1 au démrrage ************************************/
  function Charger_une_courbe ( idChart, tech_id, acronyme, period )
-  { if (localStorage.getItem("instance_is_master")!="true") return;
-
-    var chartElement = document.getElementById(idChart);
+  { var chartElement = document.getElementById(idChart);
     if (!chartElement) { console.log("Charger_une_courbe: Erreur chargement chartElement " + json_request ); return; }
 
     if (period===undefined) period="HOUR";
-    var json_request = JSON.stringify(
+    var json_request =
      { courbes: [ { tech_id : tech_id, acronyme : acronyme, } ],
        period   : period
-     });
+     };
 
-    Send_to_API ( "PUT", "/api/archive/get", json_request, function(json)
+    Send_to_API ( "POST", "/archive/get", json_request, function(json)
      { var dates;
        if (period=="HOUR") dates = json.valeurs.map( function(item) { return item.date.split(' ')[1]; } );
                       else dates = json.valeurs.map( function(item) { return item.date; } );

@@ -33,6 +33,7 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 
 $routes->get('/domains',      'Home::domains');
+$routes->get('/messages',     'Home::messages');
 $routes->get('(:any)',        'Home::default');
 
 /*
