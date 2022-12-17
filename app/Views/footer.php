@@ -1,6 +1,6 @@
 
 <!-- Footer -->
-<footer class="page-footer bg-info mt-2 pt-0">
+<footer class="page-footer bg-info mt-2 pt-0 fixed-bottom">
 
   <!-- Copyright -->
   <div class="footer-copyright text-center py-2"><span>© </span>

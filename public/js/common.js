@@ -58,7 +58,6 @@
     if (method=="POST" || method=="PUT" || method=="DELETE")
      { ContentType = 'application/json';
        if (parametre === null) parametre = new Object();
-       if (Token) parametre.domain_uuid = localStorage.getItem("domain_uuid");
      }
     else if (method=="POSTFILE") { ContentType = 'application/octet-stream'; method = "POST"; }
     else ContentType = null;
@@ -68,8 +67,9 @@
     else xhr.open(method, $ABLS_API+URL, true);
 
     if (ContentType != null) { xhr.setRequestHeader('Content-type', ContentType ); }
-
     xhr.timeout = 60000; // durée en millisecondes
+    xhr.setRequestHeader("X-ABLS-DOMAIN", localStorage.getItem("domain_uuid") );
+    xhr.setRequestHeader("Authorization", "Bearer " + Token );
 
     xhr.onreadystatechange = function()
      { if ( xhr.readyState != 4 ) return;
@@ -86,7 +86,6 @@
             }
      }
     xhr.ontimeout = function() { console.log("XHR timeout for "+URL); }
-    xhr.setRequestHeader("Authorization", "Bearer " + Token );
     xhr.send( JSON.stringify(parametre) );
   }
 /************************************ Controle de saisie avant envoi **********************************************************/
@@ -108,7 +107,7 @@
  function Load_common ()
   { console.log("debut load_common");
 
-    Send_to_API ( "POST", "/user/profil", null, function( Response )
+    Send_to_API ( "GET", "/user/profil", null, function( Response )
      { console.debug(Response);
        if (Response.default_domain_uuid == null)
         { localStorage.clear(); }
@@ -130,8 +129,6 @@
     else if (TokenParsed.given_name !== null )         $("#idUsername").text(TokenParsed.given_name);
     else if (TokenParsed.email !== null )              $("#idUsername").text(TokenParsed.email);
     else $("#idUsername").text("Unknown");
-
-
 
     $("body").hide().removeClass("d-none").fadeIn();
   }
@@ -216,7 +213,7 @@
 /*****************************************Peuple un selecten fonction d'un retour API *****************************************/
  function Select_from_api ( id, url, json_request, array_out, array_item, to_string, selected )
   { $('#'+id).empty();
-    Send_to_API ( "POST", url, json_request, function(Response)
+    Send_to_API ( "GET", url, json_request, function(Response)
      { $.each ( Response[array_out], function ( i, item )
         { $('#'+id).append("<option value='"+item[array_item]+"'>"+to_string(item)+"</option>"); } );
        if (selected!=null) $('#'+id).val(selected);

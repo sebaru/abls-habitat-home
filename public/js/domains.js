@@ -30,7 +30,7 @@
   { console.log("Demande de changement de domaine : " + element.domain_uuid );
     localStorage.setItem ( "domain_uuid", element.domain_uuid );
     localStorage.setItem ( "domain_name", element.domain_name );
-    element.target_domain_uuid = element.domain_uuid;
+    element.domain_uuid = element.domain_uuid;
     Send_to_API ( 'POST', "/user/set_domain", element, function (Response)
      { Redirect("/");
      }, null );

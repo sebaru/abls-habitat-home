@@ -145,7 +145,7 @@
   { var bodymain = $('#bodymain');
     var fullsvg  = $('#fullsvg');
     var tableaux = $('#tableaux');
-    Send_to_API ( "POST", "/syn/show", { "syn_id": syn_id }, function(Response)
+    Send_to_API ( "GET", "/syn/show", { "syn_id": syn_id }, function(Response)
      { console.log(Response);
        Synoptique = Response;
 
