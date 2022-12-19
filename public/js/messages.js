@@ -1,6 +1,46 @@
-/********************************************* Appelé au chargement de la page ************************************************/
+
+ var is_init = false;
+ var WTDMSGWebSocket;
+
+/******************************************************************************************************************************/
+/* Load_websocket: Appelé pour ouvrir la websocket                                                                            */
+/******************************************************************************************************************************/
+ function Load_message_websocket ()
+  { if (WTDMSGWebSocket && WTDMSGWebSocket.readyState == "OPEN") return;
+    WTDMSGWebSocket = new WebSocket($ABLS_API.replace("http","ws")+"/websocket"+
+                                    "?token="+Token+"&domain_uuid="+localStorage.getItem("domain_uuid") );
+    WTDMSGWebSocket.onopen = function (event)
+     { $('#idAlertConnexionLost').hide();
+       console.log("MSGWebsocket ouverte");
+     }
+    WTDMSGWebSocket.onerror = function (event)
+     { Scroll_to_top();
+       $('#idAlertConnexionLost').show();
+       console.log("MSGWebsocket Error au websocket !");
+       console.debug(event);
+     }
+    WTDMSGWebSocket.onclose = function (event)
+     { Scroll_to_top();
+       $('#idAlertConnexionLost').show();
+       console.log("MSGWebsocket Close au websocket !");
+       console.debug(event);
+     }
+    WTDMSGWebSocket.onmessage = function (event)
+     { var Response = JSON.parse(event.data);                                               /* Pointe sur <synoptique a=1 ..> */
+
+       if (Response.tag == "DLS_HISTO" && Messages_loaded==true)
+        { $('#idTableMessages').DataTable().ajax.reload( null, false ); }
+       else console.log("Websocket Tag: " + Response.tag + " not known");
+     }
+  }
+
+/******************************************************************************************************************************/
+/* Appelé au chargement de la page                                                                                            */
+/******************************************************************************************************************************/
  function Load_page_message ()
-  { $('#idTableMSGS').DataTable(
+  { if (is_init == true) return;
+    is_init = true;
+    $('#idTableMSGS').DataTable(
      { pageLength : 50,
        fixedHeader: true, paging: false, ordering: true, searching: true,
        ajax: { url : $ABLS_API+"/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
@@ -57,5 +97,11 @@
           /*order: [ [0, "desc"] ],*/
           responsive: false,
      });
-
+    Load_message_websocket();
   }
+/******************************************************************************************************************************/
+/* Load_page: Appelé au chargement de la page                                                                                 */
+/******************************************************************************************************************************/
+ function Load_page ()
+  { Load_page_message(); }
+/*----------------------------------------------------------------------------------------------------------------------------*/
