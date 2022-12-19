@@ -27,9 +27,20 @@
      }
     WTDMSGWebSocket.onmessage = function (event)
      { var Response = JSON.parse(event.data);                                               /* Pointe sur <synoptique a=1 ..> */
-
-       if (Response.tag == "DLS_HISTO" && Messages_loaded==true)
-        { $('#idTableMessages').DataTable().ajax.reload( null, false ); }
+       if (!is_init) return;
+       if (Response.tag == "DLS_HISTO")
+        { if ( Response.alive == true )
+           { console.log("Websocket NEW: " + is_init);
+             console.debug(Response);
+             $('#idTableMSGS').DataTable().row.add ( Response ).draw();
+           }
+           else
+           { console.log("Websocket OLD: " + is_init);
+             console.debug(Response);
+             $('#idTableMSGS').DataTable().row("#"+Response.histo_msg_id).remove().draw();
+           }
+          /*else $('#idTableMSGS').DataTable().ajax.reload( null, false );*/
+        }
        else console.log("Websocket Tag: " + Response.tag + " not known");
      }
   }
@@ -50,7 +61,7 @@
                               request.setRequestHeader('X-ABLS-DOMAIN', localStorage.getItem('domain_uuid') );
                             }
              },
-       rowId: "histo_msgs_id",
+       rowId: "histo_msg_id",
        createdRow: function( row, item, dataIndex )
            {      if (item.typologie==0) { classe="text-white"; } /* etat */
              else if (item.typologie==1) { classe="text-warning" } /* alerte */
@@ -94,7 +105,7 @@
                  }
              },
            ],
-          /*order: [ [0, "desc"] ],*/
+          order: [ [1, "desc"] ],
           responsive: false,
      });
     Load_message_websocket();
