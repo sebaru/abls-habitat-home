@@ -267,12 +267,9 @@
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarUSER">
           <a class="dropdown-item" onclick="Redirect('/domains')"> <i class="fas fa-fort-awesome text-primary"></i> Mes domaines</a>
           <a class="dropdown-item" onclick="Redirect('/messages')"> <i class="fas fa-book text-primary"></i> Fil de l'eau</a>
-          <a class="dropdown-item" onclick="Show_page('historique')"> <i class="fas fa-history text-primary"></i> Historique</a>
-          <a class="dropdown-item" onclick="Show_page('synoptique')"> <i class="fas fa-history text-primary"></i> syn</a>
-          <a class="dropdown-item" href="/home/user" id="idHrefUsername" href="#"><i class="fas fa-user text-info"></i> Mon Profil</a>
-          <!--<a class="dropdown-item" href="/home/users"><i class="fas fa-users-cog text-info"></i> <span>Utilisateurs</span></a>-->
-          <a class="dropdown-item" type="button" onclick="Charger_page_user_sessions()"><i class="fas fa-list text-info"></i> <span>Mes appareils</span></a>
+          <a class="dropdown-item" onclick="Redirect('/historique')"> <i class="fas fa-history text-primary"></i> Historique</a>
           <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/home/user" id="idHrefUsername" href="#"><i class="fas fa-user text-info"></i> Mon Profil</a>
           <a class="dropdown-item" href="#" onclick="Logout()"><i class="fas fa-sign-out-alt text-danger"></i> <span>Sortir</span> </a>
         </div>
       </li>
