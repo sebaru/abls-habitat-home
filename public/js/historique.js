@@ -18,7 +18,7 @@
              $(row).addClass( classe );
            },
           columns:
-           [ { "data": null, "title":"-", "className": "align-middle text-center bg-dark",
+           [ { "data": null, "title":"-", "className": "align-middle text-center bg-dark d-none d-sm-table-cell ",
                "render": function (item)
                  {      if (item.typologie==0) { cligno = false; img = "info.svg"; } /* etat */
                    else if (item.typologie==1) { cligno = true;  img = "bouclier_orange.svg"; } /* alerte */
@@ -34,17 +34,17 @@
                  }
              },
              { "data": "date_create", "title":"Apparition", "className": "align-middle text-center d-none d-sm-table-cell bg-dark" },
-             { "data": "syn_page", "title":"Page", "className": "align-middle text-center d-none d-sm-table-cell bg-dark" },
+             { "data": "syn_page", "title":"Page", "className": "align-middle text-center d-none d-md-table-cell bg-dark" },
              { "data": "dls_shortname", "title":"Objet", "className": "align-middle text-center bg-dark" },
              { "data": null, "title":"Message", "className": "align-middle text-center bg-dark",
                "render": function (item)
                  { return( htmlEncode(item.libelle) ); }
              },
-             { "data": null, "title":"Acquit", "className": "align-middle text-center d-none d-sm-table-cell bg-dark",
+             { "data": null, "title":"Acquit", "className": "align-middle text-center d-none d-lg-table-cell bg-dark",
                "render": function (item)
                  { if (item.typologie==0) return("-");                                                      /* Si INFO, pas de ACK */
                    if (item.nom_ack!=null) return(item.nom_ack);
-                   return( Bouton ( "primary", "Acquitter le message", "Msg_acquitter", item.msg_id, "Acquitter" ) );
+                   return( Bouton ( "primary", "Acquitter le message", "Msg_acquitter", item.histo_msg_id, "Acquitter" ) );
                  }
              },
            ],
