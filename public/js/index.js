@@ -20,7 +20,7 @@
 /******************************************************************************************************************************/
  function Load_websocket ()
   { return;
-if (WTDWebSocket && WTDWebSocket.readyState == "OPEN") return;
+    if (WTDWebSocket && WTDWebSocket.readyState == "OPEN") return;
     WTDWebSocket = new WebSocket("wss://"+window.location.hostname+":"+window.location.port+"/api/live-motifs", "live-motifs");
     WTDWebSocket.onopen = function (event)
      { $('#idAlertConnexionLost').hide();
@@ -62,10 +62,12 @@ if (WTDWebSocket && WTDWebSocket.readyState == "OPEN") return;
 /* Load_page: Appelé au chargement de la page                                                                                 */
 /******************************************************************************************************************************/
  function Load_page ()
-  { target = Get_url_parameter ( "syn_id" );
-    console.log("Load_page " + target );
-    if (target == null) target = 1;
-    Charger_page_synoptique ( target );
+  { vars = window.location.pathname.split('/');
+    var syn_page = null;
+    if (vars[1] !== null) syn_page = vars[1];
+    console.log ("Syn: loading " + vars[1] );
+
+    Charger_un_synoptique ( syn_page );
     Load_websocket();
     Ping();
   }

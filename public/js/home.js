@@ -1,5 +1,4 @@
- var Synoptique;                                                     /* Toutes les données du synoptique en cours d'affichage */
- var Messages_loaded;                                                                      /* true si le datatable a été créé */
+ var Synoptique = null;                                              /* Toutes les données du synoptique en cours d'affichage */
 
 /********************************************* Affichage des vignettes ********************************************************/
  function Msg_acquitter ( id )
@@ -141,42 +140,44 @@
      Messages_loaded = true;
   }
 /********************************************* Appelé au chargement de la page ************************************************/
- function Charger_un_synoptique ( syn_id )
-  { var bodymain = $('#bodymain');
-    var fullsvg  = $('#fullsvg');
-    var tableaux = $('#tableaux');
-    Send_to_API ( "GET", "/syn/show", { "syn_id": syn_id }, function(Response)
+ function Charger_un_synoptique ( syn_page )
+  { var idSectionMain = $('#idSectionMain');
+    var fullsvg       = $('#fullsvg');
+    var idSectionTableaux = $('#idSectionTableaux');
+    Send_to_API ( "GET", "/syn/show", (syn_page ? "syn_page=" + syn_page : null), function(Response)
      { console.log(Response);
+       idSectionMain.empty();
        Synoptique = Response;
+       window.history.replaceState( null, "", Response.page );                                  /* Affiche la page dans l'URL */
 
-       $('#idNavSynoptique').empty();
-       $('#idNavSynoptique').prepend( "<a class='nav-link rounded d-none d-sm-inline' href='#'> <span>"+Synoptique.libelle+"</span></a>" );
-       if (Synoptique.syn_id != 1)
-        { $.each ( Response.parent_syns, function (i, syn)
-                    { $('#idNavSynoptique').prepend ( "<a class='nav-item'><img src='https://static.abls-habitat.fr/img/"+syn.image+"' alt='"+syn.libelle+"' "+
-                                                      "data-toggle='tooltip' data-placement='bottom' title='"+syn.libelle+"' "+
-                                                      "onclick='Charger_page_synoptique("+syn.syn_id+")' "+
-                                                      "class='wtd-menu'></a>" );
-                      $('#idNavSynoptique').prepend ( "<span class='navbar-text text-secondary'>></span>" );
-                    }
-                 );
-        }
+       $('#idNavSynoptique')
+        .empty()
+        .prepend( "<a class='nav-link rounded d-none d-sm-inline' href='#'> <span>"+Synoptique.libelle+"</span></a>" );
+       $.each ( Response.parent_syns, function (i, syn)
+                 { $('#idNavSynoptique').prepend ( "<a class='nav-item'><img src='https://static.abls-habitat.fr/img/"+syn.image+"' alt='"+syn.libelle+"' "+
+                                                   "data-toggle='tooltip' data-placement='bottom' title='"+syn.libelle+"' "+
+                                                   "onclick='Charger_un_synoptique("+syn.page+")' "+
+                                                   "class='wtd-menu'></a>" );
+                   $('#idNavSynoptique').prepend ( "<span class='navbar-text text-secondary'>></span>" );
+                 }
+              );
+
 
        $.each ( Synoptique.child_syns, function (i, syn)
-                 { bodymain.append ( Creer_card ( syn ) );
+                 { idSectionMain.append ( Creer_passerelle ( syn ) );
                    if (Synoptique.syn_vars)
                     { Set_syn_vars ( syn.syn_id, Synoptique.syn_vars.filter ( function(ssitem) { return ssitem.syn_id==syn.syn_id } )[0] ); }
                  }
               );
        /*Set_syn_vars ( Synoptique.id, Synoptique.syn_vars.filter ( function(ssitem) { return ssitem.id==Response.id } )[0] );*/
        $.each ( Synoptique.horloges, function (i, horloge)
-                 { bodymain.append ( Creer_horloge ( horloge ) ); }
+                 { idSectionMain.append ( Creer_horloge ( horloge ) ); }
               );
 
        if (Synoptique.mode_affichage == 0) /* Affichage simple */
         { $.each ( Synoptique.visuels, function (i, visuel)
                     { var card = Creer_visuel ( visuel );
-                      bodymain.append ( card );
+                      idSectionMain.append ( card );
                       Changer_etat_visuel ( visuel );
                     }
                  );
@@ -350,50 +351,34 @@
         }
 
        $.each ( Synoptique.cadrans, function (i, cadran)
-                 { bodymain.append( Creer_cadran ( cadran ) );
+                 { idSectionMain.append( Creer_cadran ( cadran ) );
                  }
               );
 
-       if (Synoptique.nbr_tableaux>0)
-        { tableaux.prepend("<hr>");
-          $.each ( Synoptique.tableaux, function (i, tableau)
+       if (Synoptique.nbr_idSectionTableaux>0)
+        { idSectionTableaux.prepend("<hr>");
+          $.each ( Synoptique.idSectionTableaux, function (i, tableau)
            { var id = "idTableau-"+tableau.tableau_id;
-             tableaux.append( $("<div></div>").append("<canvas id='"+id+"'></canvas>").addClass("col wtd-courbe m-1") );
-             maps = Synoptique.tableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
+             idSectionTableaux.append( $("<div></div>").append("<canvas id='"+id+"'></canvas>").addClass("col wtd-courbe m-1") );
+             maps = Synoptique.idSectionTableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
              Charger_plusieurs_courbes ( id, maps, "HOUR" );
              $('#'+id).on("click", function () { Charger_page_tableau(tableau.tableau_id); } );
            });
         }
 
-       Charger_messages ( syn_id );
+       /*Charger_messages ( syn_id );*/
        Slide_down_when_loaded ( "toplevel" );
      }, null );
  }
 
 /********************************************* Appelé au chargement de la page ************************************************/
- function Charger_page_synoptique ( syn_id )
-  {
-    console.log("Charger_page_synoptique " + syn_id);
-    Scroll_to_top();
-    $('#toplevel').slideUp("normal", function ()
-     { $('#toplevel').empty()
-                     .append("<div id='bodymain' class='row row-cols-2 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 row-cols-xl-6 justify-content-center'></div>")
-                     .append("<div class='row justify-content-center'><div id='fullsvg'></div></div>")
-                     .append("<div id='tableaux' class='row mx-1 justify-content-center'></div>")
-                     .append("<hr><table id='idTableMessages' class='table table-dark table-bordered w-100'></table>");
-       Synoptique = null;
-       Messages_loaded=false;
-       Charger_un_synoptique ( syn_id );
-     });
-  }
-/********************************************* Appelé au chargement de la page ************************************************/
- function Creer_card ( Response )
+ function Creer_passerelle ( Response )
   { var card = $('<div></div>').addClass("row bg-transparent mb-3")
                .append( $('<div></div>').addClass("col text-center mb-1")
                         .append( $('<div></div>').addClass("d-inline-block wtd-img-container")
-                                 .append($('<img>').attr("src", (Response.image=="custom" ? "/upload/syn_"+Response.syn_id+".jpg"
-                                                                                           : "https://static.abls-habitat.fr/img/"+Response.image) )
-                                                   .attr("onclick", "Charger_page_synoptique("+Response.syn_id+")")
+                                 .append($('<img>').attr("src", (Response.image=="custom" ? Response.image
+                                                                                          : "https://static.abls-habitat.fr/img/"+Response.image) )
+                                                   .off("click").on("click", () => { Charger_un_synoptique( Response.page ); } )
                                                    .attr("id", "idImgSyn_"+Response.syn_id)
                                                    .addClass("wtd-synoptique") )
                                  .append($('<img>').attr("id", "idVignetteComm_"+Response.syn_id)
