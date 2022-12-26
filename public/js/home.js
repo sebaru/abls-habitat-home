@@ -145,6 +145,7 @@
     var idSectionLightSyn    = $('#idSectionLightSyn');
     var fullsvg       = $('#fullsvg');
     var idSectionTableaux = $('#idSectionTableaux');
+    console.log("------------------------------ Chargement synoptique "+syn_page);
     Send_to_API ( "GET", "/syn/show", (syn_page ? "syn_page=" + syn_page : null), function(Response)
      { console.log(Response);
        idSectionPasserelles.empty();
@@ -155,10 +156,15 @@
         .empty()
         .prepend( "<a class='nav-link rounded d-none d-sm-inline' href='#'> <span>"+Synoptique.libelle+"</span></a>" );
        $.each ( Response.parent_syns, function (i, syn)
-                 { $('#idNavSynoptique').prepend ( "<a class='nav-item'><img src='https://static.abls-habitat.fr/img/"+syn.image+"' alt='"+syn.libelle+"' "+
-                                                   "data-toggle='tooltip' data-placement='bottom' title='"+syn.libelle+"' "+
-                                                   "onclick='Charger_un_synoptique("+syn.page+")' "+
-                                                   "class='wtd-menu'></a>" );
+                 { var bread = $('<a>').addClass('nav-item')
+                                .append($('<img>').attr("src", "https://static.abls-habitat.fr/img/"+syn.image)
+                                                  .attr("alt", syn.libelle)
+                                                  .attr("data-toggle", "tooltip")
+                                                  .attr("data-placement", "bottom")
+                                                  .attr("title", syn.libelle)
+                                                  .off("click").on("click", () => { Charger_un_synoptique( syn.page ); } )
+                                                  .addClass("wtd-menu") );
+                   $('#idNavSynoptique').prepend ( bread );
                    $('#idNavSynoptique').prepend ( "<span class='navbar-text text-secondary'>></span>" );
                  }
               );
