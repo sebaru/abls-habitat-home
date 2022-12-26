@@ -11,7 +11,7 @@
 </section>
 <section id='idSectionHeavySyn' class='row justify-content-center'>
 </section>
-<section id='idSectionTableaux' class='row mx-1 justify-content-center'></div>
+<section id='idSectionTableaux' class='row mx-1 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-3 justify-content-center'>
 </section>
 
 <hr>

@@ -108,6 +108,7 @@
 
 	       .wtd-courbe { background-color: white;
                       width: auto;
+                      max-width: 800px;
                       min-height: 600px;
                       cursor: pointer;
                     }

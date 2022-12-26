@@ -358,7 +358,8 @@
               );
 
        if (Synoptique.nbr_tableaux>0)
-        { idSectionTableaux.prepend("<hr>");
+        { idSectionTableaux.empty();
+          /*idSectionTableaux.prepend("<hr>");*/
           $.each ( Synoptique.tableaux, function (i, tableau)
            { var id = "idTableau-"+tableau.tableau_id;
              idSectionTableaux.append( $("<div></div>").append("<canvas id='"+id+"'></canvas>").addClass("col wtd-courbe m-1") );
