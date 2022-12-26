@@ -5,7 +5,11 @@
      <a href="/">Se reconnecter</a>
    </div>
 
-<section id='idSectionMain' class='row row-cols-2 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 row-cols-xl-6 justify-content-center'>
+<section id='idSectionPasserelles' class='row row-cols-2 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 row-cols-xl-6 justify-content-center'>
+</section>
+<section id='idSectionLightSyn' class='row row-cols-2 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 row-cols-xl-6 justify-content-center'>
+</section>
+<section id='idSectionHeavySyn' class='row justify-content-center'>
 </section>
 <section id='idSectionTableaux' class='row mx-1 justify-content-center'></div>
 </section>

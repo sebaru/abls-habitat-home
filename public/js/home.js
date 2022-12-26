@@ -141,12 +141,13 @@
   }
 /********************************************* Appelé au chargement de la page ************************************************/
  function Charger_un_synoptique ( syn_page )
-  { var idSectionMain = $('#idSectionMain');
+  { var idSectionPasserelles = $('#idSectionPasserelles');
+    var idSectionLightSyn    = $('#idSectionLightSyn');
     var fullsvg       = $('#fullsvg');
     var idSectionTableaux = $('#idSectionTableaux');
     Send_to_API ( "GET", "/syn/show", (syn_page ? "syn_page=" + syn_page : null), function(Response)
      { console.log(Response);
-       idSectionMain.empty();
+       idSectionPasserelles.empty();
        Synoptique = Response;
        window.history.replaceState( null, "", Response.page );                                  /* Affiche la page dans l'URL */
 
@@ -164,25 +165,26 @@
 
 
        $.each ( Synoptique.child_syns, function (i, syn)
-                 { idSectionMain.append ( Creer_passerelle ( syn ) );
+                 { idSectionPasserelles.append ( Creer_passerelle ( syn ) );
                    if (Synoptique.syn_vars)
                     { Set_syn_vars ( syn.syn_id, Synoptique.syn_vars.filter ( function(ssitem) { return ssitem.syn_id==syn.syn_id } )[0] ); }
                  }
               );
        /*Set_syn_vars ( Synoptique.id, Synoptique.syn_vars.filter ( function(ssitem) { return ssitem.id==Response.id } )[0] );*/
        $.each ( Synoptique.horloges, function (i, horloge)
-                 { idSectionMain.append ( Creer_horloge ( horloge ) ); }
+                 { idSectionPasserelles.append ( Creer_horloge ( horloge ) ); }
               );
 
-       if (Synoptique.mode_affichage == 0) /* Affichage simple */
-        { $.each ( Synoptique.visuels, function (i, visuel)
+/*---------------------------------------------------- Affichage léger -------------------------------------------------------*/
+       $.each ( Synoptique.visuels, function (i, visuel)
                     { var card = Creer_visuel ( visuel );
-                      idSectionMain.append ( card );
+                      idSectionLightSyn.append ( card );
                       Changer_etat_visuel ( visuel );
                     }
-                 );
-        }
-       else /* Affichage full */
+              );
+
+/*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
+/*       $.each ( Synoptique.visuels, function (i, visuel)
         { var svg = d3.select("#fullsvg").append("svg").attr("width", 1024).attr("height", 768);
           fullsvg.css("position","relative");
 
@@ -348,21 +350,21 @@
                        }
                     }
                  );
-        }
-
+        });
+*/
        $.each ( Synoptique.cadrans, function (i, cadran)
-                 { idSectionMain.append( Creer_cadran ( cadran ) );
+                 { idSectionPasserelles.append( Creer_cadran ( cadran ) );
                  }
               );
 
-       if (Synoptique.nbr_idSectionTableaux>0)
+       if (Synoptique.nbr_tableaux>0)
         { idSectionTableaux.prepend("<hr>");
-          $.each ( Synoptique.idSectionTableaux, function (i, tableau)
+          $.each ( Synoptique.tableaux, function (i, tableau)
            { var id = "idTableau-"+tableau.tableau_id;
              idSectionTableaux.append( $("<div></div>").append("<canvas id='"+id+"'></canvas>").addClass("col wtd-courbe m-1") );
-             maps = Synoptique.idSectionTableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
+             maps = Synoptique.tableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
              Charger_plusieurs_courbes ( id, maps, "HOUR" );
-             $('#'+id).on("click", function () { Charger_page_tableau(tableau.tableau_id); } );
+             $('#'+id).off("click").on("click", function () { Charger_page_tableau(tableau.tableau_id); } );
            });
         }
 
