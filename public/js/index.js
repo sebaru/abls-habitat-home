@@ -67,6 +67,11 @@
     if (vars[1] !== null) syn_page = vars[1];
     console.log ("Syn: loading " + vars[1] );
 
+    Send_to_API ( 'GET', "/domain/image", null, function (Response)
+     { if (Response.image == null) Response.image = "https://static.abls-habitat.fr/img/syn_maison.png";
+       Changer_img_src ( "idNavImgTopSyn", Response.image, false );
+     }, null);
+
     Charger_un_synoptique ( syn_page );
     Load_websocket();
     Ping();

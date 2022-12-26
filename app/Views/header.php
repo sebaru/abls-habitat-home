@@ -246,7 +246,7 @@
   <a class="nav-item"><img id="idMasterVignetteSecuPers" class="wtd-menu mr-1" src=""></a>-->
   <ul class="navbar-nav">
     <a class="nav-item" href="#" onclick="Charger_un_synoptique(null)">
-      <img src="https://static.abls-habitat.fr/img/syn_maison.png" alt="Accueil"
+      <img id ="idNavImgTopSyn" src="" alt=""
            class="wtd-menu" data-toggle='tooltip' data-placement='bottom' title="Aller à l'accueil">
     </a>
   </ul>
