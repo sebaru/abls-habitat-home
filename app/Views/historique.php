@@ -6,7 +6,7 @@
 
            <div class="row form-group">
              <div class="input-group">
-               <label class="col-4 col-form-label text-right">Domain Name</label>
+               <label class="col-4 col-form-label text-right">Recherche</label>
                <input id="idHistoSearchQuery" type="text" class="form-control" placeholder="Recherche a effectuer">
               <button id="idHistoSearch" type="button" class="btn btn-primary ml-1">
                 <i class="fas fa-search"></i> Rechercher
