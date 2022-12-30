@@ -280,3 +280,4 @@
 </nav>
 </header>
 <?php if ( getenv("CI_ENVIRONMENT") == "development" ) { echo "<div class='alert alert-warning'>Instance de DEV</div>"; } ?>
+<script src="/js/common_home.js" type="text/javascript"></script>
