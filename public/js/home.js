@@ -148,10 +148,10 @@
     console.log("------------------------------ Chargement synoptique "+syn_page);
     Send_to_API ( "GET", "/syn/show", (syn_page ? "syn_page=" + syn_page : null), function(Response)
      { console.log(Response);
-       idSectionPasserelles.empty();
        Synoptique = Response;
        window.history.replaceState( null, "", Response.page );                                  /* Affiche la page dans l'URL */
 
+/*------------------------------------------------------------ Barre de navigation -------------------------------------------*/
        $('#idNavSynoptique')
         .empty()
         .prepend( "<a class='nav-link rounded d-none d-sm-inline' href='#'> <span>"+Synoptique.libelle+"</span></a>" );
@@ -170,6 +170,8 @@
               );
 
 
+/*--------------------------------------------------- Passerelles ------------------------------------------------------------*/
+       idSectionPasserelles.empty();
        $.each ( Synoptique.child_syns, function (i, syn)
                  { idSectionPasserelles.append ( Creer_passerelle ( syn ) );
                    if (Synoptique.syn_vars)
@@ -182,6 +184,7 @@
               );
 
 /*---------------------------------------------------- Affichage léger -------------------------------------------------------*/
+       idSectionLightSyn.empty();
        $.each ( Synoptique.visuels, function (i, visuel)
                     { var card = Creer_visuel ( visuel );
                       idSectionLightSyn.append ( card );
@@ -363,9 +366,10 @@
                  }
               );
 
+/*---------------------------------------------------- Affichage des tableaux ------------------------------------------------*/
+       idSectionTableaux.empty();
        if (Synoptique.nbr_tableaux>0)
-        { idSectionTableaux.empty();
-          /*idSectionTableaux.prepend("<hr>");*/
+        { /*idSectionTableaux.prepend("<hr>");*/
           $.each ( Synoptique.tableaux, function (i, tableau)
            { var id = "idTableau-"+tableau.tableau_id;
              idSectionTableaux.append( $("<div></div>").append("<canvas id='"+id+"'></canvas>").addClass("col wtd-courbe m-1") );
