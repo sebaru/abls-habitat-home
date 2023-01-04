@@ -3,10 +3,14 @@
 <footer class="page-footer bg-info mt-2 pt-0 fixed-bottom">
 
   <!-- Copyright -->
-  <div class="footer-copyright text-center py-2"><span>© </span>
-    <a href="https://ABLS-habitat.fr/">ABLS-Habitat.fr</a>
+  <div class="footer-copyright text-right py-2">
+    <small>
+
+      <span class="text-secondary"><?php echo getenv("ABLS_API"); ?> -</span>
+      <span class="text-secondary"> © </span>
+      <a href="https://ABLS-habitat.fr/">ABLS-Habitat.fr</a>
+    </small>
   </div>
-  <!-- Copyright -->
 
 </footer>
 
