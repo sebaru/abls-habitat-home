@@ -18,9 +18,10 @@
                background-attachment: fixed;
                height: 100%;
                background-color: rgba(30,28,56,1.0);
-               /*padding-top: 90px;*/
+               padding-top: 60px;
                overflow-y: scroll;
              }
+
 
         h3 { color: white }
 
@@ -147,7 +148,7 @@
                     }
 
 
-        .navbar { background-color: rgba(30,28,56,0.8);
+        .navbar { background-color: rgba(30,28,56,0.95);
                 }
 
         .nav-link {
@@ -240,7 +241,7 @@
 <header>
 
 
-	<nav class="navbar navbar-dark navbar-expand-md sticky-top shadow mb-2"> <!-- fixed-top -->
+	<nav class="navbar navbar-dark navbar-expand-md fixed-top shadow"> <!-- fixed-top -->
 
   <!--<a class="nav-item"><img id="idMasterVignetteActivite" class="wtd-menu mr-1" src=""></a>
   <a class="nav-item"><img id="idMasterVignetteSecuBien" class="wtd-menu mr-1" src=""></a>
@@ -281,3 +282,4 @@
 </header>
 <?php if ( getenv("CI_ENVIRONMENT") == "development" ) { echo "<div class='alert alert-warning'>Instance de DEV</div>"; } ?>
 <script src="/js/common_home.js" type="text/javascript"></script>
+
