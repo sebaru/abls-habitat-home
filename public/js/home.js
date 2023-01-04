@@ -143,6 +143,7 @@
  function Charger_un_synoptique ( syn_page )
   { var idSectionPasserelles = $('#idSectionPasserelles');
     var idSectionLightSyn    = $('#idSectionLightSyn');
+    var idSectionHeavySyn    = $('#idSectionHeavySyn');
     var fullsvg       = $('#fullsvg');
     var idSectionTableaux = $('#idSectionTableaux');
     console.log("------------------------------ Chargement synoptique "+syn_page);
@@ -185,17 +186,26 @@
 
 /*---------------------------------------------------- Affichage léger -------------------------------------------------------*/
        idSectionLightSyn.empty();
-       $.each ( Synoptique.visuels, function (i, visuel)
+       if (Synoptique.mode_affichage == false)
+        { $.each ( Synoptique.visuels, function (i, visuel)
                     { var card = Creer_visuel ( visuel );
                       idSectionLightSyn.append ( card );
                       Changer_etat_visuel ( visuel );
                     }
               );
-
+        }
 /*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
-/*       $.each ( Synoptique.visuels, function (i, visuel)
-        { var svg = d3.select("#fullsvg").append("svg").attr("width", 1024).attr("height", 768);
-          fullsvg.css("position","relative");
+       idSectionHeavySyn.empty().css("position","relative").css("margin","0% 5%");
+       if (Synoptique.mode_affichage == true)
+        { var svg = d3.select("#idSectionHeavySyn")
+                      .append("svg").attr("id", "idSVG")
+                                    .attr("width", 1200).attr("height", 1024)
+                                    .attr("preserveAspectRatio", "xMinYMin meet");
+
+          $("#idSVG").addClass("border border-white").css("background-color", "darkgray")
+                     .css("position", "relative")
+                     .css("left", "0").css("top", "0")
+                     .css("width", "100%").css("width", "100%");
 
           $.each ( Synoptique.visuels, function (i, visuel)
                     { if (visuel.forme == null)
@@ -204,13 +214,13 @@
                          new_svg.append ( "image" ).attr("href", "https://static.abls-habitat.fr/img/"+visuel.icone+".gif" )
                                           .on( "load", function ()
                                             { console.log("loaded");
-                                    var dimensions = this.getBBox();
-                                    var orig_x = (visuel.posx-dimensions.width/2);
-                                    var orig_y = (visuel.posy-dimensions.height/2);
-                                    new_svg.attr( "transform", "rotate("+visuel.angle+") "+
-                                                               "scale("+(visuel.larg/dimensions.width)+" "+(visuel.haut/dimensions.height)+") "+
-                                                               "translate("+orig_x+" "+orig_y+") "
-                                                );
+                                              var dimensions = this.getBBox();
+                                              var orig_x = (visuel.posx-dimensions.width/2);
+                                              var orig_y = (visuel.posy-dimensions.height/2);
+                                              new_svg.attr( "transform", "rotate("+visuel.angle+") "+
+                                                                         "scale("+(visuel.larg/dimensions.width)+" "+(visuel.haut/dimensions.height)+") "+
+                                                                         "translate("+orig_x+" "+orig_y+") "
+                                                          );
                                   } );
                        }
                       else if (visuel.ihm_affichage=="complexe" && visuel.forme=="bouton")
@@ -224,10 +234,11 @@
                          else if (visuel.color=="red")    button.addClass("btn-danger");
                          else if (visuel.color=="green")  button.addClass("btn-success");
                          else button.addClass("btn-outline-dark").attr("disabled", '');
-                         $("#fullsvg").append ( button );
+                         console.debug(button);
+                         $("#idSectionHeavySyn").append ( () => { return (button); } );
                        }
                       else if (visuel.ihm_affichage=="complexe" && visuel.forme=="encadre")
-                       { var new_svg = svg. append ("g").attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
+                       { var new_svg = svg.append ("g").attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
                          new_svg.node().setAttribute( "transform-origin", visuel.posx+" "+visuel.posy );
 
                          var dimensions = visuel.mode.split('x');
@@ -359,8 +370,8 @@
                        }
                     }
                  );
-        });
-*/
+        }
+
        $.each ( Synoptique.cadrans, function (i, cadran)
                  { idSectionPasserelles.append( Creer_cadran ( cadran ) );
                  }
@@ -369,8 +380,7 @@
 /*---------------------------------------------------- Affichage des tableaux ------------------------------------------------*/
        idSectionTableaux.empty();
        if (Synoptique.nbr_tableaux>0)
-        { /*idSectionTableaux.prepend("<hr>");*/
-          $.each ( Synoptique.tableaux, function (i, tableau)
+        { $.each ( Synoptique.tableaux, function (i, tableau)
            { var id = "idTableau-"+tableau.tableau_id;
              idSectionTableaux.append( $("<div></div>").append("<canvas id='"+id+"'></canvas>").addClass("col wtd-courbe m-1") );
              maps = Synoptique.tableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
