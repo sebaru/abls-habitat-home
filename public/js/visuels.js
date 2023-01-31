@@ -1,3 +1,13 @@
+/********************************************* Appeler quand l'utilisateur selectionne un motif *******************************/
+ function Clic_sur_motif ( visuel, event )
+  { console.log(" Click sur motif " + visuel.libelle + " offsetx = " + event.clientX + " offsetY="+event.clientY );
+    var target = { tech_id : visuel.tech_id,
+                   acronyme: visuel.acronyme,
+                 };
+    Send_to_API ( 'POST', "/syn/clic", target, function ()
+     {
+     }, null);
+  }
 /******************************************************************************************************************************/
 /* Changer_etat_visuel: Appeler par la websocket pour changer un visuel d'etat                                                */
 /******************************************************************************************************************************/

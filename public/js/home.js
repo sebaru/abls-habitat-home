@@ -193,189 +193,51 @@
                       Changer_etat_visuel ( visuel );
                     }
               );
-        }
-/*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
-       idSectionHeavySyn.empty().css("position","relative").css("margin","0% 5%");
-       if (Synoptique.mode_affichage == true)
-        { var svg = d3.select("#idSectionHeavySyn")
-                      .append("svg").attr("id", "idSVG")
-                                    .attr("width", 1200).attr("height", 1024)
-                                    .attr("preserveAspectRatio", "xMinYMin meet");
-
-          $("#idSVG").addClass("border border-white").css("background-color", "darkgray")
-                     .css("position", "relative")
-                     .css("left", "0").css("top", "0")
-                     .css("width", "100%").css("width", "100%");
-
-          $.each ( Synoptique.visuels, function (i, visuel)
-                    { if (visuel.forme == null)
-                       { var new_svg = svg.append ("g").attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-                         new_svg.node().setAttribute( "transform-origin", visuel.posx+" "+visuel.posy );
-                         new_svg.append ( "image" ).attr("href", "https://static.abls-habitat.fr/img/"+visuel.icone+".gif" )
-                                          .on( "load", function ()
-                                            { console.log("loaded");
-                                              var dimensions = this.getBBox();
-                                              var orig_x = (visuel.posx-dimensions.width/2);
-                                              var orig_y = (visuel.posy-dimensions.height/2);
-                                              new_svg.attr( "transform", "rotate("+visuel.angle+") "+
-                                                                         "scale("+(visuel.larg/dimensions.width)+" "+(visuel.haut/dimensions.height)+") "+
-                                                                         "translate("+orig_x+" "+orig_y+") "
-                                                          );
-                                  } );
-                       }
-                      else if (visuel.ihm_affichage=="complexe" && visuel.forme=="bouton")
-                       { var button = $("<button>").css("position", "absolute").addClass("btn btn-sm")
-                                                   .css("left", visuel.posx).css("top", visuel.posy)
-                                                   .css("translate", "-50% -50%")
-                                                   .append( visuel.libelle )
-                              if (visuel.color=="blue")   button.addClass("btn-primary");
-                         else if (visuel.color=="orange") button.addClass("btn-warning");
-                         else if (visuel.color=="gray")   button.addClass("btn-secondary");
-                         else if (visuel.color=="red")    button.addClass("btn-danger");
-                         else if (visuel.color=="green")  button.addClass("btn-success");
-                         else button.addClass("btn-outline-dark").attr("disabled", '');
-                         console.debug(button);
-                         $("#idSectionHeavySyn").append ( () => { return (button); } );
-                       }
-                      else if (visuel.ihm_affichage=="complexe" && visuel.forme=="encadre")
-                       { var new_svg = svg.append ("g").attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-                         new_svg.node().setAttribute( "transform-origin", visuel.posx+" "+visuel.posy );
-
-                         var dimensions = visuel.mode.split('x');
-                         console.log("Encadre : dimensions");
-                         console.debug(dimensions);
-                         if (!dimensions[0]) dimensions[0] = 1;
-                         if (!dimensions[1]) dimensions[1] = 1;
-
-                         var hauteur=64*parseInt(dimensions[0]);
-                         var largeur=64*parseInt(dimensions[1]);
-
-                         new_svg.append ( "text" ).attr("x", (largeur+10)/2 ).attr("y", 12 )
-                                                  .attr("text-anchor", "middle")
-                                                  .attr("font-size", "14" )
-                                                  .attr("font-family", "Sans" )
-                                                  .attr("font-style", "italic" )
-                                                  .attr("font-weight", "normal" )
-                                                  .attr("fill", visuel.color )
-                                                  .attr("stroke", visuel.color )
-                                                  .text(visuel.libelle);
-
-                         new_svg.append ( "rect" ).attr("x", 5 ).attr("y", 20 ).attr("rx", 15)
-                                                  .attr("width", largeur)
-                                                  .attr("height", hauteur )
-                                                  .attr("fill", "none" )
-                                                  .attr("stroke-width", 4 )
-                                                  .attr("stroke", visuel.color );
-                         new_svg.attr( "transform", "rotate("+visuel.angle+") "+
-                                                    "scale("+visuel.scale+") "+
-                                                    "translate("+visuel.posx+" "+visuel.posy+") "
-                                     );
-                        }
-                      else if (visuel.ihm_affichage=="complexe" && visuel.forme=="comment")
-                       { var new_svg = svg. append ("g").attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-                         new_svg.node().setAttribute( "transform-origin", visuel.posx+" "+visuel.posy );
-                         var size, family, style, weight;
-                         if ( visuel.mode=="titre" )
-                          { size = 32;
-                            family = "Sans";
-                            style  = "italic";
-                            weight = "normal";
-                          }
-                         else if ( visuel.mode =="soustitre" )
-                          { size = 24;
-                            family = "Sans";
-                            style  = "italic";
-                            weight = "normal";
-                          }
-                         else
-                          { size   = 14;
-                            family = "Sans";
-                            style  = "italic";
-                            weight = "normal";
-                          }
-
-                         new_svg.append ( "text" ).attr("font-size", size)
-                                                  .attr("font-family", family + ",serif" )
-                                                  .attr("font-style", style )
-                                                  .attr("font-weight", weight )
-                                                  .attr("fill", visuel.color )
-                                                  .attr("stroke", visuel.color )
-                                                  .attr("dominant-baseline", "middle")
-                                                  .attr("text-anchor", "middle")
-                                                  .text(visuel.libelle);
-                         new_svg.attr( "transform", "rotate("+visuel.angle+") "+
-                                                    "scale("+visuel.scale+") "+
-                                                    "translate("+visuel.posx+" "+visuel.posy+") "
-                                     );
-                       }
-                      else if (visuel.ihm_affichage=="by_mode")
-                       { var new_svg = svg.append ("g").attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-                         new_svg.node().setAttribute( "transform-origin", visuel.posx+" "+visuel.posy );
-                         new_svg.append ( "image" ).attr("href", "https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"."+visuel.extension )
-                                .on( "load", function ()
-                                  { console.log("loaded");
-                                    var dimensions = this.getBBox();
-                                    var orig_x = (visuel.posx-dimensions.width/2);
-                                    var orig_y = (visuel.posy-dimensions.height/2);
-                                    new_svg.attr( "transform", "rotate("+visuel.angle+") "+
-                                                               "scale("+visuel.scale+") "+
-                                                               "translate("+orig_x+" "+orig_y+") "
-                                                );
-                                  } );
-                       }
-                      else if (visuel.ihm_affichage=="by_color")
-                       { var new_svg = svg.append ("g").attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-                         new_svg.node().setAttribute( "transform-origin", visuel.posx+" "+visuel.posy );
-                         new_svg.append ( "image" ).attr("href", "https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.color+"."+visuel.extension )
-                                .on( "load", function ()
-                                  { console.log("loaded");
-                                    var dimensions = this.getBBox();
-                                    var orig_x = (visuel.posx-dimensions.width/2);
-                                    var orig_y = (visuel.posy-dimensions.height/2);
-                                    new_svg.attr( "transform", "rotate("+visuel.angle+") "+
-                                                               "scale("+visuel.scale+") "+
-                                                               "translate("+orig_x+" "+orig_y+") "
-                                                );
-                                  } );
-                       }
-                      else if (visuel.ihm_affichage=="by_mode_color")
-                       { var new_svg = svg.append ("g").attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-                         new_svg.node().setAttribute( "transform-origin", visuel.posx+" "+visuel.posy );
-                         new_svg.append ( "image" ).attr("href", "https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension )
-                                .on( "load", function ()
-                                  { console.log("loaded");
-                                    var dimensions = this.getBBox();
-                                    var orig_x = (visuel.posx-dimensions.width/2);
-                                    var orig_y = (visuel.posy-dimensions.height/2);
-                                    new_svg.attr( "transform", "rotate("+visuel.angle+") "+
-                                                               "scale("+visuel.scale+") "+
-                                                               "translate("+orig_x+" "+orig_y+") "
-                                                );
-                                  } );
-                       }
-                      else if (visuel.ihm_affichage=="static")
-                       { var new_svg = svg.append ("g").attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-                         new_svg.node().setAttribute( "transform-origin", visuel.posx+" "+visuel.posy );
-                         new_svg.append ( "image" ).attr("href", "https://static.abls-habitat.fr/img/"+visuel.forme+"."+visuel.extension )
-                                .on( "load", function ()
-                                  { console.log("loaded");
-                                    var dimensions = this.getBBox();
-                                    var orig_x = (visuel.posx-dimensions.width/2);
-                                    var orig_y = (visuel.posy-dimensions.height/2);
-                                    new_svg.attr( "transform", "rotate("+visuel.angle+") "+
-                                                               "scale("+visuel.scale+") "+
-                                                               "translate("+orig_x+" "+orig_y+") "
-                                                );
-                                  } );
-                       }
+          $.each ( Synoptique.cadrans, function (i, cadran)
+                    { idSectionPasserelles.append( Creer_cadran ( cadran ) );
                     }
                  );
         }
+/*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
+       idSectionHeavySyn.empty().css("position","relative").addClass("mx-1");
+       if (Synoptique.mode_affichage == true)
+        { Trame = Trame_new ("idSectionHeavySyn");
+          $.each ( Response.visuels, function (i, visuel)
+                    { if (visuel.forme == null)
+                       { console.log ( "new null at " + visuel.posx + " " + visuel.posy );
+                         visuel.svggroupe = Trame.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
+                         Trame.add(visuel.svggroupe);
+                         visuel.svggroupe.add ( SVG_New_from_image ( Trame, visuel.icone+".gif" ) );
+                         SVG_Update_matrice ( visuel );
+                       }
+                      else if (visuel.ihm_affichage=="complexe" && visuel.forme=="bouton")
+                       { Trame.new_button ( visuel ); }
+                      else if (visuel.ihm_affichage=="complexe" && visuel.forme=="encadre")
+                       { Trame.new_encadre ( visuel ); }
+                      else if (visuel.ihm_affichage=="complexe" && visuel.forme=="comment")
+                       { Trame.new_comment ( visuel ); }
+                      else if (visuel.ihm_affichage=="by_mode")
+                       { Trame.new_from_image( visuel, visuel.forme+"_"+visuel.mode+"."+visuel.extension ); }
+                      else if (visuel.ihm_affichage=="by_color")
+                       { Trame.new_from_image( visuel, visuel.forme+"_"+visuel.color+"."+visuel.extension ); }
+                      else if (visuel.ihm_affichage=="by_mode_color")
+                       { Trame.new_from_image( visuel, visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension ); }
+                      else if (visuel.ihm_affichage=="static")
+                       { Trame.new_from_image( visuel, visuel.forme+"."+visuel.extension ); }
 
-       $.each ( Synoptique.cadrans, function (i, cadran)
-                 { idSectionPasserelles.append( Creer_cadran ( cadran ) );
-                 }
-              );
+                      if (visuel.svggroupe !== undefined)
+                       { visuel.svggroupe.on ( "click", function (event) { Clic_sur_motif ( visuel, event ) }, false);
+                       }
+                    }
+                 );
+          $.each ( Response.cadrans, function (i, cadran)
+                    { Trame.new_cadran ( cadran );
+                      /*if (cadran.svggroupe !== undefined)
+                       { cadran.svggroupe.on ( "click", function (event) { Clic_sur_motif ( cadran, event ) }, false);
+                       }*/
+                    }
+                 );
+        }
 
 /*---------------------------------------------------- Affichage des tableaux ------------------------------------------------*/
        idSectionTableaux.empty();
