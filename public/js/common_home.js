@@ -10,14 +10,4 @@
      { $('#idTableMessages').DataTable().ajax.reload( null, false );
      }, null);
   }
-/********************************************* Clic sur visuel ****************************************************************/
- function Envoyer_clic_visuel ( tech_id, acronyme )
-  { console.log ("Envoyer_clic_visuel: "+tech_id+":"+acronyme );
-    var json_request = JSON.stringify(
-       { tech_id  : tech_id,
-         acronyme : acronyme,
-       }
-     );
-    Send_to_API ( 'POST', "/api/syn/clic", json_request, null, null );
-  }
 /*----------------------------------------------------------------------------------------------------------------------------*/
