@@ -1,14 +1,12 @@
- /*document.addEventListener('DOMContentLoaded', Load_page, false);
- document.addEventListener('pageshow', Load_websocket, false);
-*/
+
  var WTDWebSocket;
 
  function Ping ()
   { setTimeout ( function()                                                                         /* Un ping tous les jours */
      { Send_to_API ( "GET", "/ping", null, function ()
-        { if (WTDWebSocket && WTDWebSocket.readyState != 1)
+        { if (WTDWebSocket && WTDWebSocket.readyState != "OPEN")
            { console.log("Ping : websocket status = " + WTDWebSocket.readyState );
-             Charger_page_synoptique (Synoptique.syn_id);
+             Charger_synoptique (Synoptique.page);
              Load_websocket();
            }
           Ping();

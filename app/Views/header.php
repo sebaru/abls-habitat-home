@@ -260,7 +260,6 @@
 
   <div class="collapse navbar-collapse" id="navbar-toggled">
     <ul class="navbar-nav ml-auto">
-      <a class="nav-item rounded mr-1" href="https://console.abls-habitat.fr"><img src="https://static.abls-habitat.fr/img/menu_parametres.png" alt="Console" class="wtd-menu"></a>
       <li class="nav-item dropdown">
         <a class="nav-link rounded align-items-middle dropdown-toggle" href="#" id="navbarUSER" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-user text-white"></i> <span id="idUsername">-</span>
