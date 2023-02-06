@@ -18,9 +18,10 @@
                background-attachment: fixed;
                height: 100%;
                background-color: rgba(30,28,56,1.0);
-               /*padding-top: 90px;*/
+               padding-top: 60px;
                overflow-y: scroll;
              }
+
 
         h3 { color: white }
 
@@ -108,6 +109,7 @@
 
 	       .wtd-courbe { background-color: white;
                       width: auto;
+                      max-width: 800px;
                       min-height: 600px;
                       cursor: pointer;
                     }
@@ -146,7 +148,7 @@
                     }
 
 
-        .navbar { background-color: rgba(30,28,56,0.8);
+        .navbar { background-color: rgba(30,28,56,0.95);
                 }
 
         .nav-link {
@@ -239,14 +241,14 @@
 <header>
 
 
-	<nav class="navbar navbar-dark navbar-expand-md sticky-top shadow mb-2"> <!-- fixed-top -->
+	<nav class="navbar navbar-dark navbar-expand-md fixed-top shadow"> <!-- fixed-top -->
 
   <!--<a class="nav-item"><img id="idMasterVignetteActivite" class="wtd-menu mr-1" src=""></a>
   <a class="nav-item"><img id="idMasterVignetteSecuBien" class="wtd-menu mr-1" src=""></a>
   <a class="nav-item"><img id="idMasterVignetteSecuPers" class="wtd-menu mr-1" src=""></a>-->
   <ul class="navbar-nav">
-    <a class="nav-item" href="#" onclick="Charger_page_synoptique(1)">
-      <img src="https://static.abls-habitat.fr/img/syn_maison.png" alt="Accueil"
+    <a class="nav-item" href="#" onclick="Charger_un_synoptique(null)">
+      <img id ="idNavImgTopSyn" src="" alt=""
            class="wtd-menu" data-toggle='tooltip' data-placement='bottom' title="Aller à l'accueil">
     </a>
   </ul>
@@ -258,21 +260,17 @@
 
   <div class="collapse navbar-collapse" id="navbar-toggled">
     <ul class="navbar-nav ml-auto">
-      <a class="nav-item rounded mr-1" href="https://console.abls-habitat.fr"><img src="https://static.abls-habitat.fr/img/menu_parametres.png" alt="Console" class="wtd-menu"></a>
       <li class="nav-item dropdown">
         <a class="nav-link rounded align-items-middle dropdown-toggle" href="#" id="navbarUSER" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-user text-white"></i> <span id="idUsername">-</span>
         </a>
 
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarUSER">
-          <a class="dropdown-item" onclick="Show_page('domains')"> <i class="fas fa-fort-awesome text-primary"></i> Mes domaines</a>
-          <a class="dropdown-item" onclick="Show_page('message')"> <i class="fas fa-book text-primary"></i> Fil de l'eau</a>
-          <a class="dropdown-item" onclick="Show_page('historique')"> <i class="fas fa-history text-primary"></i> Historique</a>
-          <a class="dropdown-item" onclick="Show_page('synoptique')"> <i class="fas fa-history text-primary"></i> syn</a>
-          <a class="dropdown-item" href="/home/user" id="idHrefUsername" href="#"><i class="fas fa-user text-info"></i> Mon Profil</a>
-          <!--<a class="dropdown-item" href="/home/users"><i class="fas fa-users-cog text-info"></i> <span>Utilisateurs</span></a>-->
-          <a class="dropdown-item" type="button" onclick="Charger_page_user_sessions()"><i class="fas fa-list text-info"></i> <span>Mes appareils</span></a>
+          <a class="dropdown-item" onclick="Redirect('/domains')"> <i class="fas fa-fort-awesome text-primary"></i> Mes domaines</a>
+          <a class="dropdown-item" onclick="Redirect('/messages')"> <i class="fas fa-book text-primary"></i> Fil de l'eau</a>
+          <a class="dropdown-item" onclick="Redirect('/historique')"> <i class="fas fa-history text-primary"></i> Historique</a>
           <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/home/user" id="idHrefUsername" href="#"><i class="fas fa-user text-info"></i> Mon Profil</a>
           <a class="dropdown-item" href="#" onclick="Logout()"><i class="fas fa-sign-out-alt text-danger"></i> <span>Sortir</span> </a>
         </div>
       </li>
@@ -282,3 +280,5 @@
 </nav>
 </header>
 <?php if ( getenv("CI_ENVIRONMENT") == "development" ) { echo "<div class='alert alert-warning'>Instance de DEV</div>"; } ?>
+
+

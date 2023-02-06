@@ -5,10 +5,28 @@
      <a href="/">Se reconnecter</a>
    </div>
 
-<div id="toplevel" class="">
-</div>
+<section id='idSectionPasserelles' class='row row-cols-2 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 row-cols-xl-6 justify-content-center'>
+</section>
+<section id='idSectionLightSyn' class='row row-cols-2 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 row-cols-xl-6 justify-content-center'>
+</section>
+<section id='idSectionHeavySyn' class='row justify-content-center'>
+</section>
+<section id='idSectionTableaux' class='row mx-1 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-3 justify-content-center'>
+</section>
+
+<hr>
+
+<section id='idSectionMessages'>
+ <table id='idTableMessages' class='table table-dark table-bordered w-100'>
+  <thead class="thead-dark">
+  </thead>
+  <tbody>
+  </tbody>
+ </table>
+</section>
 
 </main>
+
 
 <script src="/js/cadran.js" type="text/javascript"></script>
 <script src="/js/visuels.js" type="text/javascript"></script>
@@ -16,4 +34,3 @@
 <script src="/js/home.js" type="text/javascript"></script>
 <script src="/js/tableau.js" type="text/javascript"></script>
 <script src="/js/horloge.js" type="text/javascript"></script>
-<script src="/js/user_sessions.js" type="text/javascript"></script>
