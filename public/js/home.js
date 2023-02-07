@@ -141,7 +141,6 @@
      { console.log(Response);
        Synoptique = Response;
        window.history.replaceState( null, "", Response.page );                                  /* Affiche la page dans l'URL */
-
 /*------------------------------------------------------------ Barre de navigation -------------------------------------------*/
        $('#idNavSynoptique')
         .empty()
@@ -187,12 +186,13 @@
                     { idSectionPasserelles.append( Creer_cadran ( cadran ) );
                     }
                  );
+          Load_lightsyn_websocket(Synoptique.cadrans);                                                 /* Charge la websocket */
         }
 /*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
        idSectionHeavySyn.empty().css("position","relative").addClass("mx-1");
        if (Synoptique.mode_affichage == true)
         { Trame = Trame_new ("idSectionHeavySyn");
-          $.each ( Response.visuels, function (i, visuel)
+          $.each ( Synoptique.visuels, function (i, visuel)
                     { if (visuel.forme == null)
                        { console.log ( "new null at " + visuel.posx + " " + visuel.posy );
                          visuel.svggroupe = Trame.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
@@ -220,13 +220,16 @@
                        }
                     }
                  );
-          $.each ( Response.cadrans, function (i, cadran)
+          $.each ( Synoptique.cadrans, function (i, cadran)
                     { Trame.new_cadran ( cadran );
                       /*if (cadran.svggroupe !== undefined)
                        { cadran.svggroupe.on ( "click", function (event) { Clic_sur_motif ( cadran, event ) }, false);
                        }*/
                     }
                  );
+          Load_heavysyn_websocket( Synoptique.cadrans.map( function (cadran)
+                                    { return ({ tech_id: cadran.tech_id, acronyme: cadran.acronyme }); } )
+                                 );                                                 /* Charge la websocket */
         }
 
 /*---------------------------------------------------- Affichage des tableaux ------------------------------------------------*/

@@ -29,14 +29,14 @@
        return( visuel );
      }
 /***************************************************** New cadran *************************************************************/
-    Trame.new_visuel = function ( visuel )
+    Trame.new_cadran = function ( visuel )
      { console.log ( "new cadran " + visuel.forme + " " + visuel.tech_id + ":" + visuel.acronyme + " " + visuel.posx + "x" + visuel.posy );
        visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
        this.add(visuel.svggroupe);
-       var rectangle = Trame.rect ( 110, 30 ).cx(0).cy(0).attr("rx", 10).fill("gray" ).stroke({ width:1, color:"lightgreen" });
+       var rectangle = Trame.rect ( 110, 30 ).attr("rx", 10).fill("gray" ).stroke({ width:2, color:"lightgreen" }).cx(0).cy(0);
        visuel.svggroupe.add ( rectangle );
 
-       var texte = this.text( "- visuel -" ).cx(0).cy(0).font ( { family: "arial", size:14, anchor: "middle", variant:"italic" } );
+       var texte = this.text( "- cadran -" ).font ( { family: "arial", size:14, anchor: "middle", variant:"italic" } ).cx(0).cy(0);
        visuel.svggroupe.add ( texte );
        this.update_matrice ( visuel );
        return(visuel);

@@ -1,9 +1,9 @@
 
  var WTDWebSocket;
 
- function Ping ()
+/* function Ping ()
   { setTimeout ( function()                                                                         /* Un ping tous les jours */
-     { Send_to_API ( "GET", "/ping", null, function ()
+/*     { Send_to_API ( "GET", "/ping", null, function ()
         { if (WTDWebSocket && WTDWebSocket.readyState != "OPEN")
            { console.log("Ping : websocket status = " + WTDWebSocket.readyState );
              Charger_synoptique (Synoptique.page);
@@ -12,11 +12,11 @@
           Ping();
         }, null );
      }, 60000 );
-  }
+  }*/
 /******************************************************************************************************************************/
 /* Load_websocket: Appelé pour ouvrir la websocket                                                                            */
 /******************************************************************************************************************************/
- function Load_websocket ()
+ function Load_heavysyn_websocket ( abonnements_cadrans )
   { if (WTDWebSocket && WTDWebSocket.readyState == "OPEN") WTDWebSocket.close();
     WTDWebSocket = new WebSocket($ABLS_API.replace("http","ws")+"/websocket"+
                                  "?token="+Token+
@@ -24,16 +24,17 @@
                                 );
 
     WTDWebSocket.onopen = function (event)
-     { console.log("Websocket loaded");
-       /*var json_request = JSON.stringify( { tag: "CONNECT", wtd_session: localStorage.getItem("wtd_session") } );
-       this.send ( json_request );*/
+     { console.log("Websocket loaded " + sessionStorage.getItem("connexion_uuid") );
+       console.debug(abonnements_cadrans );
+       var json_request = JSON.stringify( { "tag": "abonner", "cadrans": abonnements_cadrans } );
+       this.send ( json_request );
      }
     WTDWebSocket.onerror = function (event)
-     { console.log("Error au websocket !");
+     { console.log("Error au websocket !" + sessionStorage.getItem("connexion_uuid") );
        console.debug(event);
      }
     WTDWebSocket.onclose = function (event)
-     { console.log("Close au websocket !");
+     { console.log("Close au websocket !" + sessionStorage.getItem("connexion_uuid") );
        console.debug(event);
      }
 
@@ -41,12 +42,43 @@
      { var Response = JSON.parse(event.data);                                               /* Pointe sur <synoptique a=1 ..> */
        if (!Synoptique) return;
 
-            if (Response.tag == "DLS_CADRAN")
-        { Changer_etat_cadran ( Response ); }
-       else if (Response.tag == "DLS_VISUEL")
-        { Changer_etat_visuel ( Response ); }
-       else if (Response.tag == "pulse")
-        { }
+            if (Response.tag == "DLS_CADRAN") { /*Changer_etat_cadran ( Response );*/ }
+       else if (Response.tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
+       else if (Response.tag == "pulse")      { }
+       else console.log("tag: " + Response.tag + " not known");
+     }
+  }
+/******************************************************************************************************************************/
+/* Load_websocket: Appelé pour ouvrir la websocket                                                                            */
+/******************************************************************************************************************************/
+ function Load_lightsyn_websocket ( abonnements_cadrans )
+  { if (WTDWebSocket && WTDWebSocket.readyState == "OPEN") WTDWebSocket.close();
+    WTDWebSocket = new WebSocket($ABLS_API.replace("http","ws")+"/websocket"+
+                                 "?token="+Token+
+                                 "&domain_uuid="+localStorage.getItem("domain_uuid")
+                                );
+
+    WTDWebSocket.onopen = function (event)
+     { console.log("Websocket loaded " + sessionStorage.getItem("connexion_uuid") );
+       var json_request = JSON.stringify( { "tag": "abonner", "cadrans": abonnements_cadrans } );
+       this.send ( json_request );
+     }
+    WTDWebSocket.onerror = function (event)
+     { console.log("Error au websocket !" + sessionStorage.getItem("connexion_uuid") );
+       console.debug(event);
+     }
+    WTDWebSocket.onclose = function (event)
+     { console.log("Close au websocket !" + sessionStorage.getItem("connexion_uuid") );
+       console.debug(event);
+     }
+
+    WTDWebSocket.onmessage = function (event)
+     { var Response = JSON.parse(event.data);                                               /* Pointe sur <synoptique a=1 ..> */
+       if (!Synoptique) return;
+
+            if (Response.tag == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
+       else if (Response.tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
+       else if (Response.tag == "pulse")      { }
        else console.log("tag: " + Response.tag + " not known");
      }
   }
@@ -65,7 +97,5 @@
      }, null);
 
     Charger_un_synoptique ( syn_page );
-    Load_websocket();
-    Ping();
   }
 /*----------------------------------------------------------------------------------------------------------------------------*/
