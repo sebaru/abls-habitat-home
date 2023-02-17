@@ -257,15 +257,15 @@
 /********************************************* Affichage des vignettes ********************************************************/
  function Changer_img_src ( id, target, cligno )
   { var image = $('#'+id);
-    console.log("Changer_img_src "+id+" from '" + image.attr('src') + "' to "+ target );
 
     if (cligno==false) { image.removeClass("wtd-cligno"); }
-    if (image.attr('src')==target) return;
+    if (image.attr('src') == target) { console.log("Changer_img_src "+id+" already in '" + target ); return; }
+    console.log("Changer_img_src "+id+" from '" + image.attr('src') + "' to "+ target );
 
     if (image.attr('src') == "")
      { console.log("Changer_img_src "+id+" 1");
        image.slideUp("fast", function()
-        { image.on("load", function() { image.slideDown("normal", function ()
+        { image.off("load").on("load", function() { image.slideDown("normal", function ()
                                          { if (cligno==true) { image.addClass("wtd-cligno"); } } ); } );
           image.attr("src", target);
           console.log("Changer_img_src "+id+" 1 fin:" + image.attr("src") );
@@ -274,7 +274,7 @@
     else
      { console.log("Changer_img_src "+id+" 2");
        image.fadeTo("fast", 0, function()
-        { image.on("load", function() { image.fadeTo("normal", 1, function ()
+        { image.off("load").on("load", function() { image.fadeTo("normal", 1, function ()
                                          { if (cligno==true) { image.addClass("wtd-cligno"); } } ); } );
           image.attr("src", target);
           console.log("Changer_img_src "+id+" 2 fin:" + image.attr("src") );
