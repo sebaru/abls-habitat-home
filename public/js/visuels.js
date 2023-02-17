@@ -69,14 +69,26 @@
     visuel = visuels[0];
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
 console.log("Changer_etat_visuel " + visuel.ihm_affichage );
-    if (visuel.ihm_affichage=="static")
-     { Changer_etat_visuel_static ( visuel, etat );  }
-    else if (visuel.ihm_affichage=="by_mode")
-     { Changer_etat_visuel_by_mode ( visuel, etat );   }
-    else if (visuel.ihm_affichage=="by_color")
-     { Changer_etat_visuel_by_color ( visuel, etat );   }
-    else if (visuel.ihm_affichage=="by_mode_color")
-     { Changer_etat_visuel_by_mode_color ( visuel, etat );   }
+    if (Synoptique.mode_affichage == false)
+     { if (visuel.ihm_affichage=="static")
+        { Changer_etat_visuel_static ( visuel, etat );  }
+       else if (visuel.ihm_affichage=="by_mode")
+        { Changer_etat_visuel_by_mode ( visuel, etat );   }
+       else if (visuel.ihm_affichage=="by_color")
+        { Changer_etat_visuel_by_color ( visuel, etat );   }
+       else if (visuel.ihm_affichage=="by_mode_color")
+        { Changer_etat_visuel_by_mode_color ( visuel, etat );   }
+     }
+    else /* Heavysyn */
+     { /*{ if (visuel.ihm_affichage=="static")
+        { Changer_etat_visuel_static ( visuel, etat );  }
+       else*/ if (visuel.ihm_affichage=="by_mode")
+        { visuel.Change_target ( visuel.forme+"_"+etat.mode+"."+visuel.extension ); }
+       /*else if (visuel.ihm_affichage=="by_color")
+        { Changer_etat_visuel_by_color ( visuel, etat );   }
+       else if (visuel.ihm_affichage=="by_mode_color")
+        { Changer_etat_visuel_by_mode_color ( visuel, etat );   }*/
+     }
   }
 /******************************************************************************************************************************/
 /* Changer_etat_visuel: Appeler par la websocket pour changer un visuel d'etat                                                */

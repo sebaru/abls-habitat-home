@@ -199,7 +199,7 @@
                          visuel.svggroupe = Trame.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
                          Trame.add(visuel.svggroupe);
                          visuel.svggroupe.add ( SVG_New_from_image ( Trame, visuel.icone+".gif" ) );
-                         SVG_Update_matrice ( visuel );
+                         Trame.update_matrice ( visuel );
                        }
                       else if (visuel.ihm_affichage=="complexe" && visuel.forme=="bouton")
                        { Trame.new_button ( visuel ); }

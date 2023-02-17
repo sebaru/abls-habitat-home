@@ -23,7 +23,9 @@
        var svgimage = this.image( "https://static.abls-habitat.fr/img/"+image_filename, function(event)
                                    { this.dx ( -this.width()/2 );
                                      this.dy ( -this.height()/2 );
-                                   } );
+                                   } ).attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
+       visuel.Change_target = function ( filename )
+                               { svgimage.load("https://static.abls-habitat.fr/img/"+filename); }
        visuel.svggroupe.add ( svgimage );
        this.update_matrice ( visuel );
        return( visuel );
