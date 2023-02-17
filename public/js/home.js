@@ -216,7 +216,7 @@
                        { Trame.new_from_image( visuel, visuel.forme+"."+visuel.extension ); }
 
                       if (visuel.svggroupe !== undefined)
-                       { visuel.svggroupe.on ( "click", function (event) { Clic_sur_motif ( visuel, event ) }, false);
+                       { visuel.svggroupe.on ( "click", function (event) { Clic_sur_visuel ( visuel ) }, false);
                        }
                     }
                  );

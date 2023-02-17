@@ -1,6 +1,6 @@
 /********************************************* Appeler quand l'utilisateur selectionne un motif *******************************/
  function Clic_sur_visuel ( visuel )
-  { console.log(" Click sur visuel " + visuel.libelle );
+  { console.log(" Clic sur visuel " + visuel.libelle );
     var target = { tech_id : visuel.tech_id,
                    acronyme: visuel.acronyme,
                  };

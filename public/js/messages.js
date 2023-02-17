@@ -91,7 +91,10 @@
                  }
              },
              { "data": "date_create", "title":"Apparition", "className": "align-middle text-center d-none d-sm-table-cell bg-dark" },
-             { "data": "syn_page", "title":"Page", "className": "align-middle text-center d-none d-md-table-cell bg-dark" },
+             { "data": null, "title":"Page", "className": "align-middle text-center d-none d-md-table-cell bg-dark",
+               "render": function (item)
+                 { return( Lien ( "/"+item.syn_page, "Voir la page", item.syn_page ) ); }
+             },
              { "data": "dls_shortname", "title":"Objet", "className": "align-middle text-center bg-dark" },
              { "data": null, "title":"Message", "className": "align-middle text-center bg-dark",
                "render": function (item)
