@@ -192,6 +192,7 @@
        idSectionHeavySyn.empty().css("position","relative").addClass("mx-1");
        if (Synoptique.mode_affichage == true)
         { Trame = Trame_new ("idSectionHeavySyn");
+          idSectionHeavySyn.prepend( $("<h1>").addClass("text-center text-white").text( Synoptique.page + " - " + Synoptique.libelle ) );
           $.each ( Synoptique.visuels, function (i, visuel)
                     { if (visuel.forme == null)
                        { console.log ( "new null at " + visuel.posx + " " + visuel.posy );
