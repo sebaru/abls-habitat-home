@@ -134,7 +134,6 @@
   { var idSectionPasserelles = $('#idSectionPasserelles');
     var idSectionLightSyn    = $('#idSectionLightSyn');
     var idSectionHeavySyn    = $('#idSectionHeavySyn');
-    var fullsvg       = $('#fullsvg');
     var idSectionTableaux = $('#idSectionTableaux');
     console.log("------------------------------ Chargement synoptique "+syn_page);
     Send_to_API ( "GET", "/syn/show", (syn_page ? "syn_page=" + syn_page : null), function(Response)
@@ -186,20 +185,27 @@
                     { idSectionPasserelles.append( Creer_cadran ( cadran ) );
                     }
                  );
-          Load_lightsyn_websocket(Synoptique.cadrans);                                                 /* Charge la websocket */
         }
 /*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
-       idSectionHeavySyn.empty().css("position","relative").addClass("mx-1");
+       idSectionHeavySyn.empty().css("position","relative");
        if (Synoptique.mode_affichage == true)
         { Trame = Trame_new ("idSectionHeavySyn");
-          idSectionHeavySyn.prepend( $("<h1>").addClass("text-center text-white").text( Synoptique.page + " - " + Synoptique.libelle ) );
+
+           $("#idSectionHeavySynTitle").append ( $("<div>").addClass("col-auto")
+                                                  .append ( $("<h1>").addClass("text-white")
+                                                            .text ( Synoptique.page + " - " + Synoptique.libelle + "(#" + Synoptique.syn_id + ")" )
+                                                          )
+                                               )
+                                       .append ( $("<div>").addClass("ml-auto btn-group align-items-center")
+                                                  .append ( $("<button>").addClass("btn btn-primary")
+                                                              .text ( "Acquitter" )
+                                                              .on("click", () => { Acquitter_synoptique() } )
+                                                          )
+                                               );
           $.each ( Synoptique.visuels, function (i, visuel)
                     { if (visuel.forme == null)
                        { console.log ( "new null at " + visuel.posx + " " + visuel.posy );
-                         visuel.svggroupe = Trame.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-                         Trame.add(visuel.svggroupe);
-                         visuel.svggroupe.add ( SVG_New_from_image ( Trame, visuel.icone+".gif" ) );
-                         Trame.update_matrice ( visuel );
+                         Trame.new_from_image ( visuel, visuel.icone+".gif" );
                        }
                       else if (visuel.ihm_affichage=="complexe" && visuel.forme=="bouton")
                        { Trame.new_button ( visuel ); }
@@ -225,10 +231,8 @@
                        }*/
                     }
                  );
-          Load_heavysyn_websocket( Synoptique.cadrans.map( function (cadran)
-                                    { return ({ tech_id: cadran.tech_id, acronyme: cadran.acronyme }); } )
-                                 );                                                 /* Charge la websocket */
         }
+       Load_websocket(Synoptique.syn_id);                                                              /* Charge la websocket */
 
 /*---------------------------------------------------- Affichage des tableaux ------------------------------------------------*/
        idSectionTableaux.empty();
