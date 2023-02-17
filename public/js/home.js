@@ -207,14 +207,11 @@
                        { Trame.new_encadre ( visuel ); }
                       else if (visuel.ihm_affichage=="complexe" && visuel.forme=="comment")
                        { Trame.new_comment ( visuel ); }
-                      else if (visuel.ihm_affichage=="by_mode")
-                       { Trame.new_from_image( visuel, visuel.forme+"_"+visuel.mode+"."+visuel.extension ); }
-                      else if (visuel.ihm_affichage=="by_color")
-                       { Trame.new_from_image( visuel, visuel.forme+"_"+visuel.color+"."+visuel.extension ); }
-                      else if (visuel.ihm_affichage=="by_mode_color")
-                       { Trame.new_from_image( visuel, visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension ); }
+                      else if (visuel.ihm_affichage=="by_mode")       { Trame.new_by_mode ( visuel );       }
+                      else if (visuel.ihm_affichage=="by_color")      { Trame.new_by_color( visuel );       }
+                      else if (visuel.ihm_affichage=="by_mode_color") { Trame.new_by_mode_color ( visuel ); }
                       else if (visuel.ihm_affichage=="static")
-                       { Trame.new_from_image( visuel, visuel.forme+"."+visuel.extension ); }
+                       { Trame.new_static( visuel, visuel.forme+"."+visuel.extension ); }
 
                       if (visuel.svggroupe !== undefined)
                        { visuel.svggroupe.on ( "click", function (event) { Clic_sur_visuel ( visuel ) }, false);

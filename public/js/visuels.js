@@ -80,10 +80,16 @@ console.log("Changer_etat_visuel " + visuel.ihm_affichage );
         { Changer_etat_visuel_by_mode_color ( visuel, etat );   }
      }
     else /* Heavysyn */
-     { /*{ if (visuel.ihm_affichage=="static")
+     { /*else if (visuel.ihm_affichage=="complexe" && visuel.forme=="bouton")
+                       { Trame.new_button ( visuel ); }
+                      else if (visuel.ihm_affichage=="complexe" && visuel.forme=="encadre")
+                       { Trame.new_encadre ( visuel ); }
+                      else if (visuel.ihm_affichage=="complexe" && visuel.forme=="comment")
+                       { Trame.new_comment ( visuel ); }
+/*{ if (visuel.ihm_affichage=="static")
         { Changer_etat_visuel_static ( visuel, etat );  }
-       else*/ if (visuel.ihm_affichage=="by_mode")
-        { visuel.Change_target ( visuel.forme+"_"+etat.mode+"."+visuel.extension ); }
+       else if (visuel.ihm_affichage=="by_mode")*/
+        { visuel.Set_state ( etat ); }
        /*else if (visuel.ihm_affichage=="by_color")
         { Changer_etat_visuel_by_color ( visuel, etat );   }
        else if (visuel.ihm_affichage=="by_mode_color")
