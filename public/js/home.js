@@ -191,8 +191,9 @@
        if (Synoptique.mode_affichage == true)
         { Trame = Trame_new ("idSectionHeavySyn");
 
-           $("#idSectionHeavySynTitle").append ( $("<div>").addClass("col-auto")
-                                                  .append ( $("<h1>").addClass("text-white")
+           $("#idSectionHeavySynTitle").empty()
+                                       .append ( $("<div>").addClass("col-auto")
+                                                  .append ( $("<h2>").addClass("text-white")
                                                             .text ( Synoptique.page + " - " + Synoptique.libelle + "(#" + Synoptique.syn_id + ")" )
                                                           )
                                                )
