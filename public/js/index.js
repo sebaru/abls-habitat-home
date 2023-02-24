@@ -33,7 +33,8 @@
        console.debug(event);
      }
     WTDWebSocket.onclose = function (event)
-     { console.log("Close au websocket !" );
+     { $('#idAlertConnexionLost').show();
+       console.log("Close au websocket !" );
        console.debug(event);
      }
 

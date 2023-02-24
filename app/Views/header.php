@@ -240,7 +240,6 @@
 
 <header>
 
-
 	<nav class="navbar navbar-dark navbar-expand-md fixed-top shadow"> <!-- fixed-top -->
 
   <!--<a class="nav-item"><img id="idMasterVignetteActivite" class="wtd-menu mr-1" src=""></a>
@@ -281,4 +280,7 @@
 </header>
 <?php if ( getenv("CI_ENVIRONMENT") == "development" ) { echo "<div class='alert alert-warning'>Instance de DEV</div>"; } ?>
 
-
+ <div id="idAlertConnexionLost" class="alert alert-warning" role="alert" style="display: none">
+   <h4 class="alert-heading">Connexion perdue !</h4>
+     <a href="/">Se reconnecter</a>
+ </div>
