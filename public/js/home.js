@@ -188,21 +188,21 @@
         }
 /*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
        idSectionHeavySyn.empty().css("position","relative");
-       if (Synoptique.mode_affichage == true)
+       if (Synoptique.mode_affichage == true && Synoptique.visuels.length() && Synoptique.cadrans.length() )
         { Trame = Trame_new ("idSectionHeavySyn");
 
-           $("#idSectionHeavySynTitle").empty()
-                                       .append ( $("<div>").addClass("col-auto")
-                                                  .append ( $("<h2>").addClass("text-white")
-                                                            .text ( Synoptique.page + " - " + Synoptique.libelle + "(#" + Synoptique.syn_id + ")" )
-                                                          )
-                                               )
-                                       .append ( $("<div>").addClass("ml-auto btn-group align-items-center")
-                                                  .append ( $("<button>").addClass("btn btn-primary")
-                                                              .text ( "Acquitter" )
-                                                              .on("click", () => { Acquitter_synoptique() } )
-                                                          )
-                                               );
+          $("#idSectionHeavySynTitle").empty()
+                                      .append ( $("<div>").addClass("col-auto")
+                                                 .append ( $("<h2>").addClass("text-white")
+                                                           .text ( Synoptique.page + " - " + Synoptique.libelle + "(#" + Synoptique.syn_id + ")" )
+                                                         )
+                                              )
+                                      .append ( $("<div>").addClass("ml-auto btn-group align-items-center")
+                                                 .append ( $("<button>").addClass("btn btn-primary")
+                                                             .text ( "Acquitter" )
+                                                             .on("click", () => { Acquitter_synoptique() } )
+                                                         )
+                                              );
           $.each ( Synoptique.visuels, function (i, visuel)
                     { if (visuel.forme == null)
                        { console.log ( "new null at " + visuel.posx + " " + visuel.posy );
