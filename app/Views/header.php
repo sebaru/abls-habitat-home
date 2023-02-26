@@ -280,7 +280,7 @@
 </header>
 <?php if ( getenv("CI_ENVIRONMENT") == "development" ) { echo "<div class='alert alert-warning'>Instance de DEV</div>"; } ?>
 
- <div id="idAlertConnexionLost" class="alert alert-warning" role="alert" style="display: none">
+ <div id="idAlertConnexionLost" class="alert alert-warning mx-1" role="alert" style="display: none">
    <h4 class="alert-heading">Connexion perdue !</h4>
      <a href="/">Se reconnecter</a>
  </div>

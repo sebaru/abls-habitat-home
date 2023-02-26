@@ -129,10 +129,10 @@
      { console.log ( "new cadran " + visuel.forme + " " + visuel.tech_id + ":" + visuel.acronyme + " " + visuel.posx + "x" + visuel.posy );
        visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
        this.add(visuel.svggroupe);
-       var rectangle = Trame.rect ( 110, 30 ).attr("rx", 10).fill("gray" ).stroke({ width:2, color:"lightgreen" }).cx(0).cy(0);
+       var rectangle = Trame.rect ( 120, 40 ).attr("rx", 10).fill("gray" ).stroke({ width:2, color:"lightgreen" }).cx(0).cy(0);
        visuel.svggroupe.add ( rectangle );
 
-       var texte = this.text( "- cadran -" ).font ( { family: "arial", size:14, anchor: "middle", variant:"italic" } ).cx(0).cy(0);
+       var texte = this.text( "- cadran -" ).font ( { family: "arial", size:16, anchor: "middle", variant:"italic" } ).cx(0).cy(0);
        visuel.svggroupe.add ( texte );
        visuel.Set_text = function ( new_text ) { texte.text( new_text ); }
        this.update_matrice ( visuel );
@@ -207,10 +207,9 @@
        var hauteur=96*parseInt(dimensions[0]);
        var largeur=96*parseInt(dimensions[1]);
 
-       var titre = this.text ( visuel.libelle ).cx(0).cy(-hauteur/2 - 15 )
+       var titre = this.text ( visuel.libelle )
                    .font( { family: "Sans", size: 18, style: "italic", weight: "normal" } )
-                   .fill( visuel.color )
-                   .stroke( { width: 0 } );
+                   .cx(0).cy(-hauteur/2 - 15 ).fill( visuel.color ).stroke( { width: 0 } );
        visuel.svggroupe.add ( titre );
 
        var rect = Trame.rect( largeur, hauteur ).x(-largeur/2).y(-hauteur/2).attr("rx", 15)

@@ -188,7 +188,7 @@
         }
 /*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
        idSectionHeavySyn.empty().css("position","relative");
-       if (Synoptique.mode_affichage == true && Synoptique.visuels.length() && Synoptique.cadrans.length() )
+       if (Synoptique.mode_affichage == true && Synoptique.nbr_visuels > 0 && Synoptique.nbr_cadrans > 0 )
         { Trame = Trame_new ("idSectionHeavySyn");
 
           $("#idSectionHeavySynTitle").empty()
