@@ -169,6 +169,7 @@
                        .fill(visuel.color).cx(0).cy(0);
        visuel.Set_color = function ( new_color ) { texte.fill( new_color ); }
        visuel.svggroupe.add ( texte );
+       visuel.svggroupe.css("cursor", "default")
        this.update_matrice ( visuel );
        return(visuel);
      }
@@ -209,7 +210,7 @@
 
        var titre = this.text ( visuel.libelle )
                    .font( { family: "Sans", size: 18, style: "italic", weight: "normal" } )
-                   .cx(0).cy(-hauteur/2 - 15 ).fill( visuel.color ).stroke( { width: 0 } );
+                   .cx(0).cy(-hauteur/2 - 15 ).fill( visuel.color ).stroke( { width: 0 } ).css("cursor", "default");
        visuel.svggroupe.add ( titre );
 
        var rect = Trame.rect( largeur, hauteur ).x(-largeur/2).y(-hauteur/2).attr("rx", 15)

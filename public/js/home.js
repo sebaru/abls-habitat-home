@@ -1,16 +1,10 @@
  var Synoptique = null;                                              /* Toutes les données du synoptique en cours d'affichage */
 
 /********************************************* Affichage des vignettes ********************************************************/
- function Msg_acquitter ( id )
-  { table = $('#idTableMessages').DataTable();
-    selection = table.ajax.json().enregs.filter( function(item) { return (item.msg_id==msg_id) } )[0];
-    var json_request = JSON.stringify(
-       { tech_id  : selection.tech_id,
-         acronyme : selection.acronyme,
-       }
-     );
-    Send_to_API ( 'POST', "/api/histo/ack", json_request, function ()
-     { $('#idTableMessages').DataTable().ajax.reload( null, false );
+ function Acquitter_synoptique( )
+  { var json_request = { syn_page: Synoptique.page };
+    Send_to_API ( 'POST', "/syn/ack", json_request, function ()
+     { Show_toast_ok ( "Synoptique acquitté" );
      }, null);
   }
 /******************************************************************************************************************************/

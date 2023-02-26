@@ -259,6 +259,7 @@
 
   <div class="collapse navbar-collapse" id="navbar-toggled">
     <ul class="navbar-nav ml-auto">
+      <a id="idAlertConnexionLost" class="nav-link wtd-cligno" style="display: none"><i class="fa-solid fa-link-slash fa-xl text-warning"></i></a>
       <li class="nav-item dropdown">
         <a class="nav-link rounded align-items-middle dropdown-toggle" href="#" id="navbarUSER" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-user text-white"></i> <span id="idUsername">-</span>
@@ -279,8 +280,3 @@
 </nav>
 </header>
 <?php if ( getenv("CI_ENVIRONMENT") == "development" ) { echo "<div class='alert alert-warning'>Instance de DEV</div>"; } ?>
-
- <div id="idAlertConnexionLost" class="alert alert-warning mx-1" role="alert" style="display: none">
-   <h4 class="alert-heading">Connexion perdue !</h4>
-     <a href="/">Se reconnecter</a>
- </div>

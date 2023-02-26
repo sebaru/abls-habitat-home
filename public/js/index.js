@@ -27,6 +27,13 @@
      { console.log("Websocket loaded " );
        var json_request = JSON.stringify( { "tag": "abonner", "syn_id": syn_id } );
        this.send ( json_request );
+       WTDWebSocket.ping = function()                                                               /* Un ping tous les jours */
+        { var json_ping = JSON.stringify( { "tag": "ping" } );
+          this.send( json_ping );
+          setTimeout ( function () { WTDWebSocket.ping(); }, 30000 );
+          console.log ( "websocket: sending ping" );
+        }
+       WTDWebSocket.ping();
      }
     WTDWebSocket.onerror = function (event)
      { console.log("Error au websocket !" );
