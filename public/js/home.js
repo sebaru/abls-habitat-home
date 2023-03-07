@@ -182,11 +182,11 @@
         }
 /*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
        idSectionHeavySyn.empty().css("position","relative");
+       $("#idSectionHeavySynTitle").empty();
        if (Synoptique.mode_affichage == true && Synoptique.nbr_visuels > 0 && Synoptique.nbr_cadrans > 0 )
         { Trame = Trame_new ("idSectionHeavySyn");
 
-          $("#idSectionHeavySynTitle").empty()
-                                      .append ( $("<div>").addClass("col-auto")
+          $("#idSectionHeavySynTitle").append ( $("<div>").addClass("col-auto")
                                                  .append ( $("<h2>").addClass("text-white")
                                                            .text ( Synoptique.page + " - " + Synoptique.libelle + "(#" + Synoptique.syn_id + ")" )
                                                          )
