@@ -266,7 +266,7 @@
         </a>
 
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarUSER">
-          <a class="dropdown-item" href="/domains"> <i class="fas fa-fort-awesome text-primary"></i> Mes domaines</a>
+          <a class="dropdown-item" href="/domains"> <i class="fas fa-globe text-primary"></i> Mes domaines</a>
           <a class="dropdown-item" href="/messages"> <i class="fas fa-book text-primary"></i> Fil de l'eau</a>
           <a class="dropdown-item" href="/historique"> <i class="fas fa-history text-primary"></i> Historique</a>
           <div class="dropdown-divider"></div>

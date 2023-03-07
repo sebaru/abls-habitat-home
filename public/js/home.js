@@ -1,4 +1,3 @@
- var Synoptique = null;                                              /* Toutes les données du synoptique en cours d'affichage */
 
 /********************************************* Affichage des vignettes ********************************************************/
  function Acquitter_synoptique( )
@@ -151,8 +150,6 @@
                    $('#idNavSynoptique').prepend ( "<span class='navbar-text text-secondary'>></span>" );
                  }
               );
-
-
 /*--------------------------------------------------- Passerelles ------------------------------------------------------------*/
        idSectionPasserelles.empty();
        $.each ( Synoptique.child_syns, function (i, syn)
@@ -183,7 +180,7 @@
 /*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
        idSectionHeavySyn.empty().css("position","relative");
        $("#idSectionHeavySynTitle").empty();
-       if (Synoptique.mode_affichage == true && Synoptique.nbr_visuels > 0 && Synoptique.nbr_cadrans > 0 )
+       if (Synoptique.mode_affichage == true && (Synoptique.nbr_visuels > 0 || Synoptique.nbr_cadrans > 0) )
         { Trame = Trame_new ("idSectionHeavySyn");
 
           $("#idSectionHeavySynTitle").append ( $("<div>").addClass("col-auto")

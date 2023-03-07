@@ -1,9 +1,11 @@
- document.addEventListener('DOMContentLoaded', init, false);
 
  var Charts = new Array();
  var Token       = null;
  var TokenParsed = null;
+ var Closing     = false;
 
+ document.addEventListener('DOMContentLoaded', init, false);
+ window.addEventListener("beforeunload", function () { Closing = true; } );
 /**************************************************** Gère l'ID token *********************************************************/
  function init()
   { let keycloak = new Keycloak( { "realm": $IDP_REALM, "auth-server-url": $IDP_URL, "clientId": $IDP_CLIENT_ID,
