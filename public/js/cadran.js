@@ -120,11 +120,18 @@
 /* Changer_etat_cadran: Appeler par la websocket pour changer un visuel d'un cadran                                           */
 /******************************************************************************************************************************/
  function Changer_etat_cadran ( etat )
-  { if (Synoptique==null) return;
+  { console.log ("Changer_etat_cadran: " + etat );
+    if (Synoptique==null) return;
     cadrans = Synoptique.cadrans.filter( function (item) { return(item.tech_id==etat.tech_id && item.acronyme==etat.acronyme); });
     if (cadrans.length!=1) return;
     cadran = cadrans[0];
-/*    console.debug(etat);*/
+
+    if (Synoptique.mode_affichage == true)
+     { cadran.Set_text ( etat.valeur.toString() + " " + etat.unite );
+       return;
+     }
+
+    console.debug(etat);
     var minimum = parseFloat(cadran.minimum);
     var maximum = parseFloat(cadran.maximum);
     var valeur  = etat.valeur;
@@ -227,3 +234,4 @@
     texte = etat.valeur.toFixed(cadran.nb_decimal);                                            /* Affiche la valeur non capée */
     $('#'+idcadrantexte).text( texte + " " + etat.unite );
   }
+/*----------------------------------------------------------------------------------------------------------------------------*/
