@@ -8,7 +8,21 @@
                      .attr("preserveAspectRatio", "xMidYMid meet")
                      .addClass("border border-success")
                      .css("background-color", "darkgray");
-
+    Trame.maille = 1;
+/***************************************************** Set Grille *************************************************************/
+    Trame.set_grille = function ( maille )
+     { this.maille = maille;
+       if (this.grille !== undefined) this.grille.remove();
+       if(!maille) return;
+       var x, y;
+       this.grille = this.group().attr("id", "wtd-grille");
+       for ( x=0; x<1920; x+=maille )
+        { for ( y=0; y<1080; y+=maille )
+           { var point = this.circle(3).fill("lightblue").cx(x).cy(y);
+             this.grille.add(point);
+           }
+        }
+     }
 /*************************************** Met à jour la matrice de transformation **********************************************/
     Trame.update_matrice = function ( visuel )
      { visuel.svggroupe.transform ( { scale: visuel.scale, translate: [visuel.posx, visuel.posy],
@@ -167,7 +181,8 @@
        var texte = this.text ( visuel.libelle )
                        .font ( { family: family+ ",serif", size: size, style: style, weight: weight, anchor: "middle" } )
                        .fill(visuel.color).cx(0).cy(0);
-       visuel.Set_color = function ( new_color ) { texte.fill( new_color ); }
+       visuel.Set_state = function ( etat ) { texte.text ( etat.libelle ).fill(etat.color); }
+
        visuel.svggroupe.add ( texte );
        visuel.svggroupe.css("cursor", "default")
        this.update_matrice ( visuel );
@@ -187,6 +202,12 @@
                             .attr("rx", 5).fill( visuel.color );
 
        visuel.svggroupe.add ( rectangle );
+
+       visuel.Set_state = function ( etat )
+                           { texte.text( etat.libelle );
+                             rectangle.fill(etat.color);
+                           }
+
        visuel.svggroupe.add ( texte );
        visuel.svggroupe.addClass ( "wtd-darker-on-hover" ).css("cursor", "pointer");
        this.update_matrice ( visuel );

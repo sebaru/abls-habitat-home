@@ -52,7 +52,7 @@
             if (Response.tag == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
        else if (Response.tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
        else if (Response.tag == "DLS_HISTO")
-             { if ($('#idTableMessages') == null) return;
+             { if ($('#idTableMessages').length == 0) return;
                if ( Response.alive == true )
                 { console.log("Websocket MSG NEW");
                   console.debug(Response);
