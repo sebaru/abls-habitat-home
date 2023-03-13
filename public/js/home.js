@@ -182,7 +182,11 @@
        $("#idSectionHeavySynTitle").empty();
        if (Synoptique.mode_affichage == true && (Synoptique.nbr_visuels > 0 || Synoptique.nbr_cadrans > 0) )
         { Trame = Trame_new ("idSectionHeavySyn");
+          Trame.on( "dblclick", function ()
+           { if (!document.fullscreenElement) document.getElementById("idSectionHeavySyn").requestFullscreen();
+                                         else document.exitFullscreen();
 
+           });
           $("#idSectionHeavySynTitle").append ( $("<div>").addClass("col-auto")
                                                  .append ( $("<h2>").addClass("text-white")
                                                            .text ( Synoptique.page + " - " + Synoptique.libelle + "(#" + Synoptique.syn_id + ")" )
