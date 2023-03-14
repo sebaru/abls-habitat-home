@@ -55,7 +55,8 @@
                                    } ).attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
        visuel.svggroupe.add ( svgimage );
        visuel.Set_state = function ( etat )
-                           { if (etat.cligno) groupe.addClass("wtd-cligno");
+                           { visuel.mode = etat.mode;
+                             if (etat.cligno) groupe.addClass("wtd-cligno");
                                          else groupe.removeClass("wtd-cligno");
                            }
        this.update_matrice ( visuel );
@@ -76,8 +77,9 @@
                                    } ).attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
        visuel.svggroupe.add ( svgimage );
        visuel.Set_state = function ( etat )
-                           { groupe.fadeOut("fast", function ()
-                              { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+etat.mode+"."+visuel.extension );
+                           { visuel.mode = etat.mode;
+                             groupe.fadeOut("fast", function ()
+                              { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"."+visuel.extension );
                                 groupe.fadeIn();
                                 if (etat.cligno) groupe.addClass("wtd-cligno");
                                             else groupe.removeClass("wtd-cligno");
@@ -101,8 +103,9 @@
                                    } ).attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
        visuel.svggroupe.add ( svgimage );
        visuel.Set_state = function ( etat )
-                           { groupe.fadeOut("fast", function ()
-                              { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+etat.mode+"_"+visuel.color+"."+visuel.extension );
+                           { visuel.mode = etat.mode;
+                             groupe.fadeOut("fast", function ()
+                              { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension );
                                 groupe.fadeIn();
                                 if (etat.cligno) groupe.addClass("wtd-cligno");
                                             else groupe.removeClass("wtd-cligno");
@@ -126,7 +129,8 @@
                                    } ).attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
        visuel.svggroupe.add ( svgimage );
        visuel.Set_state = function ( etat )
-                           { groupe.fadeOut("fast", function ()
+                           { visuel.mode = etat.mode;
+                             groupe.fadeOut("fast", function ()
                               { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.color+"."+visuel.extension );
                                 groupe.fadeIn();
                                 if (etat.cligno) groupe.addClass("wtd-cligno");
@@ -181,7 +185,10 @@
        var texte = this.text ( visuel.libelle )
                        .font ( { family: family+ ",serif", size: size, style: style, weight: weight, anchor: "middle" } )
                        .fill(visuel.color).cx(0).cy(0);
-       visuel.Set_state = function ( etat ) { texte.text ( etat.libelle ).fill(etat.color); }
+       visuel.Set_state = function ( etat )
+                           { visuel.mode = etat.mode;
+                             texte.text ( etat.libelle ).fill(etat.color);
+                           }
 
        visuel.svggroupe.add ( texte );
        visuel.svggroupe.css("cursor", "default")
@@ -204,7 +211,8 @@
        visuel.svggroupe.add ( rectangle );
 
        visuel.Set_state = function ( etat )
-                           { texte.text( etat.libelle );
+                           { visuel.mode = etat.mode;
+                             texte.text( etat.libelle );
                              rectangle.fill(etat.color);
                            }
 
