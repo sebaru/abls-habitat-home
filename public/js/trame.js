@@ -18,7 +18,7 @@
        this.grille = this.group().attr("id", "wtd-grille");
        for ( x=0; x<1920; x+=maille )
         { for ( y=0; y<1080; y+=maille )
-           { var point = this.circle(3).fill("lightblue").cx(x).cy(y);
+           { var point = this.circle(2).fill("black").cx(x).cy(y);
              this.grille.add(point);
            }
         }
@@ -56,12 +56,12 @@
        visuel.svggroupe.add ( svgimage );
        visuel.Set_state = function ( etat )
                            { visuel.mode = etat.mode;
-                             if (etat.cligno) groupe.addClass("wtd-cligno");
-                                         else groupe.removeClass("wtd-cligno");
+                             if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                                         else visuel.svggroupe.removeClass("wtd-cligno");
                            }
        this.update_matrice ( visuel );
-       if (visuel.cligno) groupe.addClass("wtd-cligno");
-                     else groupe.removeClass("wtd-cligno");
+       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                     else visuel.svggroupe.removeClass("wtd-cligno");
        return( visuel );
      }
 /***************************************************** New image **************************************************************/
@@ -81,13 +81,13 @@
                              groupe.fadeOut("fast", function ()
                               { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"."+visuel.extension );
                                 groupe.fadeIn();
-                                if (etat.cligno) groupe.addClass("wtd-cligno");
-                                            else groupe.removeClass("wtd-cligno");
+                                if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                                            else visuel.svggroupe.removeClass("wtd-cligno");
                               } );
                            }
        this.update_matrice ( visuel );
-       if (visuel.cligno) groupe.addClass("wtd-cligno");
-                     else groupe.removeClass("wtd-cligno");
+       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                     else visuel.svggroupe.removeClass("wtd-cligno");
        return( visuel );
      }
 /***************************************************** New image **************************************************************/
@@ -107,13 +107,13 @@
                              groupe.fadeOut("fast", function ()
                               { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension );
                                 groupe.fadeIn();
-                                if (etat.cligno) groupe.addClass("wtd-cligno");
-                                            else groupe.removeClass("wtd-cligno");
+                                if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                                            else visuel.svggroupe.removeClass("wtd-cligno");
                               } );
                            }
        this.update_matrice ( visuel );
-       if (visuel.cligno) groupe.addClass("wtd-cligno");
-                     else groupe.removeClass("wtd-cligno");
+       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                     else visuel.svggroupe.removeClass("wtd-cligno");
        return( visuel );
      }
 /***************************************************** New image **************************************************************/
@@ -133,13 +133,13 @@
                              groupe.fadeOut("fast", function ()
                               { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.color+"."+visuel.extension );
                                 groupe.fadeIn();
-                                if (etat.cligno) groupe.addClass("wtd-cligno");
-                                            else groupe.removeClass("wtd-cligno");
+                                if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                                            else visuel.svggroupe.removeClass("wtd-cligno");
                               } );
                            }
        this.update_matrice ( visuel );
-       if (visuel.cligno) groupe.addClass("wtd-cligno");
-                     else groupe.removeClass("wtd-cligno");
+       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                     else visuel.svggroupe.removeClass("wtd-cligno");
        return( visuel );
      }
 /***************************************************** New cadran *************************************************************/
@@ -188,11 +188,15 @@
        visuel.Set_state = function ( etat )
                            { visuel.mode = etat.mode;
                              texte.text ( etat.libelle ).fill(etat.color);
+                             if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                                         else visuel.svggroupe.removeClass("wtd-cligno");
                            }
 
        visuel.svggroupe.add ( texte );
        visuel.svggroupe.css("cursor", "default")
        this.update_matrice ( visuel );
+       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                     else visuel.svggroupe.removeClass("wtd-cligno");
        return(visuel);
      }
 /***************************************************** New button *************************************************************/
@@ -214,11 +218,15 @@
                            { visuel.mode = etat.mode;
                              texte.text( etat.libelle );
                              rectangle.fill(etat.color);
+                             if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                                         else visuel.svggroupe.removeClass("wtd-cligno");
                            }
 
        visuel.svggroupe.add ( texte );
        visuel.svggroupe.addClass ( "wtd-darker-on-hover" ).css("cursor", "pointer");
        this.update_matrice ( visuel );
+       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                     else visuel.svggroupe.removeClass("wtd-cligno");
        return(visuel);
      }
 
@@ -246,8 +254,14 @@
                        .fill( "black" ).attr( "fill-opacity", 0.1 )
                        .stroke( { width: 4, color: visuel.color } );
        visuel.svggroupe.add ( rect );
-       visuel.Set_color = function ( new_color ) { rect.stroke( { color: new_color } ); titre.fill ( new_color ); }
+       visuel.Set_state = function ( etat )
+                           { rect.stroke( { color: etat.color } ); titre.fill ( etat.color );
+                             if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                                         else visuel.svggroupe.removeClass("wtd-cligno");
+                           }
        this.update_matrice ( visuel );
+       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                     else visuel.svggroupe.removeClass("wtd-cligno");
        return(visuel);
      }
     return(Trame);
