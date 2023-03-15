@@ -150,7 +150,8 @@
        var rectangle = Trame.rect ( 120, 40 ).attr("rx", 10).fill("gray" ).stroke({ width:2, color:"lightgreen" }).cx(0).cy(0);
        visuel.svggroupe.add ( rectangle );
 
-       var texte = this.text( "- cadran -" ).font ( { family: "arial", size:16, anchor: "middle", variant:"italic" } ).cx(0).cy(0);
+       var texte = this.text( "- cadran -" ).font ( { family: "arial", size:16, anchor: "middle", variant:"italic" } )
+                       .cx(0).cy(0).css("cursor", "default");
        visuel.svggroupe.add ( texte );
        visuel.Set_text = function ( new_text ) { texte.text( new_text ); }
        this.update_matrice ( visuel );

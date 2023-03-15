@@ -40,9 +40,15 @@
        console.debug(event);
      }
     WTDWebSocket.onclose = function (event)
-     { if(Closing==false) $('#idAlertConnexionLost').show();
-       console.log("Close au websocket !" );
+     { console.log("Close au websocket, restarting in 10s !" );
        console.debug(event);
+       if(Closing==false)
+        { $('#idAlertConnexionLost').show();
+          setInterval ( function()                                                                  /* Un ping tous les jours */
+           { Load_websocket ( syn_id );
+             console.log ( "websocket: restarting" );
+           }, 10000 );
+        }
      }
 
     WTDWebSocket.onmessage = function (event)
@@ -52,7 +58,7 @@
             if (Response.tag == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
        else if (Response.tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
        else if (Response.tag == "DLS_HISTO")
-             { if ($('#idTableMessages').length == 0) return;
+             { if (DataTable.isDataTable( 'idTableMessages') == false) return;
                if ( Response.alive == true )
                 { console.log("Websocket MSG NEW");
                   console.debug(Response);

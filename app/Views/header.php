@@ -22,8 +22,9 @@
                overflow-y: scroll;
              }
 
+        .page-footer { background-color: rgba(0,0,0,0.7); }
 
-        h3 { color: white }
+        h3 { color: white; }
 
         .nav-link:hover { color: white !important;
                           background-color: #48BBC0;
