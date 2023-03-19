@@ -1,9 +1,9 @@
 
 <!-- Footer -->
-<footer class="page-footer mt-2 fixed-bottom"> <!-- fixed-bottom-->
+<footer class="d-none d-md-block page-footer mt-2 fixed-bottom"> <!-- fixed-bottom-->
 
   <!-- Copyright -->
-  <div class="footer-copyright text-right py-2">
+  <div class="footer-copyright text-right p-1">
     <small>
       <span class="text-secondary"><?php echo getenv("ABLS_API"); ?> -</span>
       <span class="text-secondary"> © </span>
