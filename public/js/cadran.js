@@ -120,10 +120,11 @@
 /* Changer_etat_cadran: Appeler par la websocket pour changer un visuel d'un cadran                                           */
 /******************************************************************************************************************************/
  function Changer_etat_cadran ( etat )
-  { console.log ("Changer_etat_cadran: " + etat );
-    if (Synoptique==null) return;
+  { console.log ("Changer_etat_cadran: ")
+    console.debug( etat );
+    if (Synoptique==null) { console.log ("Syn is null, return"); return; }
     cadrans = Synoptique.cadrans.filter( function (item) { return(item.tech_id==etat.tech_id && item.acronyme==etat.acronyme); });
-    if (cadrans.length!=1) return;
+    if (cadrans.length!=1) { console.log ("Length != 1, return"); return; }
     cadran = cadrans[0];
 
     if (Synoptique.mode_affichage == true)
