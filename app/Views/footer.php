@@ -1,13 +1,13 @@
 
 <!-- Footer -->
-<footer class="d-none d-md-block page-footer mt-2 fixed-bottom"> <!-- fixed-bottom-->
+<footer class="d-none d-md-block page-footer mt-2 fixed-bottom bg-transparent"> <!-- fixed-bottom-->
 
   <!-- Copyright -->
   <div class="footer-copyright text-right p-1">
     <small>
       <span class="text-secondary"><?php echo getenv("ABLS_API"); ?> -</span>
       <span class="text-secondary"> © </span>
-      <a href="https://ABLS-habitat.fr/">ABLS-Habitat.fr </a>
+      <a href="https://docs.abls-habitat.fr/" target="_blank">Abls-Habitat.fr</a>
     </small>
   </div>
 

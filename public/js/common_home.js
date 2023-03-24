@@ -17,7 +17,7 @@
 /* Load_websocket: Appelé pour ouvrir la websocket                                                                            */
 /******************************************************************************************************************************/
  function Load_websocket ( syn_id )
-  { if (WTDWebSocket && WTDWebSocket.readyState == "OPEN") WTDWebSocket.close();
+  { if (WTDWebSocket && WTDWebSocket.readyState == 1) WTDWebSocket.close(); /* 1 = Open */
     WTDWebSocket = new WebSocket($ABLS_API.replace("http","ws")+"/websocket"+
                                  "?token="+Token+
                                  "&domain_uuid="+localStorage.getItem("domain_uuid")

@@ -18,17 +18,12 @@
                background-attachment: fixed;
                height: 100%;
                background-color: rgba(30,28,56,1.0);
-               padding-top: 70px;
+               padding-top: 80px;
+               padding-bottom: 40px;
                overflow-y: scroll;
              }
 
-        .page-footer { background-color: rgba(0,0,0,0.7); }
-
         h3 { color: white; }
-
-        .nav-link:hover { color: white !important;
-                          background-color: #48BBC0;
-                        }
 
         .wtd-cligno { animation-duration: 1.0s;
                       animation-name: wtdClignoFrames;
