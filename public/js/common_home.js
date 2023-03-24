@@ -36,11 +36,7 @@
         }, 30000 );
      }
     WTDWebSocket.onerror = function (event)
-     { console.log("Error au websocket !" );
-       console.debug(event);
-     }
-    WTDWebSocket.onclose = function (event)
-     { console.log("Close au websocket, restarting in 10s !" );
+     { console.log("Error au websocket restarting in 10s !" );
        console.debug(event);
        if(Closing==false)
         { $('#idAlertConnexionLost').show();
@@ -49,6 +45,10 @@
              console.log ( "websocket: restarting" );
            }, 10000 );
         }
+     }
+    WTDWebSocket.onclose = function (event)
+     { console.log("Close au websocket");
+       console.debug(event);
      }
 
     WTDWebSocket.onmessage = function (event)

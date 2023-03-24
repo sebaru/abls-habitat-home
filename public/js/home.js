@@ -242,9 +242,6 @@
              $('#'+id).off("click").on("click", function () { Charger_page_tableau(tableau.tableau_id); } );
            });
         }
-
-       /*Charger_messages ( syn_id );*/
-       Slide_down_when_loaded ( "toplevel" );
      }, null );
  }
 
