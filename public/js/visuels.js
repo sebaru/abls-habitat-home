@@ -48,13 +48,17 @@
     else
      {  }
 
-    var card = $('<div></div>').addClass("row bg-transparent mb-3")
-               .append( $('<div></div>').addClass("col text-center mb-1")
+    var card = $('<div>').addClass("row bg-transparent mb-3")
+               .append( $('<div>').addClass("col text-center mb-1")
+                                  .append ( $("<span>").addClass("text-white").text(Response.dls_owner_shortname))
+                      )
+               .append( $('<div>').addClass('w-100') )
+               .append( $('<div>').addClass("col text-center mb-1")
                         .append( contenu )
                       )
-               .append( $('<div></div>').addClass('w-100') )
-               .append( $('<div></div>').addClass("col text-center")
-                                        .append ( $("<span></span>").addClass("text-white").text(Response.libelle))
+               .append( $('<div>').addClass('w-100') )
+               .append( $('<div>').addClass("col text-center")
+                                        .append ( $("<span>").addClass("text-white").text(Response.libelle))
                                         .attr ( "id", id+"-footer-text" )
                       )
                .attr ( "id", id );

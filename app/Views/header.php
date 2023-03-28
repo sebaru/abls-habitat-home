@@ -267,6 +267,7 @@
           <a class="dropdown-item" href="/historique"> <i class="fas fa-history text-primary"></i> Historique</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="/home/user" id="idHrefUsername" href="#"><i class="fas fa-user text-info"></i> Mon Profil</a>
+          <a class="dropdown-item" href="<?php echo getenv("IDP_URL"); ?>/realms/<?php echo getenv("IDP_REALM");?>/account/"><i class="fas fa-user text-info"></i> Mon Compte</a>
           <a class="dropdown-item" href="#" onclick="Logout()"><i class="fas fa-sign-out-alt text-danger"></i> <span>Sortir</span> </a>
         </div>
       </li>
