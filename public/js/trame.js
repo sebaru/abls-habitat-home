@@ -77,13 +77,21 @@
                                    } ).attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
        visuel.svggroupe.add ( svgimage );
        visuel.Set_state = function ( etat )
-                           { visuel.mode = etat.mode;
-                             groupe.fadeOut("fast", function ()
-                              { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"."+visuel.extension );
-                                groupe.fadeIn();
-                                if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
-                                            else visuel.svggroupe.removeClass("wtd-cligno");
-                              } );
+                           { if (etat.mode!="disabled")
+                              { if (visuel.mode != etat.mode)
+                                 { groupe.fadeOut("fast", function ()
+                                    { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"."+visuel.extension );
+                                      groupe.fadeIn();
+                                    } );
+                                 }
+                              }
+                             if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                                         else visuel.svggroupe.removeClass("wtd-cligno");
+                             if (etat.mode=="disabled") visuel.svggroupe.addClass("wtd-img-grayscale")
+                                                   else visuel.svggroupe.removeClass("wtd-img-grayscale")
+                             visuel.mode   = etat.mode;
+                             visuel.cligno = etat.cligno;
+                             visuel.color  = etat.color;
                            }
        this.update_matrice ( visuel );
        if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
@@ -103,13 +111,21 @@
                                    } ).attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
        visuel.svggroupe.add ( svgimage );
        visuel.Set_state = function ( etat )
-                           { visuel.mode = etat.mode;
-                             groupe.fadeOut("fast", function ()
-                              { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension );
-                                groupe.fadeIn();
-                                if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
-                                            else visuel.svggroupe.removeClass("wtd-cligno");
-                              } );
+                           { if (etat.mode!="disabled")
+                              { if (visuel.mode != etat.mode || visuel.color != etat.color)
+                                 { groupe.fadeOut("fast", function ()
+                                    { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension );
+                                      groupe.fadeIn();
+                                    } );
+                                }
+                              }
+                             if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                                         else visuel.svggroupe.removeClass("wtd-cligno");
+                             if (etat.mode=="disabled") visuel.svggroupe.addClass("wtd-img-grayscale")
+                                                   else visuel.svggroupe.removeClass("wtd-img-grayscale")
+                             visuel.mode   = etat.mode;
+                             visuel.cligno = etat.cligno;
+                             visuel.color  = etat.color;
                            }
        this.update_matrice ( visuel );
        if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
@@ -129,13 +145,19 @@
                                    } ).attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
        visuel.svggroupe.add ( svgimage );
        visuel.Set_state = function ( etat )
-                           { visuel.mode = etat.mode;
-                             groupe.fadeOut("fast", function ()
-                              { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.color+"."+visuel.extension );
-                                groupe.fadeIn();
-                                if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
-                                            else visuel.svggroupe.removeClass("wtd-cligno");
-                              } );
+                           { if (visuel.color != etat.color)
+                              { groupe.fadeOut("fast", function ()
+                                 { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.color+"."+visuel.extension );
+                                   groupe.fadeIn();
+                                 } );
+                              }
+                             if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                                         else visuel.svggroupe.removeClass("wtd-cligno");
+                             if (etat.mode=="disabled") visuel.svggroupe.addClass("wtd-img-grayscale")
+                                                   else visuel.svggroupe.removeClass("wtd-img-grayscale")
+                             visuel.mode   = etat.mode;
+                             visuel.cligno = etat.cligno;
+                             visuel.color  = etat.color;
                            }
        this.update_matrice ( visuel );
        if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
@@ -153,7 +175,14 @@
        var texte = this.text( "- cadran -" ).font ( { family: "arial", size:16, anchor: "middle", variant:"italic" } )
                        .cx(0).cy(0).css("cursor", "default");
        visuel.svggroupe.add ( texte );
-       visuel.Set_text = function ( new_text ) { texte.text( new_text ); }
+       visuel.Set_text = function ( etat )
+                          { if (this.forme=="simple") texte.text( etat.valeur.toString() + " " + etat.unite );
+                            else if (this.classe=="REGISTRE" && this.forme=="horaire")
+                             { var heure = Math.trunc(etat.valeur);
+                               var minute = Math.trunc((etat.valeur - heure)*100); if (minute > 59) minute = 59;
+                               texte.text ( ("0"+heure).slice(-2) + ":" +  ("0"+minute).slice(-2) );
+                             }
+                          }
        this.update_matrice ( visuel );
        return(visuel);
      }

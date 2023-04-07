@@ -128,7 +128,7 @@
     cadran = cadrans[0];
 
     if (Synoptique.mode_affichage == true)
-     { cadran.Set_text ( etat.valeur.toString() + " " + etat.unite );
+     { cadran.Set_text ( etat );
        return;
      }
 
