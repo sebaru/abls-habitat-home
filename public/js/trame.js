@@ -59,9 +59,8 @@
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
                            }
+       visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
-       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
-                     else visuel.svggroupe.removeClass("wtd-cligno");
        return( visuel );
      }
 /***************************************************** New image **************************************************************/
@@ -92,9 +91,8 @@
                              visuel.color   = etat.color;
                              visuel.disable = etat.disable;
                            }
+       visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
-       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
-                     else visuel.svggroupe.removeClass("wtd-cligno");
        return( visuel );
      }
 /***************************************************** New image **************************************************************/
@@ -125,9 +123,8 @@
                              visuel.color   = etat.color;
                              visuel.disable = etat.disable;
                            }
+       visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
-       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
-                     else visuel.svggroupe.removeClass("wtd-cligno");
        return( visuel );
      }
 /***************************************************** New image **************************************************************/
@@ -158,9 +155,8 @@
                              visuel.color   = etat.color;
                              visuel.disable = etat.disable;
                            }
+       visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
-       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
-                     else visuel.svggroupe.removeClass("wtd-cligno");
        return( visuel );
      }
 /***************************************************** New cadran *************************************************************/
@@ -175,12 +171,20 @@
                        .cx(0).cy(0).css("cursor", "default");
        visuel.svggroupe.add ( texte );
        visuel.Set_text = function ( etat )
-                          { if (this.forme=="simple") texte.text( etat.valeur.toString() + " " + etat.unite );
+                          { if (this.classe=="CH")
+                             { var date = new Date();
+                               date.setSeconds(etat.valeur);
+                               var hhmmssFormat = date.toISOString().substr(11, 8);
+                               texte.text (hhmmssFormat);
+                             }
+                            else if (this.classe="CI")
+                             { texte.text( etat.valeur.toString() + " " + etat.unite ); }
                             else if (this.classe=="REGISTRE" && this.forme=="horaire")
                              { var heure = Math.trunc(etat.valeur);
                                var minute = Math.trunc((etat.valeur - heure)*100); if (minute > 59) minute = 59;
                                texte.text ( ("0"+heure).slice(-2) + ":" +  ("0"+minute).slice(-2) );
                              }
+                            else texte.text( "call seb" );
                           }
        this.update_matrice ( visuel );
        return(visuel);
@@ -223,9 +227,8 @@
 
        visuel.svggroupe.add ( texte );
        visuel.svggroupe.css("cursor", "default")
+       visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
-       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
-                     else visuel.svggroupe.removeClass("wtd-cligno");
        return(visuel);
      }
 /***************************************************** New button *************************************************************/
@@ -244,20 +247,22 @@
        visuel.svggroupe.add ( rectangle );
 
        visuel.Set_state = function ( etat )
-                           { visuel.mode = etat.mode;
-                             texte.text( etat.libelle );
+                           { texte.text( etat.libelle );
                              rectangle.fill(etat.color);
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
-                             if (etat.disable==true) visuel.svggroupe.addClass("wtd-img-grayscale");
-                                                else visuel.svggroupe.removeClass("wtd-img-grayscale");
+                             /*if (etat.disable==true) visuel.svggroupe.addClass("wtd-img-grayscale");
+                                                else visuel.svggroupe.removeClass("wtd-img-grayscale");*/
+                             visuel.mode    = etat.mode;
+                             visuel.cligno  = etat.cligno;
+                             visuel.color   = etat.color;
+                             visuel.disable = etat.disable;
                            }
 
        visuel.svggroupe.add ( texte );
        visuel.svggroupe.addClass ( "wtd-darker-on-hover" ).css("cursor", "pointer");
+       visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
-       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
-                     else visuel.svggroupe.removeClass("wtd-cligno");
        return(visuel);
      }
 
@@ -290,9 +295,8 @@
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
                            }
+       visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
-       if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
-                     else visuel.svggroupe.removeClass("wtd-cligno");
        return(visuel);
      }
     return(Trame);

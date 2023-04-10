@@ -217,6 +217,7 @@
 
                       if (visuel.svggroupe !== undefined)
                        { visuel.svggroupe.on ( "click", function (event) { Clic_sur_visuel ( visuel ) }, false);
+                         visuel.svggroupe.add("<title>"+htmlEncode(visuel.libelle)+"</title>");
                        }
                     }
                  );
