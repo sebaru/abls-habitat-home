@@ -77,21 +77,20 @@
                                    } ).attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
        visuel.svggroupe.add ( svgimage );
        visuel.Set_state = function ( etat )
-                           { if (etat.mode!="disabled")
-                              { if (visuel.mode != etat.mode)
-                                 { groupe.fadeOut("fast", function ()
-                                    { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"."+visuel.extension );
-                                      groupe.fadeIn();
-                                    } );
-                                 }
+                           { if (visuel.mode != etat.mode)
+                              { groupe.fadeOut("fast", function ()
+                                 { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"."+visuel.extension );
+                                   groupe.fadeIn();
+                                 } );
                               }
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
-                             if (etat.mode=="disabled") visuel.svggroupe.addClass("wtd-img-grayscale")
-                                                   else visuel.svggroupe.removeClass("wtd-img-grayscale")
-                             visuel.mode   = etat.mode;
-                             visuel.cligno = etat.cligno;
-                             visuel.color  = etat.color;
+                             if (etat.disable==true) visuel.svggroupe.addClass("wtd-img-grayscale");
+                                                else visuel.svggroupe.removeClass("wtd-img-grayscale");
+                             visuel.mode    = etat.mode;
+                             visuel.cligno  = etat.cligno;
+                             visuel.color   = etat.color;
+                             visuel.disable = etat.disable;
                            }
        this.update_matrice ( visuel );
        if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
@@ -111,21 +110,20 @@
                                    } ).attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
        visuel.svggroupe.add ( svgimage );
        visuel.Set_state = function ( etat )
-                           { if (etat.mode!="disabled")
-                              { if (visuel.mode != etat.mode || visuel.color != etat.color)
-                                 { groupe.fadeOut("fast", function ()
-                                    { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension );
-                                      groupe.fadeIn();
-                                    } );
-                                }
+                           { if (visuel.mode != etat.mode || visuel.color != etat.color)
+                              { groupe.fadeOut("fast", function ()
+                                 { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension );
+                                   groupe.fadeIn();
+                                 } );
                               }
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
-                             if (etat.mode=="disabled") visuel.svggroupe.addClass("wtd-img-grayscale")
-                                                   else visuel.svggroupe.removeClass("wtd-img-grayscale")
-                             visuel.mode   = etat.mode;
-                             visuel.cligno = etat.cligno;
-                             visuel.color  = etat.color;
+                             if (etat.disable==true) visuel.svggroupe.addClass("wtd-img-grayscale");
+                                                else visuel.svggroupe.removeClass("wtd-img-grayscale");
+                             visuel.mode    = etat.mode;
+                             visuel.cligno  = etat.cligno;
+                             visuel.color   = etat.color;
+                             visuel.disable = etat.disable;
                            }
        this.update_matrice ( visuel );
        if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
@@ -153,11 +151,12 @@
                               }
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
-                             if (etat.mode=="disabled") visuel.svggroupe.addClass("wtd-img-grayscale")
-                                                   else visuel.svggroupe.removeClass("wtd-img-grayscale")
-                             visuel.mode   = etat.mode;
-                             visuel.cligno = etat.cligno;
-                             visuel.color  = etat.color;
+                             if (etat.disable==true) visuel.svggroupe.addClass("wtd-img-grayscale");
+                                                else visuel.svggroupe.removeClass("wtd-img-grayscale");
+                             visuel.mode    = etat.mode;
+                             visuel.cligno  = etat.cligno;
+                             visuel.color   = etat.color;
+                             visuel.disable = etat.disable;
                            }
        this.update_matrice ( visuel );
        if (visuel.cligno) visuel.svggroupe.addClass("wtd-cligno");
@@ -250,6 +249,8 @@
                              rectangle.fill(etat.color);
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
+                             if (etat.disable==true) visuel.svggroupe.addClass("wtd-img-grayscale");
+                                                else visuel.svggroupe.removeClass("wtd-img-grayscale");
                            }
 
        visuel.svggroupe.add ( texte );
