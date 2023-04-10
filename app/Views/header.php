@@ -88,18 +88,14 @@
           }
 
         .wtd-synoptique { border-radius: 20%;
-                          width: auto;
+                          width: 128px;
                           height: auto;
-                          max-height: 128px;
-                          max-width: 128px;
                           cursor: pointer;
                         }
 
         .wtd-visuel { /*border-radius: 20%;*/
-                      width: auto;
+                      width: 128px;
                       height: auto;
-                      max-height: 128px;
-                      max-width: 128px;
                       cursor: pointer;
                     }
 
@@ -117,8 +113,8 @@
 
         @media (max-width: 768px)
          { .wtd-synoptique
-            { max-height: 96px;
-              max-width: 96px;
+            { width: 96px;
+              max-height: 96px;
             }
            .wtd-vignette
             { max-width: 24px;
