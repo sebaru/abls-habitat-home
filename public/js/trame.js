@@ -172,10 +172,13 @@
        visuel.svggroupe.add ( texte );
        visuel.Set_text = function ( etat )
                           { if (this.classe=="CH")
-                             { var date = new Date();
-                               date.setSeconds(etat.valeur);
-                               var hhmmssFormat = date.toISOString().substr(11, 8);
-                               texte.text (hhmmssFormat);
+                             { secondes  = etat.valeur;
+                               heures    = Math.floor(secondes / 3600);
+                               secondes %= 3600;
+                               minutes   = Math.floor(secondes / 60);
+                               seconds   = secondes % 60;
+                               result    = (heures<10 ? "0" : "") + heures + ":" +  ("0"+minutes).slice(-2) + ":" +  ("0"+secondes).slice(-2)
+                               texte.text ( result );
                              }
                             else if (this.classe="CI")
                              { texte.text( etat.valeur.toString() + " " + etat.unite ); }
