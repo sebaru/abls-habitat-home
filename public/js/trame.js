@@ -161,7 +161,8 @@
      }
 /***************************************************** New cadran *************************************************************/
     Trame.new_cadran = function ( visuel )
-     { console.log ( "new cadran " + visuel.forme + " " + visuel.tech_id + ":" + visuel.acronyme + " " + visuel.posx + "x" + visuel.posy );
+     { console.log ( "new cadran " + visuel.forme + " " + visuel.tech_id + ":" + visuel.acronyme + " " + visuel.posx + "x" + visuel.posy+
+                     " decimal = " + visuel.nb_decimal );
        visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
        this.add(visuel.svggroupe);
        var rectangle = Trame.rect ( 120, 40 ).attr("rx", 10).fill("gray" ).stroke({ width:2, color:"lightgreen" }).cx(0).cy(0);
@@ -180,13 +181,15 @@
                                result    = (heures<10 ? "0" : "") + heures + ":" +  ("0"+minutes).slice(-2) + ":" +  ("0"+secondes).slice(-2)
                                texte.text ( result );
                              }
-                            else if (this.classe="CI")
+                            else if (this.classe=="CI")
                              { texte.text( etat.valeur.toString() + " " + etat.unite ); }
                             else if (this.classe=="REGISTRE" && this.forme=="horaire")
                              { var heure = Math.trunc(etat.valeur);
                                var minute = Math.trunc((etat.valeur - heure)*100); if (minute > 59) minute = 59;
                                texte.text ( ("0"+heure).slice(-2) + ":" +  ("0"+minute).slice(-2) );
                              }
+                            else if (this.classe=="AI")
+                             { texte.text ( etat.valeur.toFixed(visuel.nb_decimal).toString() + " " + etat.unite ); }
                             else texte.text( "call seb" );
                           }
        this.update_matrice ( visuel );
