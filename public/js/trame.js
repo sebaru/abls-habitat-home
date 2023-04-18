@@ -190,7 +190,7 @@
                              }
                             else if (this.classe=="AI")
                              { texte.text ( etat.valeur.toFixed(visuel.nb_decimal).toString() + " " + etat.unite ); }
-                            else texte.text( "call seb" );
+                            else texte.text( etat.valeur.toString() + " " + etat.unite );
                           }
        this.update_matrice ( visuel );
        return(visuel);
