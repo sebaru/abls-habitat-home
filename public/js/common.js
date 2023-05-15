@@ -118,6 +118,8 @@
           localStorage.setItem("domain_name", Response.default_domain_name );
           localStorage.setItem("access_level", parseInt(Response.access_level) );
           $("#idNavDomainName").text( localStorage.getItem("domain_name") );
+          if (Response.domain_notification.length) $("#idDomainNotification").text( htmlEncode(Response.domain_notification) ).show();
+                                              else $("#idDomainNotification").hide();
         }
 
        if (Response.default_domain_uuid == null && window.location.pathname !== "/domains") { Redirect("/domains"); return; }
@@ -186,7 +188,7 @@
                 "class='btn btn-"+color+" btn-block btn-sm' "+
                 "data-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
                 "onclick="+clic_func+"('"+key+"')>"+
-                "<span id='idButtonSpinner_"+key+"' class='spinner-border spinner-border-sm' style='display:none' "+
+                "<span id='idButtonSpinner_"+clic_func+"_"+key+"' class='spinner-border spinner-border-sm' style='display:none' "+
                 "role='status' aria-hidden='true'></span> "+
                 htmlEncode(texte)+
                 "</button>";
@@ -208,7 +210,7 @@
  function Badge ( color, tooltip, texte )
   { return("<span "+
            "class='badge badge-"+color+"' "+
-           "data-toggle='tooltip' title='"+tooltip+"'>"+htmlEncode(texte)+
+           "data-toggle='tooltip' title='"+htmlEncode(tooltip)+"'>"+htmlEncode(texte)+
            "</span>" );
   }
 
@@ -238,7 +240,7 @@
   { return( Badge ( Access_level_description[level].color, Access_level_description[level].name, level.toString() ) ); }
 /********************************************* Renvoi un Select d'access Level ************************************************/
  function Select ( id, fonction, array, selected )
-  { retour = "<select id='"+id+"' class='custom-select' ";
+  { retour = "<select id='"+id+"' class='custom-select border border-info' ";
     if (fonction) retour += "onchange="+fonction;
     retour+= ">";
     valeur = array.map ( function(item) { return(item.valeur); } );
@@ -365,7 +367,7 @@
     /* if (period=="HOUR") setInterval( function() { window.location.reload(); }, 60000);
     else if (period=="DAY")  setInterval( function() { window.location.reload(); }, 300000);
     else setInterval( function() { window.location.reload(); }, 600000);*/
-	 }
+  }
 
 /********************************* Chargement d'une courbe dans u synoptique 1 au démrrage ************************************/
  function Charger_plusieurs_courbes ( idChart, tableau_map, period )
@@ -420,7 +422,7 @@ console.debug(data);
            { Charger_plusieurs_courbes ( idChart, tableau_map, period ); }, 60000 );
         }
      });
-	 }
+  }
 /******************************************************************************************************************************/
 /* Get_url_parameter : Recupere un parametre de recherche dans l'URL                                                          */
 /******************************************************************************************************************************/

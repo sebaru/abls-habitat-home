@@ -95,7 +95,8 @@
 
         .wtd-visuel { /*border-radius: 20%;*/
                       width: 128px;
-                      height: auto;
+                      /*height: auto;*/
+                      max-height: 128px;
                       cursor: pointer;
                     }
 
@@ -273,3 +274,4 @@
 </nav>
 </header>
 <?php if ( getenv("CI_ENVIRONMENT") == "development" ) { echo "<div class='alert alert-warning'>Instance de DEV</div>"; } ?>
+<div id="idDomainNotification" class='alert alert-info m-1' style="display:none" role="status"></div>
