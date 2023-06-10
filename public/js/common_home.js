@@ -29,7 +29,7 @@
         { var json_request = JSON.stringify( { "tag": "abonner", "syn_id": syn_id } );
           this.send ( json_request );
         }
-       setInterval ( function()                                                               /* Un ping tous les jours */
+       setInterval ( function()                                                               /* Un ping tous les 30 secondes */
         { var json_ping = JSON.stringify( { "tag": "ping" } );
           WTDWebSocket.send( json_ping );
           console.log ( "websocket: sending ping" );
@@ -40,7 +40,7 @@
        console.debug(event);
        if(Closing==false)
         { $('#idAlertConnexionLost').show();
-          setInterval ( function()                                                                  /* Un ping tous les jours */
+          setTimeout ( function()                                                                 /* restart dans 10 secondes */
            { Load_websocket ( syn_id );
              console.log ( "websocket: restarting" );
            }, 10000 );
