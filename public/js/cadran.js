@@ -132,7 +132,6 @@
        return;
      }
 
-    console.debug(etat);
     var minimum = parseFloat(cadran.minimum);
     var maximum = parseFloat(cadran.maximum);
     var valeur  = etat.valeur;
