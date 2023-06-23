@@ -1,6 +1,7 @@
 /********************************************* Appeler quand l'utilisateur selectionne un motif *******************************/
  function Clic_sur_visuel ( visuel )
-  { console.log(" Click sur visuel " + visuel.libelle );
+  { console.log(" Clic sur visuel " + visuel.libelle + " mode="+visuel.mode + "disable = "+visuel.disable );
+    if (visuel.disable) return;
     var target = { tech_id : visuel.tech_id,
                    acronyme: visuel.acronyme,
                  };
@@ -47,13 +48,17 @@
     else
      {  }
 
-    var card = $('<div></div>').addClass("row bg-transparent mb-3")
-               .append( $('<div></div>').addClass("col text-center mb-1")
+    var card = $('<div>').addClass("row bg-transparent mb-3")
+               .append( $('<div>').addClass("col text-center mb-1")
+                                  .append ( $("<span>").addClass("text-white").text(Response.dls_owner_shortname))
+                      )
+               .append( $('<div>').addClass('w-100') )
+               .append( $('<div>').addClass("col text-center mb-1")
                         .append( contenu )
                       )
-               .append( $('<div></div>').addClass('w-100') )
-               .append( $('<div></div>').addClass("col text-center")
-                                        .append ( $("<span></span>").addClass("text-white").text(Response.libelle))
+               .append( $('<div>').addClass('w-100') )
+               .append( $('<div>').addClass("col text-center")
+                                        .append ( $("<span>").addClass("text-white").text(Response.libelle))
                                         .attr ( "id", id+"-footer-text" )
                       )
                .attr ( "id", id );
@@ -69,14 +74,32 @@
     visuel = visuels[0];
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
 console.log("Changer_etat_visuel " + visuel.ihm_affichage );
-    if (visuel.ihm_affichage=="static")
-     { Changer_etat_visuel_static ( visuel, etat );  }
-    else if (visuel.ihm_affichage=="by_mode")
-     { Changer_etat_visuel_by_mode ( visuel, etat );   }
-    else if (visuel.ihm_affichage=="by_color")
-     { Changer_etat_visuel_by_color ( visuel, etat );   }
-    else if (visuel.ihm_affichage=="by_mode_color")
-     { Changer_etat_visuel_by_mode_color ( visuel, etat );   }
+    if (Synoptique.mode_affichage == false)
+     { if (visuel.ihm_affichage=="static")
+        { Changer_etat_visuel_static ( visuel, etat );  }
+       else if (visuel.ihm_affichage=="by_mode")
+        { Changer_etat_visuel_by_mode ( visuel, etat );   }
+       else if (visuel.ihm_affichage=="by_color")
+        { Changer_etat_visuel_by_color ( visuel, etat );   }
+       else if (visuel.ihm_affichage=="by_mode_color")
+        { Changer_etat_visuel_by_mode_color ( visuel, etat );   }
+     }
+    else /* Heavysyn */
+     { /*else if (visuel.ihm_affichage=="complexe" && visuel.forme=="bouton")
+                       { Trame.new_button ( visuel ); }
+                      else if (visuel.ihm_affichage=="complexe" && visuel.forme=="encadre")
+                       { Trame.new_encadre ( visuel ); }
+                      else if (visuel.ihm_affichage=="complexe" && visuel.forme=="comment")
+                       { Trame.new_comment ( visuel ); }
+/*{ if (visuel.ihm_affichage=="static")
+        { Changer_etat_visuel_static ( visuel, etat );  }
+       else if (visuel.ihm_affichage=="by_mode")*/
+        { visuel.Set_state ( etat ); }
+       /*else if (visuel.ihm_affichage=="by_color")
+        { Changer_etat_visuel_by_color ( visuel, etat );   }
+       else if (visuel.ihm_affichage=="by_mode_color")
+        { Changer_etat_visuel_by_mode_color ( visuel, etat );   }*/
+     }
   }
 /******************************************************************************************************************************/
 /* Changer_etat_visuel: Appeler par la websocket pour changer un visuel d'etat                                                */
@@ -91,12 +114,10 @@ console.log("Changer_etat_visuel " + visuel.ihm_affichage );
     console.log("Changer_etat_visuel_by_mode " + etat.tech_id + ":" + etat.acronyme + " -> mode = "+etat.mode +" couleur="+etat.color );
     console.debug(visuel);
 /*-------------------------------------------------- Visuel si pas de comm ---------------------------------------------------*/
-    if (etat.mode=="hors_comm" || etat.mode=="disabled")
-     { etat.cligno = false;
-       $("#"+idimage).addClass("wtd-img-grayscale");
-     }
+    if (etat.disable==true) $("#"+idimage).addClass("wtd-img-grayscale");
+                       else $("#"+idimage).removeClass("wtd-img-grayscale");
 /*-------------------------------------------------- Visuel si pas de comm ---------------------------------------------------*/
-    else if (etat.mode=="default")                                                                         /* si mode inconnu */
+    if (etat.mode=="default")                                                                              /* si mode inconnu */
      { etat.cligno = false;
        target = "https://static.abls-habitat.fr/img/question.png";
        Changer_img_src ( idimage, target );
@@ -105,13 +126,11 @@ console.log("Changer_etat_visuel " + visuel.ihm_affichage );
     else
      { target = "https://static.abls-habitat.fr/img/"+visuel.forme+"_"+etat.mode+"."+visuel.extension;
        Changer_img_src ( idimage, target );
-       $("#"+idimage).removeClass("wtd-img-grayscale");
      }
 /*-------------------------------------------------- Visuel commun -----------------------------------------------------------*/
     if (etat.cligno) $("#"+idimage).addClass("wtd-cligno");
                 else $("#"+idimage).removeClass("wtd-cligno");
     $("#"+idfooter).addClass("text-white").text(etat.libelle);
-
   }
 /******************************************************************************************************************************/
 /* Changer_etat_visuel: Appeler par la websocket pour changer un visuel d'etat                                                */
@@ -126,16 +145,11 @@ console.log("Changer_etat_visuel " + visuel.ihm_affichage );
     console.log("Changer_etat_1_visuel_by_color " + etat.tech_id + ":" + etat.acronyme + " -> mode = "+etat.mode +" couleur="+etat.color );
     console.debug(visuel);
 /*-------------------------------------------------- Visuel si pas de comm ---------------------------------------------------*/
-    if (etat.mode=="hors_comm" || etat.mode=="disabled")
-     { etat.cligno = false;
-       $("#"+idimage).addClass("wtd-img-grayscale");
-     }
+    if (etat.disable==true) $("#"+idimage).addClass("wtd-img-grayscale");
+                       else $("#"+idimage).removeClass("wtd-img-grayscale");
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
-    else
-     { target = "https://static.abls-habitat.fr/img/"+visuel.forme+"_"+etat.color+"."+visuel.extension;
-       Changer_img_src ( idimage, target );
-       $("#"+idimage).removeClass("wtd-img-grayscale");
-     }
+    target = "https://static.abls-habitat.fr/img/"+visuel.forme+"_"+etat.color+"."+visuel.extension;
+    Changer_img_src ( idimage, target );
 /*-------------------------------------------------- Visuel commun -----------------------------------------------------------*/
     if (etat.cligno) $("#"+idimage).addClass("wtd-cligno");
                 else $("#"+idimage).removeClass("wtd-cligno");
@@ -154,12 +168,10 @@ console.log("Changer_etat_visuel " + visuel.ihm_affichage );
     console.log("Changer_etat_visuel_by_mode_color " + etat.tech_id + ":" + etat.acronyme + " -> mode = "+etat.mode +" couleur="+etat.color );
     console.debug(visuel);
 /*-------------------------------------------------- Visuel si pas de comm ---------------------------------------------------*/
-    if (etat.mode=="hors_comm" || etat.mode=="disabled")
-     { etat.cligno = false;
-       $("#"+idimage).addClass("wtd-img-grayscale");
-     }
+    if (etat.disable==true) $("#"+idimage).addClass("wtd-img-grayscale");
+                       else $("#"+idimage).removeClass("wtd-img-grayscale");
 /*-------------------------------------------------- Visuel si pas de comm ---------------------------------------------------*/
-    else if (etat.mode=="default")                                                                         /* si mode inconnu */
+    if (etat.mode=="default")                                                                         /* si mode inconnu */
      { etat.cligno = false;
        target = "https://static.abls-habitat.fr/img/question.png";
        Changer_img_src ( idimage, target );
@@ -168,7 +180,6 @@ console.log("Changer_etat_visuel " + visuel.ihm_affichage );
     else
      { target = "https://static.abls-habitat.fr/img/"+visuel.forme+"_"+etat.mode+"_"+etat.color+"."+visuel.extension;
        Changer_img_src ( idimage, target );
-       $("#"+idimage).removeClass("wtd-img-grayscale");
      }
 /*-------------------------------------------------- Visuel commun -----------------------------------------------------------*/
     if (etat.cligno) $("#"+idimage).addClass("wtd-cligno");
@@ -188,18 +199,10 @@ console.log("Changer_etat_visuel " + visuel.ihm_affichage );
     console.log("Changer_etat_visuel_static " + etat.tech_id + ":" + etat.acronyme + " -> mode = "+etat.mode +" couleur="+etat.color );
     console.debug(visuel);
 
-/*-------------------------------------------------- Visuel si pas de comm ---------------------------------------------------*/
-    if (etat.mode=="hors_comm" || etat.mode=="disabled")
-     { etat.cligno = false;
-       $("#"+idimage).addClass("wtd-img-grayscale");
-     }
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
-    else
-     { target = "https://static.abls-habitat.fr/img/"+visuel.forme+"."+visuel.extension;
-       Changer_img_src ( idimage, target );
-       $("#"+idimage).removeClass("wtd-img-grayscale");
-     }
-
+    target = "https://static.abls-habitat.fr/img/"+visuel.forme+"."+visuel.extension;
+    Changer_img_src ( idimage, target );
+    $("#"+idimage).removeClass("wtd-img-grayscale");
 /*-------------------------------------------------- Visuel commun -----------------------------------------------------------*/
     if (etat.cligno) $("#"+idimage).addClass("wtd-cligno");
                 else $("#"+idimage).removeClass("wtd-cligno");

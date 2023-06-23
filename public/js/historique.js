@@ -26,8 +26,8 @@
                    else if (item.typologie==3) { cligno = true;  img = "pignon_red.svg"; } /* alarme */
                    else if (item.typologie==4) { cligno = false; img = "bouclier_green.svg"; } /* veille */
                    else if (item.typologie==5) { cligno = false; img = "info.svg"; } /* attente */
-                   else if (item.typologie==6) { cligno = true;  img = "croix_rouge_red.svg"; } /* danger */
-                   else if (item.typologie==7) { cligno = true;  img = "croix_rouge_orange.svg"; } /* derangement */
+                   else if (item.typologie==6) { cligno = true;  img = "croix_red.svg"; } /* danger */
+                   else if (item.typologie==7) { cligno = true;  img = "croix_orange.svg"; } /* derangement */
                    else { cligno = false; img = "info.svg"; }
                    if (cligno==true) classe="wtd-cligno"; else classe="";
                    return("<img class='wtd-vignette "+classe+"' src='https://static.abls-habitat.fr/img/"+img+"'>");
@@ -42,9 +42,8 @@
              },
              { "data": null, "title":"Acquit", "className": "align-middle text-center d-none d-lg-table-cell bg-dark",
                "render": function (item)
-                 { if (item.typologie==0) return("-");                                                      /* Si INFO, pas de ACK */
-                   if (item.nom_ack!=null) return(item.nom_ack);
-                   return( Bouton ( "primary", "Acquitter le message", "Msg_acquitter", item.histo_msg_id, "Acquitter" ) );
+                 { if (item.nom_ack!=null) return(item.nom_ack);
+                   return("-");
                  }
              },
            ],

@@ -8,8 +8,8 @@
         <meta name="google" content="notranslate">
         <meta name="robots" content="noindex, nofollow">
         <link rel="icon" href="https://static.abls-habitat.fr/img/abls.svg">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.21/fh-3.1.7/r-2.2.5/datatables.min.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css"/>
         <style>
         body { background-image: url('https://static.abls-habitat.fr/img/fond_home.jpg');
                background-position: center;
@@ -18,16 +18,12 @@
                background-attachment: fixed;
                height: 100%;
                background-color: rgba(30,28,56,1.0);
-               padding-top: 60px;
+               padding-top: 80px;
+               padding-bottom: 40px;
                overflow-y: scroll;
              }
 
-
-        h3 { color: white }
-
-        .nav-link:hover { color: white !important;
-                          background-color: #48BBC0;
-                        }
+        h3 { color: white; }
 
         .wtd-cligno { animation-duration: 1.0s;
                       animation-name: wtdClignoFrames;
@@ -92,18 +88,15 @@
           }
 
         .wtd-synoptique { border-radius: 20%;
-                          width: auto;
+                          width: 128px;
                           height: auto;
-                          max-height: 128px;
-                          max-width: 128px;
                           cursor: pointer;
                         }
 
         .wtd-visuel { /*border-radius: 20%;*/
-                      width: auto;
-                      height: auto;
+                      width: 128px;
+                      /*height: auto;*/
                       max-height: 128px;
-                      max-width: 128px;
                       cursor: pointer;
                     }
 
@@ -121,8 +114,8 @@
 
         @media (max-width: 768px)
          { .wtd-synoptique
-            { max-height: 96px;
-              max-width: 96px;
+            { width: 96px;
+              max-height: 96px;
             }
            .wtd-vignette
             { max-width: 24px;
@@ -240,7 +233,6 @@
 
 <header>
 
-
 	<nav class="navbar navbar-dark navbar-expand-md fixed-top shadow"> <!-- fixed-top -->
 
   <!--<a class="nav-item"><img id="idMasterVignetteActivite" class="wtd-menu mr-1" src=""></a>
@@ -260,17 +252,19 @@
 
   <div class="collapse navbar-collapse" id="navbar-toggled">
     <ul class="navbar-nav ml-auto">
+      <a id="idAlertConnexionLost" class="nav-link wtd-cligno" style="display: none"><i class="fa-solid fa-link-slash fa-xl text-warning"></i></a>
       <li class="nav-item dropdown">
         <a class="nav-link rounded align-items-middle dropdown-toggle" href="#" id="navbarUSER" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-user text-white"></i> <span id="idUsername">-</span>
         </a>
 
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarUSER">
-          <a class="dropdown-item" onclick="Redirect('/domains')"> <i class="fas fa-fort-awesome text-primary"></i> Mes domaines</a>
-          <a class="dropdown-item" onclick="Redirect('/messages')"> <i class="fas fa-book text-primary"></i> Fil de l'eau</a>
-          <a class="dropdown-item" onclick="Redirect('/historique')"> <i class="fas fa-history text-primary"></i> Historique</a>
+          <a class="dropdown-item" href="/domains"> <i class="fas fa-globe text-primary"></i> Mes domaines</a>
+          <a class="dropdown-item" href="/messages"> <i class="fas fa-book text-primary"></i> Fil de l'eau</a>
+          <a class="dropdown-item" href="/historique"> <i class="fas fa-history text-primary"></i> Historique</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="/home/user" id="idHrefUsername" href="#"><i class="fas fa-user text-info"></i> Mon Profil</a>
+          <a class="dropdown-item" href="<?php echo getenv("IDP_URL"); ?>/realms/<?php echo getenv("IDP_REALM");?>/account/"><i class="fas fa-user text-info"></i> Mon Compte</a>
           <a class="dropdown-item" href="#" onclick="Logout()"><i class="fas fa-sign-out-alt text-danger"></i> <span>Sortir</span> </a>
         </div>
       </li>
@@ -280,5 +274,4 @@
 </nav>
 </header>
 <?php if ( getenv("CI_ENVIRONMENT") == "development" ) { echo "<div class='alert alert-warning'>Instance de DEV</div>"; } ?>
-
-
+<div id="idDomainNotification" class='alert alert-info m-1' style="display:none" role="status"></div>

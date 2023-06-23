@@ -1,16 +1,9 @@
- var Synoptique = null;                                              /* Toutes les données du synoptique en cours d'affichage */
 
 /********************************************* Affichage des vignettes ********************************************************/
- function Msg_acquitter ( id )
-  { table = $('#idTableMessages').DataTable();
-    selection = table.ajax.json().enregs.filter( function(item) { return (item.msg_id==msg_id) } )[0];
-    var json_request = JSON.stringify(
-       { tech_id  : selection.tech_id,
-         acronyme : selection.acronyme,
-       }
-     );
-    Send_to_API ( 'POST', "/api/histo/ack", json_request, function ()
-     { $('#idTableMessages').DataTable().ajax.reload( null, false );
+ function Acquitter_synoptique( )
+  { var json_request = { syn_page: Synoptique.page };
+    Send_to_API ( 'POST', "/syn/ack", json_request, function ()
+     { Show_toast_ok ( "Synoptique acquitté" );
      }, null);
   }
 /******************************************************************************************************************************/
@@ -28,7 +21,7 @@
      }
 
     if (syn_vars.bit_danger == true)
-     { Changer_img_src ( "idVignette_"+syn_id, "https://static.abls-habitat.fr/img/croix_rouge_red.svg", true );
+     { Changer_img_src ( "idVignette_"+syn_id, "https://static.abls-habitat.fr/img/croix_red.svg", true );
      }
     else if (syn_vars.bit_alerte == true)
      { Changer_img_src ( "idVignette_"+syn_id, "https://static.abls-habitat.fr/img/bouclier_red.svg", true );
@@ -40,7 +33,7 @@
      { Changer_img_src ( "idVignette_"+syn_id, "https://static.abls-habitat.fr/img/pignon_yellow.svg", true );
      }
     else if (syn_vars.bit_derangement == true)
-     { Changer_img_src ( "idVignette_"+syn_id, "https://static.abls-habitat.fr/img/croix_rouge_orange.svg", true );
+     { Changer_img_src ( "idVignette_"+syn_id, "https://static.abls-habitat.fr/img/croix_orange.svg", true );
      }
     else if (syn_vars.bit_alerte_fixe == true)
      { Changer_img_src ( "idVignette_"+syn_id, "https://static.abls-habitat.fr/img/bouclier_red.svg", false );
@@ -52,10 +45,10 @@
      { Changer_img_src ( "idVignette_"+syn_id, "https://static.abls-habitat.fr/img/pignon_yellow.svg",false );
      }
     else if (syn_vars.bit_danger_fixe == true)
-     { Changer_img_src ( "idVignette_"+syn_id, "https://static.abls-habitat.fr/img/croix_rouge_red.svg",false );
+     { Changer_img_src ( "idVignette_"+syn_id, "https://static.abls-habitat.fr/img/croix_red.svg",false );
      }
     else if (syn_vars.bit_derangement_fixe == true)
-     { Changer_img_src ( "idVignette_"+syn_id, "https://static.abls-habitat.fr/img/croix_rouge_orange.svg", false );
+     { Changer_img_src ( "idVignette_"+syn_id, "https://static.abls-habitat.fr/img/croix_orange.svg", false );
      }
     else if (syn_vars.bit_veille_totale == true)
      { vignette.removeClass("wtd-cligno").fadeTo(0);
@@ -103,8 +96,8 @@
                    else if (item.typologie==3) { cligno = true;  img = "pignon_red.svg"; } /* alarme */
                    else if (item.typologie==4) { cligno = false; img = "bouclier_green.svg"; } /* veille */
                    else if (item.typologie==5) { cligno = false; img = "info.svg"; } /* attente */
-                   else if (item.typologie==6) { cligno = true;  img = "croix_rouge_red.svg"; } /* danger */
-                   else if (item.typologie==7) { cligno = true;  img = "croix_rouge_orange.svg"; } /* derangement */
+                   else if (item.typologie==6) { cligno = true;  img = "croix_red.svg"; } /* danger */
+                   else if (item.typologie==7) { cligno = true;  img = "croix_orange.svg"; } /* derangement */
                    else img = "info.svg";
                    if (cligno==true) classe="wtd-cligno"; else classe="";
                    return("<img class='wtd-vignette "+classe+"' src='https://static.abls-habitat.fr/img/"+img+"'>");
@@ -134,14 +127,12 @@
   { var idSectionPasserelles = $('#idSectionPasserelles');
     var idSectionLightSyn    = $('#idSectionLightSyn');
     var idSectionHeavySyn    = $('#idSectionHeavySyn');
-    var fullsvg       = $('#fullsvg');
     var idSectionTableaux = $('#idSectionTableaux');
     console.log("------------------------------ Chargement synoptique "+syn_page);
     Send_to_API ( "GET", "/syn/show", (syn_page ? "syn_page=" + syn_page : null), function(Response)
      { console.log(Response);
        Synoptique = Response;
        window.history.replaceState( null, "", Response.page );                                  /* Affiche la page dans l'URL */
-
 /*------------------------------------------------------------ Barre de navigation -------------------------------------------*/
        $('#idNavSynoptique')
         .empty()
@@ -159,8 +150,6 @@
                    $('#idNavSynoptique').prepend ( "<span class='navbar-text text-secondary'>></span>" );
                  }
               );
-
-
 /*--------------------------------------------------- Passerelles ------------------------------------------------------------*/
        idSectionPasserelles.empty();
        $.each ( Synoptique.child_syns, function (i, syn)
@@ -189,16 +178,30 @@
                  );
         }
 /*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
-       idSectionHeavySyn.empty().css("position","relative").addClass("mx-1");
-       if (Synoptique.mode_affichage == true)
+       idSectionHeavySyn.empty().css("position","relative");
+       $("#idSectionHeavySynTitle").empty();
+       if (Synoptique.mode_affichage == true && (Synoptique.nbr_visuels > 0 || Synoptique.nbr_cadrans > 0) )
         { Trame = Trame_new ("idSectionHeavySyn");
-          $.each ( Response.visuels, function (i, visuel)
+          Trame.on( "dblclick", function ()
+           { if (!document.fullscreenElement) document.getElementById("idSectionHeavySyn").requestFullscreen();
+                                         else document.exitFullscreen();
+
+           });
+          $("#idSectionHeavySynTitle").append ( $("<div>").addClass("col-auto")
+                                                 .append ( $("<h2>").addClass("text-white")
+                                                           .text ( Synoptique.page + " - " + Synoptique.libelle + "(#" + Synoptique.syn_id + ")" )
+                                                         )
+                                              )
+                                      .append ( $("<div>").addClass("ml-auto btn-group align-items-center")
+                                                 .append ( $("<button>").addClass("btn btn-primary")
+                                                             .text ( "Acquitter" )
+                                                             .on("click", () => { Acquitter_synoptique() } )
+                                                         )
+                                              );
+          $.each ( Synoptique.visuels, function (i, visuel)
                     { if (visuel.forme == null)
                        { console.log ( "new null at " + visuel.posx + " " + visuel.posy );
-                         visuel.svggroupe = Trame.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-                         Trame.add(visuel.svggroupe);
-                         visuel.svggroupe.add ( SVG_New_from_image ( Trame, visuel.icone+".gif" ) );
-                         SVG_Update_matrice ( visuel );
+                         Trame.new_from_image ( visuel, visuel.icone+".gif" );
                        }
                       else if (visuel.ihm_affichage=="complexe" && visuel.forme=="bouton")
                        { Trame.new_button ( visuel ); }
@@ -206,28 +209,28 @@
                        { Trame.new_encadre ( visuel ); }
                       else if (visuel.ihm_affichage=="complexe" && visuel.forme=="comment")
                        { Trame.new_comment ( visuel ); }
-                      else if (visuel.ihm_affichage=="by_mode")
-                       { Trame.new_from_image( visuel, visuel.forme+"_"+visuel.mode+"."+visuel.extension ); }
-                      else if (visuel.ihm_affichage=="by_color")
-                       { Trame.new_from_image( visuel, visuel.forme+"_"+visuel.color+"."+visuel.extension ); }
-                      else if (visuel.ihm_affichage=="by_mode_color")
-                       { Trame.new_from_image( visuel, visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension ); }
+                      else if (visuel.ihm_affichage=="by_mode")       { Trame.new_by_mode ( visuel );       }
+                      else if (visuel.ihm_affichage=="by_color")      { Trame.new_by_color( visuel );       }
+                      else if (visuel.ihm_affichage=="by_mode_color") { Trame.new_by_mode_color ( visuel ); }
                       else if (visuel.ihm_affichage=="static")
-                       { Trame.new_from_image( visuel, visuel.forme+"."+visuel.extension ); }
+                       { Trame.new_static( visuel, visuel.forme+"."+visuel.extension ); }
 
                       if (visuel.svggroupe !== undefined)
-                       { visuel.svggroupe.on ( "click", function (event) { Clic_sur_motif ( visuel, event ) }, false);
+                       { visuel.svggroupe.on ( "click", function (event) { Clic_sur_visuel ( visuel ) }, false);
+                         visuel.svggroupe.add("<title>"+htmlEncode(visuel.libelle)+"</title>");
                        }
                     }
                  );
-          $.each ( Response.cadrans, function (i, cadran)
+          $.each ( Synoptique.cadrans, function (i, cadran)
                     { Trame.new_cadran ( cadran );
+                      cadran.svggroupe.add("<title>"+htmlEncode(cadran.libelle)+"</title>");
                       /*if (cadran.svggroupe !== undefined)
                        { cadran.svggroupe.on ( "click", function (event) { Clic_sur_motif ( cadran, event ) }, false);
                        }*/
                     }
                  );
         }
+       Load_websocket(Synoptique.syn_id);                                                              /* Charge la websocket */
 
 /*---------------------------------------------------- Affichage des tableaux ------------------------------------------------*/
        idSectionTableaux.empty();
@@ -240,9 +243,6 @@
              $('#'+id).off("click").on("click", function () { Charger_page_tableau(tableau.tableau_id); } );
            });
         }
-
-       /*Charger_messages ( syn_id );*/
-       Slide_down_when_loaded ( "toplevel" );
      }, null );
  }
 

@@ -3,13 +3,16 @@
  <div id="idAlertConnexionLost" class="alert alert-warning" role="alert" style="display: none">
    <h4 class="alert-heading">Connexion perdue !</h4>
      <a href="/">Se reconnecter</a>
-   </div>
+ </div>
+
 
 <section id='idSectionPasserelles' class='row row-cols-2 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 row-cols-xl-6 justify-content-center'>
 </section>
 <section id='idSectionLightSyn' class='row row-cols-2 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 row-cols-xl-6 justify-content-center'>
 </section>
-<section id='idSectionHeavySyn' class='row justify-content-center'>
+<section id='idSectionHeavySynTitle' class='row mx-1'>
+</section>
+<section id='idSectionHeavySyn' class='row mx-1'>
 </section>
 <section id='idSectionTableaux' class='row mx-1 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-3 justify-content-center'>
 </section>
