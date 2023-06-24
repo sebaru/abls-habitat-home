@@ -53,12 +53,11 @@
 
     WTDWebSocket.onmessage = function (event)
      { var Response = JSON.parse(event.data);                                               /* Pointe sur <synoptique a=1 ..> */
-       if (!Synoptique) return;
-
-            if (Response.tag == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
-       else if (Response.tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
+console.log(Response);
+            if (Synoptique && Response.tag == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
+       else if (Synoptique && Response.tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
        else if (Response.tag == "DLS_HISTO")
-             { if (DataTable.isDataTable( 'idTableMessages') == false) return;
+             { if (DataTable.isDataTable( '#idTableMessages') == false) return;
                if ( Response.alive == true )
                 { console.log("Websocket MSG NEW");
                   console.debug(Response);
