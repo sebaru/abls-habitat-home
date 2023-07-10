@@ -25,6 +25,7 @@
 
     WTDWebSocket.onopen = function (event)
      { console.log("Websocket loaded " );
+       $('#idAlertConnexionLost').hide();
        if (syn_id)
         { var json_request = JSON.stringify( { "tag": "abonner", "syn_id": syn_id } );
           this.send ( json_request );
