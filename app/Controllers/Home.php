@@ -20,4 +20,5 @@ class Home extends BaseController
  public function domains()      { $this->send_page ("domains"); }
  public function messages()     { $this->send_page ("messages"); }
  public function historique()   { $this->send_page ("historique"); }
+ public function tableau()      { $this->send_page ("tableau"); }
 }

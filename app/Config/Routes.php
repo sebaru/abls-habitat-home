@@ -32,11 +32,12 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 
-$routes->get('/domains',      'Home::domains');
-$routes->get('/messages',     'Home::messages');
-$routes->get('/historique',   'Home::historique');
-$routes->get('/test',         'Home::test');
-$routes->get('(:any)',        'Home::default');
+$routes->get('/domains',        'Home::domains');
+$routes->get('/messages',       'Home::messages');
+$routes->get('/historique',     'Home::historique');
+$routes->get('/test',           'Home::test');
+$routes->get('/tableau/(:any)', 'Home::tableau');
+$routes->get('(:any)',          'Home::default');
 
 /*
  * --------------------------------------------------------------------

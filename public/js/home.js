@@ -127,7 +127,7 @@
   { var idSectionPasserelles = $('#idSectionPasserelles');
     var idSectionLightSyn    = $('#idSectionLightSyn');
     var idSectionHeavySyn    = $('#idSectionHeavySyn');
-    var idSectionTableaux = $('#idSectionTableaux');
+    var idSectionTableaux    = $('#idSectionTableaux');
     console.log("------------------------------ Chargement synoptique "+syn_page);
     Send_to_API ( "GET", "/syn/show", (syn_page ? "syn_page=" + syn_page : null), function(Response)
      { console.log(Response);
@@ -233,6 +233,7 @@
 
 
 /*---------------------------------------------------- Affichage des tableaux ------------------------------------------------*/
+       if (DataTable.isDataTable('#idTableMessages')) $('#idTableMessages').DataTable().destroy();
        $('#idTableMessages').empty().DataTable(
         { pageLength : 50,
           fixedHeader: true, paging: false, ordering: true, searching: true,
@@ -307,7 +308,7 @@
              idSectionTableaux.append( $("<div></div>").append("<canvas id='"+id+"'></canvas>").addClass("col wtd-courbe m-1") );
              maps = Synoptique.tableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
              Charger_plusieurs_courbes ( id, maps, "HOUR" );
-             $('#'+id).off("click").on("click", function () { Charger_page_tableau(tableau.tableau_id); } );
+             $('#'+id).off("click").on("click", function () { Redirect("/tableau/"+tableau.tableau_id); } );
            });
         }
      }, null );
