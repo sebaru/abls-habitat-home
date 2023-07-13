@@ -107,6 +107,16 @@
                       max-width: 800px;
                       min-height: 600px;
                       cursor: pointer;
+                      max-height: 100vh;
+                    }
+
+	       .wtd-courbe-full-screen
+                    { background-color: white;
+                      width: auto;
+                      /*max-width: 800px;*/
+                      min-height: 600px;
+                      max-height: 100vh;
+                      cursor: pointer;
                     }
 
         .wtd-vignette

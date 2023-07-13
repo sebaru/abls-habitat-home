@@ -308,7 +308,7 @@
              idSectionTableaux.append( $("<div></div>").append("<canvas id='"+id+"'></canvas>").addClass("col wtd-courbe m-1") );
              maps = Synoptique.tableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
              Charger_plusieurs_courbes ( id, maps, "HOUR" );
-             $('#'+id).off("click").on("click", function () { Redirect("/tableau/"+tableau.tableau_id); } );
+             $('#'+id).off("click").on("click", function () { Redirect("/tableau/"+tableau.tableau_id+"/HOUR"); } );
            });
         }
      }, null );
