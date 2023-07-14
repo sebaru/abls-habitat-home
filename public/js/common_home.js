@@ -63,7 +63,7 @@ console.log(Response);
                 { console.log("Websocket MSG NEW");
                   console.debug(Response);
                   if (!Synoptique || (Synoptique && Synoptique.page == Response.syn_page ) )
-                   # $('#idTableMessages').DataTable().row.add ( Response ).draw(); }
+                   { $('#idTableMessages').DataTable().row.add ( Response ).draw(); }
                 }
                else
                 { console.log("Websocket REMOVE MSG");
