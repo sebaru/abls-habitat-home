@@ -68,7 +68,11 @@ console.log(Response);
                else
                 { console.log("Websocket REMOVE MSG");
                   console.debug(Response);
-                  $('#idTableMessages').DataTable().row("#"+Response.histo_msg_id).remove().draw();
+                  /*$('#idTableMessages').DataTable().row("#"+Response.histo_msg_id).remove().draw();*/
+                  $('#idTableMessages').DataTable().rows( function ( index, data, node )
+                   { if ( data.tech_id == Response.tech_id && data.acronyme == Response.acronyme ) return(true);
+                     else return(false);
+                   }).remove().draw("page");
                 }
                /*else $('#idTableMSGS').DataTable().ajax.reload( null, false );*/
              }
