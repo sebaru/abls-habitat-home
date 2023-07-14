@@ -238,6 +238,7 @@
         { pageLength : 50,
           fixedHeader: true, paging: false, ordering: true, searching: true,
           ajax: { url : $ABLS_API+"/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
+                  data: { "syn_page": Synoptique.page },
                   error: function ( xhr, status, error ) { Show_toast_ko(xhr.statusText); },
                   beforeSend: function (request)
                                { request.setRequestHeader('Authorization', 'Bearer ' + Token);
@@ -275,10 +276,10 @@
                     }
                 },
                 { "data": "date_create", "title":"Apparition", "className": "align-middle text-center d-none d-sm-table-cell bg-dark" },
-                { "data": null, "title":"Page", "className": "align-middle text-center d-none d-md-table-cell bg-dark",
+               /* { "data": null, "title":"Page", "className": "align-middle text-center d-none d-md-table-cell bg-dark",
                   "render": function (item)
                     { return( Lien ( "/"+item.syn_page, "Voir la page", item.syn_page ) ); }
-                },
+                },*/
                 { "data": "dls_shortname", "title":"Objet", "className": "align-middle text-center bg-dark" },
                 { "data": null, "title":"Message", "className": "align-middle text-center bg-dark",
                   "render": function (item)
