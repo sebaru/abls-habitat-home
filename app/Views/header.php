@@ -97,14 +97,14 @@
 
         .wtd-visuel { /*border-radius: 20%;*/
                       width: 128px;
-                      /*height: auto;*/
+                      height: auto;
                       max-height: 128px;
                       cursor: pointer;
                     }
 
 	       .wtd-courbe { background-color: white;
                       width: auto;
-                      max-width: 800px;
+                      max-width: 100vw;
                       min-height: 600px;
                       cursor: pointer;
                       max-height: 100vh;
