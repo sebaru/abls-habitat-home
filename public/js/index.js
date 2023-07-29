@@ -15,6 +15,7 @@
     Send_to_API ( 'GET', "/domain/image", null, function (Response)
      { if (Response.image == null) Response.image = "https://static.abls-habitat.fr/img/syn_maison.png";
        Changer_img_src ( "idNavImgTopSyn", Response.image, false );
+       $("#idNavImgTopSyn").on("click", function () { Charger_un_synoptique(null); } );
      }, null);
 
     Charger_un_synoptique ( syn_page );

@@ -72,5 +72,11 @@
 /* Load_page: Appelé au chargement de la page                                                                                 */
 /******************************************************************************************************************************/
  function Load_page ()
-  { Load_page_message(); }
+  { Send_to_API ( 'GET', "/domain/image", null, function (Response)
+     { if (Response.image == null) Response.image = "https://static.abls-habitat.fr/img/syn_maison.png";
+       Changer_img_src ( "idNavImgTopSyn", Response.image, false );
+       $("#idNavImgTopSyn").on("click", function () { Redirect("/"); } );
+     }, null);
+    Load_page_message();
+  }
 /*----------------------------------------------------------------------------------------------------------------------------*/
