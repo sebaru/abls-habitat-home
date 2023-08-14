@@ -208,7 +208,7 @@
                       else if (item.typologie==2) { cligno = true;  img = "pignon_orange.svg"; } /* defaut */
                       else if (item.typologie==3) { cligno = true;  img = "pignon_red.svg"; } /* alarme */
                       else if (item.typologie==4) { cligno = false; img = "bouclier_green.svg"; } /* veille */
-                      else if (item.typologie==5) { cligno = false; img = "info.svg"; } /* attente */
+                      else if (item.typologie==5) { cligno = false; img = "notification.svg"; } /* attente */
                       else if (item.typologie==6) { cligno = true;  img = "croix_red.svg"; } /* danger */
                       else if (item.typologie==7) { cligno = true;  img = "croix_orange.svg"; } /* derangement */
                       else { cligno = false; img = "info.svg"; }
