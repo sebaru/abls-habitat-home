@@ -153,6 +153,7 @@
                       else if (visuel.controle=="by_mode")       { Trame.new_by_mode ( visuel );       }
                       else if (visuel.controle=="by_color")      { Trame.new_by_color( visuel );       }
                       else if (visuel.controle=="by_mode_color") { Trame.new_by_mode_color ( visuel ); }
+                      else if (visuel.controle=="by_js")         { Trame.new_by_js ( visuel ); }
                       else if (visuel.controle=="static")
                        { Trame.new_static( visuel, visuel.forme+"."+visuel.extension ); }
 
