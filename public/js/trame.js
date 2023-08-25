@@ -159,6 +159,40 @@
        this.update_matrice ( visuel );
        return( visuel );
      }
+/***************************************************** New image **************************************************************/
+    Trame.new_by_js = function ( visuel )
+     { console.log ( "new by_js " + visuel.tech_id + ":" + visuel.acronyme + " " + visuel.posx + "x" + visuel.posy );
+       visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
+       this.add(visuel.svggroupe);
+       var groupe = $("#wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
+       var svgimage = this.image( "https://static.abls-habitat.fr/img/"+visuel.forme+"."+visuel.extension,
+                                  function(event)
+                                   { this.dx ( -this.width()/2 );
+                                     this.dy ( -this.height()/2 );
+                                   } ).attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
+       visuel.svggroupe.add ( svgimage );
+
+       fetch ( "https://static.abls-habitat.fr/img/"+visuel.forme+".js" )
+       .then ( Response => Response.text() )
+       .then ( js_text =>
+                { var Inside_set_state = new Function ( "state", js_text );
+                  visuel.Set_state = function ( etat )
+                   { Inside_set_state(etat);
+                     if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
+                                 else visuel.svggroupe.removeClass("wtd-cligno");
+                     if (etat.disable==true) visuel.svggroupe.addClass("wtd-img-grayscale");
+                                        else visuel.svggroupe.removeClass("wtd-img-grayscale");
+                     visuel.mode    = etat.mode;
+                     visuel.cligno  = etat.cligno;
+                     visuel.color   = etat.color;
+                     visuel.disable = etat.disable;
+                   }
+                  visuel.Set_state ( visuel );
+                }
+             );
+       this.update_matrice ( visuel );
+       return( visuel );
+     }
 /***************************************************** New cadran *************************************************************/
     Trame.new_cadran = function ( visuel )
      { console.log ( "new cadran " + visuel.forme + " " + visuel.tech_id + ":" + visuel.acronyme + " " + visuel.posx + "x" + visuel.posy+

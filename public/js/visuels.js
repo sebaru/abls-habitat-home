@@ -15,14 +15,14 @@
     var contenu;
 
 /*-------------------------------------------------- Visuel mode cadre -------------------------------------------------------*/
-         if (Response.ihm_affichage=="static")
+         if (Response.controle=="static")
      { contenu = $('<img>').addClass("wtd-visuel p-2")
                            .attr ( "id", id+"-img" )
                            .attr("src", "https://static.abls-habitat.fr/img/"+Response.forme+"."+Response.extension)
                            .click( function () { Clic_sur_visuel ( Response ); } );
      }
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
-    else if (Response.ihm_affichage=="by_mode")
+    else if (Response.controle=="by_mode")
      { contenu = $('<img>').addClass("wtd-visuel")
                            .attr ( "id", id+"-img" )
                            .attr("src", "https://static.abls-habitat.fr/img/"+Response.forme+"_"+Response.mode+"."+Response.extension)
@@ -30,7 +30,7 @@
        if (Response.mode=="hors_comm") contenu.attr("src", "https://static.abls-habitat.fr/img/hors_comm.png");
        else contenu.attr("src", "https://static.abls-habitat.fr/img/"+Response.forme+"_"+Response.mode+"."+Response.extension);
      }
-    else if (Response.ihm_affichage=="by_color")
+    else if (Response.controle=="by_color")
      { contenu = $('<img>').addClass("wtd-visuel")
                            .attr ( "id", id+"-img" )
                            .attr("src", "https://static.abls-habitat.fr/img/"+Response.forme+"_"+Response.color+"."+Response.extension)
@@ -38,7 +38,7 @@
        if (Response.mode=="hors_comm") contenu.attr("src", "https://static.abls-habitat.fr/img/hors_comm.png");
        else contenu.attr("src", "https://static.abls-habitat.fr/img/"+Response.forme+"_"+Response.color+"."+Response.extension);
      }
-    else if (Response.ihm_affichage=="by_mode_color")
+    else if (Response.controle=="by_mode_color")
      { contenu = $('<img>').addClass("wtd-visuel")
                            .attr ( "id", id+"-img" )
                            .click( function () { Clic_sur_visuel ( Response ); } );
@@ -73,31 +73,31 @@
     if (visuels.length!=1) return;
     visuel = visuels[0];
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
-console.log("Changer_etat_visuel " + visuel.ihm_affichage );
+console.log("Changer_etat_visuel " + visuel.controle );
     if (Synoptique.mode_affichage == false)
-     { if (visuel.ihm_affichage=="static")
+     { if (visuel.controle=="static")
         { Changer_etat_visuel_static ( visuel, etat );  }
-       else if (visuel.ihm_affichage=="by_mode")
+       else if (visuel.controle=="by_mode")
         { Changer_etat_visuel_by_mode ( visuel, etat );   }
-       else if (visuel.ihm_affichage=="by_color")
+       else if (visuel.controle=="by_color")
         { Changer_etat_visuel_by_color ( visuel, etat );   }
-       else if (visuel.ihm_affichage=="by_mode_color")
+       else if (visuel.controle=="by_mode_color")
         { Changer_etat_visuel_by_mode_color ( visuel, etat );   }
      }
     else /* Heavysyn */
-     { /*else if (visuel.ihm_affichage=="complexe" && visuel.forme=="bouton")
+     { /*else if (visuel.controle=="complexe" && visuel.forme=="bouton")
                        { Trame.new_button ( visuel ); }
-                      else if (visuel.ihm_affichage=="complexe" && visuel.forme=="encadre")
+                      else if (visuel.controle=="complexe" && visuel.forme=="encadre")
                        { Trame.new_encadre ( visuel ); }
-                      else if (visuel.ihm_affichage=="complexe" && visuel.forme=="comment")
+                      else if (visuel.controle=="complexe" && visuel.forme=="comment")
                        { Trame.new_comment ( visuel ); }
-/*{ if (visuel.ihm_affichage=="static")
+/*{ if (visuel.controle=="static")
         { Changer_etat_visuel_static ( visuel, etat );  }
-       else if (visuel.ihm_affichage=="by_mode")*/
+       else if (visuel.controle=="by_mode")*/
         { visuel.Set_state ( etat ); }
-       /*else if (visuel.ihm_affichage=="by_color")
+       /*else if (visuel.controle=="by_color")
         { Changer_etat_visuel_by_color ( visuel, etat );   }
-       else if (visuel.ihm_affichage=="by_mode_color")
+       else if (visuel.controle=="by_mode_color")
         { Changer_etat_visuel_by_mode_color ( visuel, etat );   }*/
      }
   }
