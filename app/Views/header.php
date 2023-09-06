@@ -113,8 +113,8 @@
 	       .wtd-courbe-full-screen
                     { background-color: white;
                       width: auto;
-                      /*max-width: 800px;*/
-                      min-height: 600px;
+                      max-width: 100vw;
+                      min-height: 80vh;
                       max-height: 100vh;
                       cursor: pointer;
                     }

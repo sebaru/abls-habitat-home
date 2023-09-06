@@ -5,7 +5,7 @@
     var period     = vars[3];
     if (tableau_id==null) tableau_id=10000;
     if (period!=null) $("#idTableauPeriod").val( period );
-    $("#idCourbePeriod").off("change").on("change", function () { Redirect ( "/tableau/"+tableau_id+"/"+$("#idTableauPeriod").val() ); } );
+    $("#idTableauPeriod").off("change").on("change", function () { Redirect ( "/tableau/"+tableau_id+"/"+$("#idTableauPeriod").val() ); } );
 
     Send_to_API ( "GET", "/tableau/map/list", "tableau_id="+tableau_id, function(Response)
      { $('#idTableauTitle').text(Response.titre);

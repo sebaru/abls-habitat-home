@@ -174,7 +174,7 @@
         }
 
 
-/*---------------------------------------------------- Affichage des tableaux ------------------------------------------------*/
+/*---------------------------------------------------- Affichage des messages ------------------------------------------------*/
        if (DataTable.isDataTable('#idTableMessages')) { $('#idTableMessages').DataTable().ajax.reload(null, false); }
        else $('#idTableMessages').empty().DataTable(
         { pageLength : 50,
