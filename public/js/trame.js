@@ -165,10 +165,10 @@
        .then ( Response => Response.text() )
        .then ( svg_text =>
                 { visuel.svggroupe.svg( svg_text );            /* Convertir le texte en SVG pour utiliser la librairie SVG.js */
-                  const parser = new DOMParser();               /* Convertie le texte en Element pour récupérer les functions */
-                  let svgElement = parser.parseFromString ( svg_text, "image/svg+xml" ).documentElement;
-                  console.debug(svgElement.getElementById("Set_state"));
-                  if (svgElement.getElementById("Set_state") != null) visuel.InsideSVG_Set_state = new Function ( "state", svgElement.getElementById("Set_state").innerHTML );
+
+                  fetch ( "https://static.abls-habitat.fr/img/"+visuel.forme+".js" )
+                  .then ( Response => Response.text() )
+                  .then ( js_text => { visuel.InsideSVG_Set_state = new Function ( "state", js_text ); } );
 
                   visuel.Set_state = function ( etat )
                    { if (this.InsideSVG_Set_state !== undefined) this.InsideSVG_Set_state(etat);
