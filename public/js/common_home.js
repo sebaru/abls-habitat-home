@@ -25,6 +25,7 @@
 
     WTDWebSocket.onopen = function (event)
      { console.log("Websocket loaded " );
+       $('#idAlertConnexionLost').hide();
        if (syn_id)
         { var json_request = JSON.stringify( { "tag": "abonner", "syn_id": syn_id } );
           this.send ( json_request );
@@ -53,21 +54,25 @@
 
     WTDWebSocket.onmessage = function (event)
      { var Response = JSON.parse(event.data);                                               /* Pointe sur <synoptique a=1 ..> */
-       if (!Synoptique) return;
-
-            if (Response.tag == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
-       else if (Response.tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
+console.log(Response);
+            if (Synoptique && Response.tag == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
+       else if (Synoptique && Response.tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
        else if (Response.tag == "DLS_HISTO")
-             { if (DataTable.isDataTable( 'idTableMessages') == false) return;
+             { if (DataTable.isDataTable( '#idTableMessages') == false) return;
                if ( Response.alive == true )
                 { console.log("Websocket MSG NEW");
                   console.debug(Response);
-                  $('#idTableMessages').DataTable().row.add ( Response ).draw();
+                  if (!Synoptique || (Synoptique && Synoptique.page == Response.syn_page ) )
+                   { $('#idTableMessages').DataTable().row.add ( Response ).draw(); }
                 }
                else
                 { console.log("Websocket REMOVE MSG");
                   console.debug(Response);
-                  $('#idTableMessages').DataTable().row("#"+Response.histo_msg_id).remove().draw();
+                  /*$('#idTableMessages').DataTable().row("#"+Response.histo_msg_id).remove().draw();*/
+                  $('#idTableMessages').DataTable().rows( function ( index, data, node )
+                   { if ( data.tech_id == Response.tech_id && data.acronyme == Response.acronyme ) return(true);
+                     else return(false);
+                   }).remove().draw("page");
                 }
                /*else $('#idTableMSGS').DataTable().ajax.reload( null, false );*/
              }

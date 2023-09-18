@@ -339,7 +339,7 @@
                       else dates = json.valeurs.map( function(item) { return item.date; } );
        var valeurs = json.valeurs.map( function(item) { return item.moyenne1; } );
        var data = { labels: dates,
-                    datasets: [ { label: json.courbe1.libelle,
+                    datasets: [ { label: json.courbe1.libelle+ " ("+json.courbe1.unite+")",
                                   borderColor: "rgba(0, 100, 255, 1.0)",
                                   backgroundColor: "rgba(0, 100, 100, 0.1)",
                                   borderWidth: "1",
@@ -394,8 +394,8 @@
        for (i=0; i<tableau_map.length; i++)
         { data.datasets.push ( { label: Response["courbe"+(i+1)].libelle+ " ("+Response["courbe"+(i+1)].unite+")",
                                  borderColor: tableau_map[i].color,
-                                 backgroundColor: "rgba(100, 100, 100, 0.0)",
-                                 /*backgroundColor: "rgba(100, 100, 100, 0.1)",*/
+                                 /*backgroundColor: "rgba(0, 0, 0, 0.5)",*/
+                                 backgroundColor: tableau_map[i].color,/*"rgba(100, 100, 100, 0.1)",*/
                                  borderWidth: "1",
                                  tension: "0.1",
                                  radius: "1",

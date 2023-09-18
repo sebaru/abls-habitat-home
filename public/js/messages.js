@@ -34,7 +34,7 @@
                    else if (item.typologie==2) { cligno = true;  img = "pignon_orange.svg"; } /* defaut */
                    else if (item.typologie==3) { cligno = true;  img = "pignon_red.svg"; } /* alarme */
                    else if (item.typologie==4) { cligno = false; img = "bouclier_green.svg"; } /* veille */
-                   else if (item.typologie==5) { cligno = false; img = "info.svg"; } /* attente */
+                   else if (item.typologie==5) { cligno = false; img = "notification.svg"; } /* attente */
                    else if (item.typologie==6) { cligno = true;  img = "croix_red.svg"; } /* danger */
                    else if (item.typologie==7) { cligno = true;  img = "croix_orange.svg"; } /* derangement */
                    else { cligno = false; img = "info.svg"; }
@@ -72,5 +72,11 @@
 /* Load_page: Appelé au chargement de la page                                                                                 */
 /******************************************************************************************************************************/
  function Load_page ()
-  { Load_page_message(); }
+  { Send_to_API ( 'GET', "/domain/image", null, function (Response)
+     { if (Response.image == null) Response.image = "https://static.abls-habitat.fr/img/syn_maison.png";
+       Changer_img_src ( "idNavImgTopSyn", Response.image, false );
+       $("#idNavImgTopSyn").on("click", function () { Redirect("/"); } );
+     }, null);
+    Load_page_message();
+  }
 /*----------------------------------------------------------------------------------------------------------------------------*/

@@ -11,6 +11,8 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css"/>
         <style>
+        :root { color-scheme: dark; }
+
         body { background-image: url('https://static.abls-habitat.fr/img/fond_home.jpg');
                background-position: center;
                background-size: cover;
@@ -95,15 +97,25 @@
 
         .wtd-visuel { /*border-radius: 20%;*/
                       width: 128px;
-                      /*height: auto;*/
+                      height: auto;
                       max-height: 128px;
                       cursor: pointer;
                     }
 
 	       .wtd-courbe { background-color: white;
                       width: auto;
-                      max-width: 800px;
+                      max-width: 100vw;
                       min-height: 600px;
+                      cursor: pointer;
+                      max-height: 100vh;
+                    }
+
+	       .wtd-courbe-full-screen
+                    { background-color: white;
+                      width: auto;
+                      max-width: 100vw;
+                      min-height: 80vh;
+                      max-height: 100vh;
                       cursor: pointer;
                     }
 
@@ -239,7 +251,7 @@
   <a class="nav-item"><img id="idMasterVignetteSecuBien" class="wtd-menu mr-1" src=""></a>
   <a class="nav-item"><img id="idMasterVignetteSecuPers" class="wtd-menu mr-1" src=""></a>-->
   <ul class="navbar-nav">
-    <a class="nav-item" href="#" onclick="Charger_un_synoptique(null)">
+    <a class="nav-item" href="#">
       <img id ="idNavImgTopSyn" src="" alt=""
            class="wtd-menu" data-toggle='tooltip' data-placement='bottom' title="Aller à l'accueil">
     </a>
