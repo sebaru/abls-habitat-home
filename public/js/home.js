@@ -199,7 +199,7 @@
                 else if (item.typologie==7) { classe="text-warning"; } /* derangement */
                 else { classe="text-info"; }
                 $(row).addClass( classe ).css("cursor", "pointer");
-                $(row).on("click", function() { Msg_acquitter ( row.id ); } );
+                $(row).off("click").on("click", function() { Msg_acquitter ( row.id ); } );
               },
              columns:
               [ { "data": null, "title":"-", "className": "align-middle text-center bg-dark d-none d-sm-table-cell ",
