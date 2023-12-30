@@ -8,7 +8,7 @@
         <meta name="google" content="notranslate">
         <meta name="robots" content="noindex, nofollow">
         <link rel="icon" href="https://static.abls-habitat.fr/img/abls.svg">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"/>
         <style>
         :root { color-scheme: dark; }
@@ -176,9 +176,9 @@
 <div class="position-fixed" style="top: 3rem; left: 50%; z-index:9999">
   <div id="idToastStatusOK" data-delay="3000" class="toast hide bg-primary" role="status">
    <div class="toast-header">
-     <strong class="mr-auto"> Résultat de la commande</strong>
+     <strong class="me-auto"> Résultat de la commande</strong>
      <!--<small>11 mins ago</small>-->
-     <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+     <button type="button" class="ml-2 mb-1 close" data-bs-dismiss="toast" aria-label="Close">
        <span aria-hidden="true">&times;</span>
      </button>
    </div>
@@ -191,9 +191,9 @@
 <div class="position-fixed" style="top: 3rem; left: 50%; z-index:9999">
   <div id="idToastStatusKO" data-delay="3000" class="toast hide bg-danger" role="status">
    <div class="toast-header">
-     <strong class="mr-auto"> Résultat de la commande</strong>
+     <strong class="me-auto"> Résultat de la commande</strong>
      <!--<small>11 mins ago</small>-->
-     <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+     <button type="button" class="ml-2 mb-1 close" data-bs-dismiss="toast" aria-label="Close">
        <span aria-hidden="true">&times;</span>
      </button>
    </div>
@@ -209,7 +209,7 @@
     <div class="modal-content ">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title text-justify"><i class="fas fa-trash"></i> <span id="idModalDelTitre"></span></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -217,8 +217,8 @@
         <p id="idModalDelMessage"></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Annuler</button>
-        <button id="idModalDelValider" type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-trash"></i> Valider</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> Annuler</button>
+        <button id="idModalDelValider" type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fas fa-trash"></i> Valider</button>
       </div>
     </div>
   </div>
@@ -229,7 +229,7 @@
     <div class="modal-content">
       <div class="modal-header bg-warning">
         <h5 class="modal-title text-justify"><i class="fas fa-exclamation-circle"></i>Erreur</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -237,7 +237,7 @@
         <p id="idModalDetail">Une erreur est survenue !</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -253,20 +253,20 @@
   <ul class="navbar-nav">
     <a class="nav-item" href="#">
       <img id ="idNavImgTopSyn" src="" alt=""
-           class="wtd-menu" data-toggle='tooltip' data-placement='bottom' title="Aller à l'accueil">
+           class="wtd-menu" data-bs-toggle='tooltip' data-placement='bottom' title="Aller à l'accueil">
     </a>
   </ul>
-  <ul id="idNavSynoptique" class="navbar-nav d-inline mr-auto"></ul>
+  <ul id="idNavSynoptique" class="navbar-nav d-inline me-auto"></ul>
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-toggled" aria-controls="navbar-toggled" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggled" aria-controls="navbar-toggled" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbar-toggled">
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ms-auto">
       <a id="idAlertConnexionLost" class="nav-link wtd-cligno" style="display: none"><i class="fa-solid fa-link-slash fa-xl text-warning"></i></a>
       <li class="nav-item dropdown">
-        <a class="nav-link rounded align-items-middle dropdown-toggle" href="#" id="navbarUSER" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link rounded align-items-middle dropdown-toggle" href="#" id="navbarUSER" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-user text-white"></i> <span id="idUsername">-</span>
         </a>
 

@@ -96,15 +96,6 @@
     input = $('#'+id);
     return ( FormatTag.test(input.val()) )
   }
-/********************************************* Gestion des popovers ***********************************************************/
- function Popover_hide ( element )
-  { element.popover('dispose');
-  }
- function Popover_show ( element, titre, content, place )
-  { Popover_hide ( element );
-    element.popover({ container: 'body', title: titre, content: content});
-    element.popover('show');
-  }
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
  function Load_common ()
   { console.log("debut load_common");
@@ -163,7 +154,7 @@
  function Bouton_actions_add ( color, tooltip, clic_func, key, icone, texte )
   { if (clic_func !== null)
      { result = "<button class='btn btn-"+color+" btn-sm' "+
-                "data-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
+                "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
                 "onclick="+clic_func+"('"+key+"')>"+
                 (icone!==null ? "<i class='fas fa-"+icone+"'></i> " : "") +
                 (texte!==null ? htmlEncode(texte) : "") +
@@ -171,7 +162,7 @@
      }
     else
      { result = "<button class='btn btn-"+color+" btn-sm' disabled "+
-                "data-toggle='tooltip' title='"+htmlEncode(tooltip)+"'> "+
+                "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"'> "+
                 (icone!==null ? "<i class='fas fa-"+icone+"'></i> " : "") +
                 (texte!==null ? htmlEncode(texte) : "") +
                 "</button>";
@@ -186,7 +177,7 @@
   { if (clic_func !== null)
      { result = "<button "+
                 "class='btn btn-"+color+" btn-block btn-sm' "+
-                "data-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
+                "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
                 "onclick="+clic_func+"('"+key+"')>"+
                 "<span id='idButtonSpinner_"+clic_func+"_"+key+"' class='spinner-border spinner-border-sm' style='display:none' "+
                 "role='status' aria-hidden='true'></span> "+
@@ -196,7 +187,7 @@
    else
     { result =  "<button "+
                 "class='btn btn-"+color+" btn-block btn-sm' "+
-                "data-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
+                "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
                 "disabled>"+htmlEncode(texte)+
                 "</button>";
     }
@@ -204,13 +195,13 @@
   }
 
  function Lien ( target, tooltip, texte )
-  { return( "<a href='"+target+"' data-toggle='tooltip' title='"+htmlEncode(tooltip)+"'>"+texte+"</a>" );
+  { return( "<a href='"+target+"' data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"'>"+texte+"</a>" );
   }
 
  function Badge ( color, tooltip, texte )
   { return("<span "+
-           "class='badge badge-"+color+"' "+
-           "data-toggle='tooltip' title='"+htmlEncode(tooltip)+"'>"+htmlEncode(texte)+
+           "class='badge bg-"+color+"' "+
+           "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"'>"+htmlEncode(texte)+
            "</span>" );
   }
 

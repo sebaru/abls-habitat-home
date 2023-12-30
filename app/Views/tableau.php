@@ -4,7 +4,7 @@
  <div class="row m-2">
    <div class="col-auto"><h3><i class="fas fa-chart-line text-primary"></i> Voir la courbe</h3></div>
 
-   <div class ="ml-auto btn-group align-items-center">
+   <div class ="ms-auto btn-group align-items-center">
      <i class='fas fa-clock text-primary mr-2'></i>
      <select id='idTableauPeriod' class='custom-select'>
       <option value='HOUR'>Heure</option>

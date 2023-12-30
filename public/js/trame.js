@@ -18,8 +18,16 @@
        this.grille = this.group().attr("id", "wtd-grille");
        for ( x=0; x<1920; x+=maille )
         { for ( y=0; y<1080; y+=maille )
-           { var point = this.circle(2).fill("black").cx(x).cy(y);
-             this.grille.add(point);
+           { if ( x%100==0 && y%100==0 )
+              { var croix1 = this.line(x, y-6, x, y+6).stroke({ color: 'blue', width: 1 });
+                var croix2 = this.line(x-6, y, x+6, y).stroke({ color: 'blue', width: 1 });
+                this.grille.add(croix1);
+                this.grille.add(croix2);
+              }
+             else
+              { var point = this.circle(2).fill("black").cx(x).cy(y);
+                this.grille.add(point);
+              }
            }
         }
      }

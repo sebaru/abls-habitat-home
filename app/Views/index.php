@@ -23,7 +23,7 @@
 <section id='idSectionMessages' class='row mx-0'>
    <div class="table-responsive">
      <table id="idTableMessages" class='table table-dark table-bordered w-100'>
-       <thead class="thead-dark">
+       <thead class="table-dark">
        </thead>
        <tbody>
        </tbody>
