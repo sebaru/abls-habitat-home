@@ -107,6 +107,7 @@
        else
         { localStorage.setItem("domain_uuid", Response.default_domain_uuid );/* Positionne les parametres domain par défaut */
           localStorage.setItem("domain_name", Response.default_domain_name );
+          localStorage.setItem("static_data_url",    Response.static_data_url );
           localStorage.setItem("access_level", parseInt(Response.access_level) );
           $("#idNavDomainName").text( localStorage.getItem("domain_name") );
           if (Response.domain_notification.length) $("#idDomainNotification").text( htmlEncode(Response.domain_notification) ).show();

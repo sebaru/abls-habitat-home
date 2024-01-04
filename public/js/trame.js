@@ -48,7 +48,7 @@
      { console.log ( "new image " + visuel.tech_id + ":" + visuel.acronyme + " " + visuel.posx + "x" + visuel.posy );
        visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
        this.add(visuel.svggroupe);
-       var svgimage = this.image( "https://static.abls-habitat.fr/img/"+image_filename)
+       var svgimage = this.image( localStorage.getItem("static_data_url")+"/img/"+image_filename)
                           .attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
        visuel.svggroupe.add ( svgimage );
        this.update_matrice ( visuel );
@@ -60,7 +60,7 @@
        visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
        this.add(visuel.svggroupe);
        var groupe = $("#wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-       var svgimage = this.image( "https://static.abls-habitat.fr/img/"+visuel.forme+"."+visuel.extension,
+       var svgimage = this.image( localStorage.getItem("static_data_url")+"/img/"+visuel.forme+"."+visuel.extension,
                                   function(event) { this.center(0,0); })
                           .attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
        visuel.svggroupe.add ( svgimage );
@@ -79,14 +79,14 @@
        visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
        this.add(visuel.svggroupe);
        var groupe = $("#wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-       var svgimage = this.image( "https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"."+visuel.extension,
+       var svgimage = this.image( localStorage.getItem("static_data_url")+"/img/"+visuel.forme+"_"+visuel.mode+"."+visuel.extension,
                                   function(event) { this.center(0,0); })
                           .attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
        visuel.svggroupe.add ( svgimage );
        visuel.Set_state = function ( etat )
                            { if (visuel.mode != etat.mode)
                               { groupe.fadeOut("fast", function ()
-                                 { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"."+visuel.extension );
+                                 { svgimage.load(localStorage.getItem("static_data_url")+"/img/"+visuel.forme+"_"+visuel.mode+"."+visuel.extension );
                                    groupe.fadeIn();
                                  } );
                               }
@@ -109,14 +109,14 @@
        visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
        this.add(visuel.svggroupe);
        var groupe = $("#wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-       var svgimage = this.image( "https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension,
+       var svgimage = this.image( localStorage.getItem("static_data_url")+"/img/"+visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension,
                                   function(event) { this.center(0,0); })
                           .attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img")
        visuel.svggroupe.add ( svgimage );
        visuel.Set_state = function ( etat )
                            { if (visuel.mode != etat.mode || visuel.color != etat.color)
                               { groupe.fadeOut("fast", function ()
-                                 { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension );
+                                 { svgimage.load(localStorage.getItem("static_data_url")+"/img/"+visuel.forme+"_"+visuel.mode+"_"+visuel.color+"."+visuel.extension );
                                    groupe.fadeIn();
                                  } );
                               }
@@ -139,14 +139,14 @@
        visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
        this.add(visuel.svggroupe);
        var groupe = $("#wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-       var svgimage = this.image( "https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.color+"."+visuel.extension,
+       var svgimage = this.image( localStorage.getItem("static_data_url")+"/img/"+visuel.forme+"_"+visuel.color+"."+visuel.extension,
                                   function(event) { this.center(0,0); })
                           .attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme + "-img");
        visuel.svggroupe.add ( svgimage );
        visuel.Set_state = function ( etat )
                            { if (visuel.color != etat.color)
                               { groupe.fadeOut("fast", function ()
-                                 { svgimage.load("https://static.abls-habitat.fr/img/"+visuel.forme+"_"+visuel.color+"."+visuel.extension );
+                                 { svgimage.load(localStorage.getItem("static_data_url")+"/img/"+visuel.forme+"_"+visuel.color+"."+visuel.extension );
                                    groupe.fadeIn();
                                  } );
                               }
@@ -169,12 +169,12 @@
        visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
        this.add(visuel.svggroupe);
        var groupe = $("#wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
-       fetch ( "https://static.abls-habitat.fr/img/"+visuel.forme+".svg" )
+       fetch ( localStorage.getItem("static_data_url")+"/img/"+visuel.forme+".svg" )
        .then ( Response => Response.text() )
        .then ( svg_text =>
                 { visuel.svggroupe.svg( svg_text );            /* Convertir le texte en SVG pour utiliser la librairie SVG.js */
 
-                  fetch ( "https://static.abls-habitat.fr/img/"+visuel.forme+".js" )
+                  fetch ( localStorage.getItem("static_data_url")+"/img/"+visuel.forme+".js" )
                   .then ( Response => Response.text() )
                   .then ( js_text => { visuel.InsideSVG_Set_state = new Function ( "state", js_text ); } );
 

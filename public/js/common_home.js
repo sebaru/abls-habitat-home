@@ -20,7 +20,8 @@
   { if (WTDWebSocket && WTDWebSocket.readyState == 1) WTDWebSocket.close(); /* 1 = Open */
     WTDWebSocket = new WebSocket($ABLS_API.replace("http","ws")+"/websocket"+
                                  "?token="+Token+
-                                 "&domain_uuid="+localStorage.getItem("domain_uuid")
+                                 "&domain_uuid="+localStorage.getItem("domain_uuid"),
+                                 "live-http"
                                 );
 
     WTDWebSocket.onopen = function (event)
@@ -30,11 +31,14 @@
         { var json_request = JSON.stringify( { "tag": "abonner", "syn_id": syn_id } );
           this.send ( json_request );
         }
-       setInterval ( function()                                                               /* Un ping tous les 30 secondes */
-        { var json_ping = JSON.stringify( { "tag": "ping" } );
-          WTDWebSocket.send( json_ping );
-          console.log ( "websocket: sending ping" );
-        }, 30000 );
+       WTDWebSocket.ping = setInterval ( function()                                     /* Un ping tous les 30 secondes */
+        { console.log("ws log " + WTDWebSocket.readyState );
+          if (WTDWebSocket.readyState == 1)
+           { var json_ping = JSON.stringify( { "tag": "ping" } );
+             WTDWebSocket.send( json_ping );
+             console.log ( "websocket: sending ping" );
+           } else console.log ( "websocket: not sending ping (closed?)" );
+        }, 20000 );
      }
     WTDWebSocket.onerror = function (event)
      { console.log("Error au websocket restarting in 10s !" );
@@ -47,14 +51,15 @@
            }, 10000 );
         }
      }
+
     WTDWebSocket.onclose = function (event)
-     { console.log("Close au websocket");
+     { console.log("Close au websocket: code=" + event.code + ", reason=" + event.reason );
+       clearInterval ( WTDWebSocket.ping );
        console.debug(event);
      }
 
     WTDWebSocket.onmessage = function (event)
      { var Response = JSON.parse(event.data);                                               /* Pointe sur <synoptique a=1 ..> */
-console.log(Response);
             if (Synoptique && Response.tag == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
        else if (Synoptique && Response.tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
        else if (Response.tag == "DLS_HISTO")
@@ -76,7 +81,6 @@ console.log(Response);
                 }
                /*else $('#idTableMSGS').DataTable().ajax.reload( null, false );*/
              }
-       else if (Response.tag == "pulse") { console.log("pulse received"); }
        else console.log("tag: " + Response.tag + " not known");
      }
   }

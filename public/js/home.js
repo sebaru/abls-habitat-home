@@ -80,7 +80,7 @@
         .prepend( "<a class='nav-link rounded d-none d-sm-inline' href='#'> <span>"+Synoptique.libelle+"</span></a>" );
        $.each ( Response.parent_syns, function (i, syn)
                  { var bread = $('<a>').addClass('nav-item')
-                                .append($('<img>').attr("src", "https://static.abls-habitat.fr/img/"+syn.image)
+                                .append($('<img>').attr("src", localStorage.getItem("static_data_url")+"/img/"+syn.image)
                                                   .attr("alt", syn.libelle)
                                                   .attr("data-bs-toggle", "tooltip")
                                                   .attr("data-placement", "bottom")
@@ -133,7 +133,7 @@
                                                            .text ( Synoptique.page + " - " + Synoptique.libelle + "(#" + Synoptique.syn_id + ")" )
                                                          )
                                               )
-                                      .append ( $("<div>").addClass("ms-auto btn-group align-items-center")
+                                      .append ( $("<div>").addClass("col-auto ms-auto btn-group align-items-center")
                                                  .append ( $("<button>").addClass("btn btn-primary")
                                                              .text ( "Acquitter" )
                                                              .on("click", () => { Acquitter_synoptique() } )
@@ -265,7 +265,7 @@
                .append( $('<div></div>').addClass("col text-center mb-1")
                         .append( $('<div></div>').addClass("d-inline-block wtd-img-container")
                                  .append($('<img>').attr("src", (Response.image=="custom" ? Response.image
-                                                                                          : "https://static.abls-habitat.fr/img/"+Response.image) )
+                                                                                          : localStorage.getItem("static_data_url")+"/img/"+Response.image) )
                                                    .off("click").on("click", () => { Charger_un_synoptique( Response.page ); } )
                                                    .attr("id", "idImgSyn_"+Response.syn_id)
                                                    .addClass("wtd-synoptique") )
