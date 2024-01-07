@@ -7,7 +7,7 @@
 <hr>
 
    <div class="table-responsive">
-     <table id="idTableMessages" class='table table-dark table-bordered w-100'>
+     <table id="idTableMessages" class='table w-100'>
        <thead class="table-dark">
        </thead>
        <tbody>

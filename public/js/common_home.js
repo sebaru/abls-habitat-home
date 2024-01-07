@@ -1,6 +1,16 @@
  var Synoptique = null;                                              /* Toutes les données du synoptique en cours d'affichage */
  var WTDWebSocket = null;
 
+ var MSG_TYPOLOGIE = [ { cligno: false, classe: "text-white",   img: "info.svg" }, /* etat */
+                       { cligno: true,  classe: "text-warning", img: "bouclier_orange.svg" }, /* alerte */
+                       { cligno: true,  classe: "text-warning", img: "pignon_orange.svg" }, /* defaut */
+                       { cligno: true,  classe: "text-danger",  img: "pignon_red.svg" }, /* alarme */
+                       { cligno: false, classe: "text-success", img: "bouclier_green.svg" }, /* veille */
+                       { cligno: false, classe: "text-white",   img: "notification.svg" }, /* attente */
+                       { cligno: true,  classe: "text-danger",  img: "croix_red.svg" }, /* danger */
+                       { cligno: true,  classe: "text-warning", img: "croix_orange.svg" }, /* derangement */
+                     ];
+
 /********************************************* Affichage des vignettes ********************************************************/
  function Msg_acquitter ( histo_msg_id )
   { selection = $('#idTableMessages').DataTable().row("#"+histo_msg_id).data();
