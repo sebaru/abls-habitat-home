@@ -232,6 +232,48 @@
        return(visuel);
      }
 
+/***************************************************** New cadran *************************************************************/
+    Trame.new_cadran_texte = function ( visuel )
+     { console.log ( "new cadran texte " + visuel.forme + " " + visuel.tech_id + ":" + visuel.acronyme + " " + visuel.posx + "x" + visuel.posy+
+                     " decimal = " + visuel.nb_decimal );
+       visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
+       this.add(visuel.svggroupe);
+       var rectangle = Trame.rect ( 120, 40 ).attr("rx", 10).fill("gray" ).stroke({ width:2, color:"lightgreen" }).cx(0).cy(0);
+       visuel.svggroupe.add ( rectangle );
+
+       var texte = this.text( "- cadran -" ).font ( { family: "arial", size:16, anchor: "middle", variant:"italic" } )
+                       .cx(0).cy(0).css("cursor", "default");
+       visuel.svggroupe.add ( texte );
+
+       visuel.Set_state = function ( etat ) { texte.text ( etat.valeur.toString() ); };
+       this.update_matrice ( visuel );
+       return(visuel);
+     }
+
+/***************************************************** New cadran *************************************************************/
+    Trame.new_cadran_horaire = function ( visuel )
+     { console.log ( "new cadran horaire " + visuel.forme + " " + visuel.tech_id + ":" + visuel.acronyme + " " + visuel.posx + "x" + visuel.posy+
+                     " decimal = " + visuel.nb_decimal );
+       visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
+       this.add(visuel.svggroupe);
+       var rectangle = Trame.rect ( 120, 40 ).attr("rx", 10).fill("gray" ).stroke({ width:2, color:"lightgreen" }).cx(0).cy(0);
+       visuel.svggroupe.add ( rectangle );
+
+       var texte = this.text( "- cadran -" ).font ( { family: "arial", size:16, anchor: "middle", variant:"italic" } )
+                       .cx(0).cy(0).css("cursor", "default");
+       visuel.svggroupe.add ( texte );
+       visuel.Set_state = function ( etat )
+                           { var temps     = etat.valeur;
+                             var heures    = Math.floor(temps / 3600);
+                             temps %= 3600;
+                             var minutes   = Math.floor(temps / 60);
+                             var secondes  = temps % 60;
+                             var result    = (heures<10 ? "0" : "") + heures + ":" +  ("0"+minutes).slice(-2) + ":" +  ("0"+secondes).slice(-2)
+                                texte.text ( result );
+                           }
+       this.update_matrice ( visuel );
+       return(visuel);
+     }
 /***************************************************** New commentaire ********************************************************/
     Trame.new_comment = function ( visuel )
      { console.log ( "new comment " + visuel.forme + " " + visuel.tech_id + ":" + visuel.acronyme + " " + visuel.posx + "x" + visuel.posy );

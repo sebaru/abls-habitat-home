@@ -73,7 +73,7 @@
     if (visuels.length!=1) return;
     visuel = visuels[0];
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
-console.log("Changer_etat_visuel " + visuel.controle );
+console.log("Changer_etat_visuel " + visuel.controle + " " + visuel.tech_id + ":" + visuel.acronyme );
     if (Synoptique.mode_affichage == false)
      { if (visuel.controle=="static")
         { Changer_etat_visuel_static ( visuel, etat );  }
@@ -84,22 +84,8 @@ console.log("Changer_etat_visuel " + visuel.controle );
        else if (visuel.controle=="by_mode_color")
         { Changer_etat_visuel_by_mode_color ( visuel, etat );   }
      }
-    else /* Heavysyn */
-     { /*else if (visuel.controle=="complexe" && visuel.forme=="bouton")
-                       { Trame.new_button ( visuel ); }
-                      else if (visuel.controle=="complexe" && visuel.forme=="encadre")
-                       { Trame.new_encadre ( visuel ); }
-                      else if (visuel.controle=="complexe" && visuel.forme=="comment")
-                       { Trame.new_comment ( visuel ); }
-/*{ if (visuel.controle=="static")
-        { Changer_etat_visuel_static ( visuel, etat );  }
-       else if (visuel.controle=="by_mode")*/
-        { visuel.Set_state ( etat ); }
-       /*else if (visuel.controle=="by_color")
-        { Changer_etat_visuel_by_color ( visuel, etat );   }
-       else if (visuel.controle=="by_mode_color")
-        { Changer_etat_visuel_by_mode_color ( visuel, etat );   }*/
-     }
+    else /* by_js && complexe */
+     { visuel.Set_state ( etat ); }
   }
 /******************************************************************************************************************************/
 /* Changer_etat_visuel: Appeler par la websocket pour changer un visuel d'etat                                                */
