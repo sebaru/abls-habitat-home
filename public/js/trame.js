@@ -172,13 +172,7 @@
        fetch ( localStorage.getItem("static_data_url")+"/img/"+visuel.forme+".svg" )
        .then ( Response => Response.text() )
        .then ( svg_text =>
-                { visuel.svggroupe.svg( svg_text );            /* Convertir le texte en SVG pour utiliser la librairie SVG.js */
-
-                  fetch ( localStorage.getItem("static_data_url")+"/img/"+visuel.forme+".js" )
-                  .then ( Response => Response.text() )
-                  .then ( js_text => { visuel.InsideSVG_Set_state = new Function ( "state", js_text ); } );
-
-                  visuel.Set_state = function ( etat )
+                { visuel.Set_state = function ( etat )
                    { if (this.InsideSVG_Set_state !== undefined) this.InsideSVG_Set_state(etat);
                      if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                  else visuel.svggroupe.removeClass("wtd-cligno");
@@ -189,8 +183,14 @@
                      visuel.color   = etat.color;
                      visuel.disable = etat.disable;
                    }
-                  visuel.Set_state ( visuel );
-                  this.update_matrice ( visuel );
+
+                  fetch ( localStorage.getItem("static_data_url")+"/img/"+visuel.forme+".js" )
+                  .then ( Response => Response.text() )
+                  .then ( js_text => { visuel.InsideSVG_Set_state = new Function ( "state", js_text );
+                                       visuel.svggroupe.svg( svg_text );/* Convertir le texte en SVG pour utiliser la librairie SVG.js */
+                                       visuel.Set_state ( visuel );
+                                       this.update_matrice ( visuel );
+                                     } );
                 }
              );
        return( visuel );
