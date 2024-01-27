@@ -189,7 +189,7 @@
                 },
           rowId: "histo_msg_id",
           createdRow: function( row, item, dataIndex )
-              { $(row).addClass( classe ).css("cursor", "pointer");
+              { $(row).css("cursor", "pointer");
                 $(row).off("click").on("click", function() { Msg_acquitter ( row.id ); } );
               },
              columns:
