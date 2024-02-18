@@ -6,7 +6,7 @@
                        { cligno: true,  classe: "text-warning", img: "pignon_orange.svg" }, /* defaut */
                        { cligno: true,  classe: "text-danger",  img: "pignon_red.svg" }, /* alarme */
                        { cligno: false, classe: "text-success", img: "bouclier_green.svg" }, /* veille */
-                       { cligno: false, classe: "text-white",   img: "notification.svg" }, /* attente */
+                       { cligno: false, classe: "text-white",   img: "panneau_danger.svg" }, /* attente */
                        { cligno: true,  classe: "text-danger",  img: "croix_red.svg" }, /* danger */
                        { cligno: true,  classe: "text-warning", img: "croix_orange.svg" }, /* derangement */
                      ];
