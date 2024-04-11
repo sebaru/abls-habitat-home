@@ -55,4 +55,6 @@
      }, null);
     $('#idHistoSearch').off("click").on( "click", () => { HISTO_Rechercher(); });
     $('#idHistoSearchQuery').off("enter").on( "enter", () => { HISTO_Rechercher(); });
+    var target = Get_url_parameter( "search" );
+    if (target!==null) { $("#idHistoSearchQuery").val(target); HISTO_Rechercher(); }
   }

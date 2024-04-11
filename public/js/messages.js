@@ -35,7 +35,7 @@
              },
              { "data": null, "title":"Objet", "className": "align-middle text-center bg-dark",
                "render": function (item)
-                 { return( "<p class="+MSG_TYPOLOGIE[item.typologie].classe+"> "+htmlEncode(item.dls_shortname)+"</p>" ); }
+                 { return( Lien ( "/historique?search="+item.dls_shortname, "Voir l'historique", item.dls_shortname ) ); }
              },
              { "data": null, "title":"Message", "className": "align-middle text-center bg-dark",
                "render": function (item)
