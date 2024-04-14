@@ -218,7 +218,7 @@
                                texte.text ( result );
                              }
                             else if (this.classe=="CI")
-                             { texte.text( etat.valeur.toString() + " " + etat.unite ); }
+                             { texte.text( (etat.valeur * etat.multi).toFixed(0).toString() + " " + etat.unite ); }
                             else if (this.classe=="REGISTRE" && this.forme=="horaire")
                              { var heure = Math.trunc(etat.valeur);
                                var minute = Math.trunc((etat.valeur - heure)*100); if (minute > 59) minute = 59;
