@@ -264,7 +264,7 @@
                        .cx(0).cy(0).css("cursor", "default");
        visuel.svggroupe.add ( texte );
        visuel.Set_state = function ( etat )
-                           { var temps     = etat.valeur;
+                           { var temps     = etat.valeur/10.0; /* Valeur est en dixième */
                              var heures    = Math.floor(temps / 3600);
                              temps %= 3600;
                              var minutes   = Math.floor(temps / 60);
