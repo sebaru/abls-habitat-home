@@ -73,7 +73,8 @@
     if (visuels.length!=1) return;
     visuel = visuels[0];
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
-console.log("Changer_etat_visuel " + visuel.controle + " " + visuel.tech_id + ":" + visuel.acronyme );
+console.log("Changer_etat_visuel " + visuel.controle + " " + visuel.tech_id + ":" + visuel.acronyme +
+            " valeur=" + etat.valeur + " unite=" + etat.unite + " decimal=" + etat.decimal );
     if (Synoptique.mode_affichage == false)
      { if (visuel.controle=="static")
         { Changer_etat_visuel_static ( visuel, etat );  }

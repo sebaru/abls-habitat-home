@@ -235,7 +235,7 @@
 /***************************************************** New cadran *************************************************************/
     Trame.new_cadran_texte = function ( visuel )
      { console.log ( "new cadran texte " + visuel.forme + " " + visuel.tech_id + ":" + visuel.acronyme + " " + visuel.posx + "x" + visuel.posy+
-                     " decimal = " + visuel.nb_decimal );
+                     " decimal = " + visuel.decimal );
        visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
        this.add(visuel.svggroupe);
        var rectangle = Trame.rect ( 120, 40 ).attr("rx", 10).fill("gray" ).stroke({ width:2, color:"lightgreen" }).cx(0).cy(0);
@@ -245,7 +245,7 @@
                        .cx(0).cy(0).css("cursor", "default");
        visuel.svggroupe.add ( texte );
 
-       visuel.Set_state = function ( etat ) { texte.text ( etat.valeur.toString() ); };
+       visuel.Set_state = function ( etat ) { texte.text ( etat.valeur.toFixed(etat.decimal).toString() + " " + etat.unite ); };
        visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
        return(visuel);
