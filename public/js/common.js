@@ -105,10 +105,14 @@
        if (Response.default_domain_uuid == null)
         { localStorage.clear(); }
        else
-        { localStorage.setItem("domain_uuid", Response.default_domain_uuid );/* Positionne les parametres domain par défaut */
-          localStorage.setItem("domain_name", Response.default_domain_name );
+        { localStorage.setItem("domain_uuid",        Response.default_domain_uuid );/* Positionne les parametres domain par défaut */
+          localStorage.setItem("domain_name",        Response.default_domain_name );
           localStorage.setItem("static_data_url",    Response.static_data_url );
-          localStorage.setItem("access_level", parseInt(Response.access_level) );
+          localStorage.setItem("access_level",       parseInt(Response.access_level) );
+          localStorage.setItem("mqtt_hostname",      Response.mqtt_hostname );
+          localStorage.setItem("mqtt_port",          parseInt(Response.mqtt_port) );
+          localStorage.setItem("mqtt_over_ssl",      Response.mqtt_over_ssl );
+          sessionStorage.setItem("browser_password", Response.browser_password );
           $("#idNavDomainName").text( localStorage.getItem("domain_name") );
           if (Response.domain_notification.length) $("#idDomainNotification").text( htmlEncode(Response.domain_notification) ).show();
                                               else $("#idDomainNotification").hide();

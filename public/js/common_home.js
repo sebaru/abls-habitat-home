@@ -1,5 +1,4 @@
  var Synoptique = null;                                              /* Toutes les données du synoptique en cours d'affichage */
- var WTDWebSocket = null;
 
  var MSG_TYPOLOGIE = [ { cligno: false, classe: "text-white",   img: "info.svg" }, /* etat */
                        { cligno: true,  classe: "text-warning", img: "bouclier_orange.svg" }, /* alerte */
@@ -24,64 +23,49 @@
      }, null);
   }
 /******************************************************************************************************************************/
-/* Load_websocket: Appelé pour ouvrir la websocket                                                                            */
+/* Load_mqtt: Appelé pour ouvrir la connexion mqtt                                                                            */
 /******************************************************************************************************************************/
- function Load_websocket ( syn_id )
-  { if (WTDWebSocket && WTDWebSocket.readyState == 1) WTDWebSocket.close(); /* 1 = Open */
-    WTDWebSocket = new WebSocket($ABLS_API.replace("http","ws")+"/websocket"+
-                                 "?token="+Token+
-                                 "&domain_uuid="+localStorage.getItem("domain_uuid"),
-                                 "live-http"
-                                );
-
-    WTDWebSocket.onopen = function (event)
-     { console.log("Websocket loaded " );
+ function Load_mqtt ( syn_id )
+  { var domain_uuid = localStorage.getItem("domain_uuid");
+    var methode;
+    if (localStorage.getItem ( "mqtt_over_ssl" ) == 1) methode = "wss"; else methode = "ws";
+    var url = methode + "://" + localStorage.getItem("mqtt_hostname") + ":" + localStorage.getItem("mqtt_port");
+    console.log( "connecting " + 'browser-'+domain_uuid + " to " + url );
+    const client = mqtt.connect( url, { protocolId: 'MQTT', clean: true,
+                                        connectTimeout: 4000, reconnectPeriod: 10000,
+                                        username: "browser-"+domain_uuid,
+                                        password: sessionStorage.getItem ("browser_password"),
+                                      });
+    client.on('connect', function ()
+     { console.log('Connected');
        $('#idAlertConnexionLost').hide();
-       if (syn_id)
-        { var json_request = JSON.stringify( { "tag": "abonner", "syn_id": syn_id } );
-          this.send ( json_request );
-        }
-       WTDWebSocket.ping = setInterval ( function()                                     /* Un ping tous les 30 secondes */
-        { console.log("ws log " + WTDWebSocket.readyState );
-          if (WTDWebSocket.readyState == 1)
-           { var json_ping = JSON.stringify( { "tag": "ping" } );
-             WTDWebSocket.send( json_ping );
-             console.log ( "websocket: sending ping" );
-           } else console.log ( "websocket: not sending ping (closed?)" );
-        }, 20000 );
-     }
-    WTDWebSocket.onerror = function (event)
-     { console.log("Error au websocket restarting in 10s !" );
-       console.debug(event);
-       if(Closing==false)
-        { $('#idAlertConnexionLost').show();
-          setTimeout ( function()                                                                 /* restart dans 10 secondes */
-           { Load_websocket ( syn_id );
-             console.log ( "websocket: restarting" );
-           }, 10000 );
-        }
-     }
+       client.subscribe( domain_uuid + "/DLS_VISUEL", (err) =>
+        { if (err) { console.log ( "MQTT Subscribe error: " + err ); }
+          else console.log ( "MQTT Subscribed to " + "DLS_VISUEL" );
+        });
+     });
 
-    WTDWebSocket.onclose = function (event)
-     { console.log("Close au websocket: code=" + event.code + ", reason=" + event.reason );
-       clearInterval ( WTDWebSocket.ping );
-       console.debug(event);
-     }
+    client.on('error', function (error)
+     { if(Closing==false) $('#idAlertConnexionLost').show();
+       console.log('MQTT Error: ' + error);
+     });
 
-    WTDWebSocket.onmessage = function (event)
-     { var Response = JSON.parse(event.data);                                               /* Pointe sur <synoptique a=1 ..> */
-            if (Synoptique && Response.tag == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
-       else if (Synoptique && Response.tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
-       else if (Response.tag == "DLS_HISTO")
+    client.on ('message', function (topic, message)
+     { var topics = topic.split("/");
+       if (topics[0] != domain_uuid) return;
+       var Response = JSON.parse(message);                                                  /* Pointe sur <synoptique a=1 ..> */
+            if (Synoptique && topics[1] == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
+       else if (Synoptique && topics[1] == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
+       else if (topics[1] == "DLS_HISTO")
              { if (DataTable.isDataTable( '#idTableMessages') == false) return;
                if ( Response.alive == true )
-                { console.log("Websocket MSG NEW");
+                { console.log("MQTT MSG NEW");
                   console.debug(Response);
                   if (!Synoptique || (Synoptique && Synoptique.page == Response.syn_page ) )
                    { $('#idTableMessages').DataTable().row.add ( Response ).draw(); }
                 }
                else
-                { console.log("Websocket REMOVE MSG");
+                { console.log("MQTT REMOVE MSG");
                   console.debug(Response);
                   /*$('#idTableMessages').DataTable().row("#"+Response.histo_msg_id).remove().draw();*/
                   $('#idTableMessages').DataTable().rows( function ( index, data, node )
@@ -91,7 +75,7 @@
                 }
                /*else $('#idTableMSGS').DataTable().ajax.reload( null, false );*/
              }
-       else console.log("tag: " + Response.tag + " not known");
-     }
+       else console.log("topic: " + topics[1] + " not known");
+     });
   }
 /*----------------------------------------------------------------------------------------------------------------------------*/

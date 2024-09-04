@@ -86,7 +86,12 @@ console.log("Changer_etat_visuel " + visuel.controle + " " + visuel.tech_id + ":
         { Changer_etat_visuel_by_mode_color ( visuel, etat );   }
      }
     else /* by_js && complexe */
-     { visuel.Set_state ( etat ); }
+     { console.log ( visuel );
+       if (typeof visuel.Set_state === 'function') { visuel.Set_state ( etat ); }
+       else { console.log ( "No Set_state for " + visuel );
+              console.log ( visuel );
+            }
+     }
   }
 /******************************************************************************************************************************/
 /* Changer_etat_visuel: Appeler par la websocket pour changer un visuel d'etat                                                */

@@ -71,6 +71,7 @@
                            }
        visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
+       visuel.svggroupe.css("cursor", "pointer");
        return( visuel );
      }
 /***************************************************** New image **************************************************************/
@@ -101,6 +102,7 @@
                            }
        visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
+       visuel.svggroupe.css("cursor", "pointer");
        return( visuel );
      }
 /***************************************************** New image **************************************************************/
@@ -131,6 +133,7 @@
                            }
        visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
+       visuel.svggroupe.css("cursor", "pointer");
        return( visuel );
      }
 /***************************************************** New image **************************************************************/
@@ -161,6 +164,7 @@
                            }
        visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
+       visuel.svggroupe.css("cursor", "pointer");
        return( visuel );
      }
 /***************************************************** New image **************************************************************/
@@ -193,6 +197,7 @@
                                      } );
                 }
              );
+       visuel.svggroupe.css("cursor", "pointer");
        return( visuel );
      }
 /***************************************************** New cadran *************************************************************/
@@ -245,7 +250,10 @@
                        .cx(0).cy(0).css("cursor", "default");
        visuel.svggroupe.add ( texte );
 
-       visuel.Set_state = function ( etat ) { texte.text ( etat.valeur.toFixed(etat.decimal).toString() + " " + etat.unite ); };
+       visuel.Set_state = function ( etat )
+        { if (etat.valeur === undefined) texte.text("Unknown");
+          else texte.text ( etat.valeur.toFixed(etat.decimal).toString() + " " + etat.unite );
+        };
        visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
        return(visuel);

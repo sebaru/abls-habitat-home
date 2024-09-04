@@ -54,7 +54,7 @@
           order: [ [1, "desc"] ],
           responsive: false,
      });
-    Load_websocket();
+    Load_mqtt();
   }
 /******************************************************************************************************************************/
 /* Load_page: Appelé au chargement de la page                                                                                 */
