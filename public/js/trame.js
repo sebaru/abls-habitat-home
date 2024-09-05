@@ -381,7 +381,7 @@
        visuel.svggroupe.add ( titre );
 
        var rect = Trame.rect( largeur, hauteur ).x(-largeur/2).y(-hauteur/2).attr("rx", 15)
-                       .fill( "black" ).attr( "fill-opacity", 0.1 )
+                       .fill( "black" ).attr( "fill-opacity", 0.2 )
                        .stroke( { width: 4, color: visuel.color } );
        visuel.svggroupe.add ( rect );
        visuel.Set_state = function ( etat )
