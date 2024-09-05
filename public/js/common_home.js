@@ -43,6 +43,10 @@
         { if (err) { console.log ( "MQTT Subscribe error: " + err ); }
           else console.log ( "MQTT Subscribed to " + "DLS_VISUEL" );
         });
+       client.subscribe( domain_uuid + "/DLS_HISTO", (err) =>
+        { if (err) { console.log ( "MQTT Subscribe error: " + err ); }
+          else console.log ( "MQTT Subscribed to " + "DLS_HISTO" );
+        });
      });
 
     client.on('error', function (error)
