@@ -31,13 +31,13 @@
     if (localStorage.getItem ( "mqtt_over_ssl" ) == 1) methode = "wss"; else methode = "ws";
     var url = methode + "://" + localStorage.getItem("mqtt_hostname") + ":" + localStorage.getItem("mqtt_port");
     console.log( "connecting " + 'browser-'+domain_uuid + " to " + url );
-    const client = mqtt.connect( url, { protocolId: 'MQTT', clean: true,
+    const client = mqtt.connect( url, { protocolId: 'MQTT', clean: true, keepalive: 30,
                                         connectTimeout: 4000, reconnectPeriod: 10000,
                                         username: "browser-"+domain_uuid,
                                         password: sessionStorage.getItem ("browser_password"),
                                       });
     client.on('connect', function ()
-     { console.log('Connected');
+     { console.log('MQTT Connected');
        $('#idAlertConnexionLost').hide();
        client.subscribe( domain_uuid + "/DLS_VISUEL", (err) =>
         { if (err) { console.log ( "MQTT Subscribe error: " + err ); }
@@ -49,13 +49,19 @@
         });
      });
 
+    client.on('disconnect', function ()
+     { console.log('MQTT Disconnected');
+       $('#idAlertConnexionLost').show();
+     });
+
     client.on('error', function (error)
      { if(Closing==false) $('#idAlertConnexionLost').show();
        console.log('MQTT Error: ' + error);
      });
 
     client.on ('message', function (topic, message)
-     { var topics = topic.split("/");
+     { $('#idAlertConnexionLost').hide();
+       var topics = topic.split("/");
        if (topics[0] != domain_uuid) return;
        var Response = JSON.parse(message);                                                  /* Pointe sur <synoptique a=1 ..> */
             if (Synoptique && topics[1] == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
