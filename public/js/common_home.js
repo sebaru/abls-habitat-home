@@ -1,4 +1,5 @@
  var Synoptique = null;                                              /* Toutes les données du synoptique en cours d'affichage */
+ var MQTT_Client = null;
 
  var MSG_TYPOLOGIE = [ { cligno: false, classe: "text-white",   img: "info.svg" }, /* etat */
                        { cligno: true,  classe: "text-warning", img: "bouclier_orange.svg" }, /* alerte */
@@ -23,50 +24,58 @@
      }, null);
   }
 /******************************************************************************************************************************/
+/* Mqtt_subsribe: Appelé pour souscrire à un topic                                                                            */
+/******************************************************************************************************************************/
+ function Mqtt_subscribe ( topic )
+  { var domain_uuid = localStorage.getItem("domain_uuid");
+    var full_topic = domain_uuid + "/browsers/" + topic;
+    MQTT_Client.subscribe( full_topic, (err) =>
+     { if (err) { console.log ( "MQTT Subscribe to " + full_topic + " error: " + err ); }
+       else console.log ( "MQTT Subscribed to " + full_topic );
+     });
+  }
+/******************************************************************************************************************************/
 /* Load_mqtt: Appelé pour ouvrir la connexion mqtt                                                                            */
 /******************************************************************************************************************************/
  function Load_mqtt ( syn_id )
-  { var domain_uuid = localStorage.getItem("domain_uuid");
+  { console.log ("------------------------------ Chargement MQTT" );
+    var domain_uuid = localStorage.getItem("domain_uuid");
     var methode;
     if (localStorage.getItem ( "mqtt_over_ssl" ) == 1) methode = "wss"; else methode = "ws";
     var url = methode + "://" + localStorage.getItem("mqtt_hostname") + ":" + localStorage.getItem("mqtt_port");
-    console.log( "connecting " + 'browser-'+domain_uuid + " to " + url );
-    const client = mqtt.connect( url, { protocolId: 'MQTT', clean: true, keepalive: 30,
-                                        connectTimeout: 4000, reconnectPeriod: 10000,
-                                        username: "browser-"+domain_uuid,
-                                        password: sessionStorage.getItem ("browser_password"),
-                                      });
-    client.on('connect', function ()
+    console.log( "connecting " + domain_uuid + '-browser'+ " to " + url );
+    MQTT_Client = mqtt.connect( url, { protocolId: 'MQTT', clean: true, keepalive: 30,
+                                connectTimeout: 4000, reconnectPeriod: 10000,
+                                username: domain_uuid + "-browser",
+                                password: sessionStorage.getItem ("browser_password"),
+                              });
+    MQTT_Client.on('connect', function ()
      { console.log('MQTT Connected');
        $('#idAlertConnexionLost').hide();
-       client.subscribe( domain_uuid + "/DLS_VISUEL", (err) =>
-        { if (err) { console.log ( "MQTT Subscribe error: " + err ); }
-          else console.log ( "MQTT Subscribed to " + "DLS_VISUEL" );
-        });
-       client.subscribe( domain_uuid + "/DLS_HISTO", (err) =>
-        { if (err) { console.log ( "MQTT Subscribe error: " + err ); }
-          else console.log ( "MQTT Subscribed to " + "DLS_HISTO" );
-        });
+       Mqtt_subscribe ( "DLS_VISUEL/#" );
+       Mqtt_subscribe ( "DLS_HISTO/#" );
      });
 
-    client.on('disconnect', function ()
+    MQTT_Client.on('disconnect', function ()
      { console.log('MQTT Disconnected');
        $('#idAlertConnexionLost').show();
      });
 
-    client.on('error', function (error)
+    MQTT_Client.on('error', function (error)
      { if(Closing==false) $('#idAlertConnexionLost').show();
        console.log('MQTT Error: ' + error);
      });
 
-    client.on ('message', function (topic, message)
+    MQTT_Client.on ('message', function (topic, message)
      { $('#idAlertConnexionLost').hide();
        var topics = topic.split("/");
        if (topics[0] != domain_uuid) return;
+       if (topics[1] != "browsers") return;
+       var tag = topics[2];
        var Response = JSON.parse(message);                                                  /* Pointe sur <synoptique a=1 ..> */
-            if (Synoptique && topics[1] == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
-       else if (Synoptique && topics[1] == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
-       else if (topics[1] == "DLS_HISTO")
+            if (Synoptique && tag == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
+       else if (Synoptique && tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
+       else if (tag == "DLS_HISTO")
              { if (DataTable.isDataTable( '#idTableMessages') == false) return;
                if ( Response.alive == true )
                 { console.log("MQTT MSG NEW");
@@ -85,7 +94,7 @@
                 }
                /*else $('#idTableMSGS').DataTable().ajax.reload( null, false );*/
              }
-       else console.log("topic: " + topics[1] + " not known");
+       else console.log("topic: " + tag + " not known");
      });
   }
 /*----------------------------------------------------------------------------------------------------------------------------*/

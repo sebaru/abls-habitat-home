@@ -229,8 +229,6 @@
              order: [ [1, "desc"] ],
              responsive: false,
         });
-       Load_mqtt(Synoptique.syn_id);                                                              /* Charge la websocket */
-
 /*---------------------------------------------------- Affichage des tableaux ------------------------------------------------*/
        idSectionTableaux.empty();
        if (Synoptique.nbr_tableaux>0)

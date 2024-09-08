@@ -18,6 +18,7 @@
        $("#idNavImgTopSyn").on("click", function () { Charger_un_synoptique(null); } );
      }, null);
 
+    Load_mqtt();                                                                                       /* Charge la websocket */
     Charger_un_synoptique ( syn_page );
   }
 /*----------------------------------------------------------------------------------------------------------------------------*/
