@@ -113,10 +113,6 @@
                       Changer_etat_visuel ( visuel );
                     }
               );
-          $.each ( Synoptique.cadrans, function (i, cadran)
-                    { idSectionPasserelles.append( Creer_cadran ( cadran ) );
-                    }
-                 );
         }
 /*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
        idSectionHeavySyn.empty().css("position","relative");
@@ -148,8 +144,8 @@
                        {      if (visuel.forme=="bouton")  { Trame.new_button  ( visuel ); }
                          else if (visuel.forme=="encadre") { Trame.new_encadre ( visuel ); }
                          else if (visuel.forme=="comment") { Trame.new_comment ( visuel ); }
-                         else if (visuel.forme=="cadran" && visuel.mode=="texte")   { Trame.new_cadran_texte   ( visuel ); }
                          else if (visuel.forme=="cadran" && visuel.mode=="horaire") { Trame.new_cadran_horaire ( visuel ); }
+                         else if (visuel.forme=="cadran" && visuel.mode=="texte")   { Trame.new_cadran_texte   ( visuel ); }
                          else { console.log (" Forme " + visuel.forme + " and mode " + visuel.mode + " inconnu. Dropping.");
                                 visuel.Set_state = new function ( etat ) { console.log("Icon error"); };
                               }

@@ -45,9 +45,26 @@
        if (Response.mode=="hors_comm") contenu.attr("src", "https://static.abls-habitat.fr/img/hors_comm.png");
        else contenu.attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"_"+Response.color+"."+Response.extension);
      }
-    else
-     {  }
-
+    else if (Response.controle=="complexe" && Response.forme=="cadran")
+     { if (Response.mode=="texte")
+        { contenu = $('<h4></h4>').addClass("text-center text-white").text( "Loading" )
+                    .attr("id", "wtd-visuel-texte-"+Response.tech_id+"-"+Response.acronyme);
+        }
+       else if (Response.mode.startsWith("progress"))
+        { contenu = $('<div>')
+                    .append ( $('<div>').addClass("progress my-2")
+                              .append( $('<div>').addClass("progress-bar")
+                                       .attr("id", "wtd-visuel-barre-"+Response.tech_id+"-"+Response.acronyme)
+                                       .attr("role", "progressbar" )
+                                       .attr("aria-valuemin", Response.minimum )
+                                       .attr("aria-valuemax", Response.maximum )
+                                     )
+                            )
+                    .append( $('<h4>').addClass("text-center text-white").text( "Loading" )
+                             .attr("id", "wtd-visuel-texte-"+Response.tech_id+"-"+Response.acronyme)
+                           );
+        }
+     }
     var card = $('<div>').addClass("row bg-transparent mb-3")
                .append( $('<div>').addClass("col text-center mb-1")
                                   .append ( $("<span>").addClass("text-white").text(Response.dls_owner_shortname))
@@ -75,6 +92,9 @@
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
 console.log("Changer_etat_visuel " + visuel.controle + " " + visuel.tech_id + ":" + visuel.acronyme +
             " valeur=" + etat.valeur + " unite=" + etat.unite + " decimal=" + etat.decimal );
+
+    if (visuel.forme == "cadran") { Changer_etat_cadran ( visuel, etat ); return; }
+
     if (Synoptique.mode_affichage == false)
      { if (visuel.controle=="static")
         { Changer_etat_visuel_static ( visuel, etat );  }
