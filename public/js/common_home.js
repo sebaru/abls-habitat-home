@@ -73,8 +73,7 @@
        if (topics[1] != "browsers") return;
        var tag = topics[2];
        var Response = JSON.parse(message);                                                  /* Pointe sur <synoptique a=1 ..> */
-            if (Synoptique && tag == "DLS_CADRAN") { Changer_etat_cadran ( Response ); }
-       else if (Synoptique && tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
+            if (Synoptique && tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
        else if (tag == "DLS_HISTO")
              { if (DataTable.isDataTable( '#idTableMessages') == false) return;
                if ( Response.alive == true )
