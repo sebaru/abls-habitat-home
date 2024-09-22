@@ -91,7 +91,7 @@
     visuel = visuels[0];
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
 console.log("Changer_etat_visuel " + visuel.controle + " " + visuel.tech_id + ":" + visuel.acronyme +
-            " valeur=" + etat.valeur + " unite=" + etat.unite + " decimal=" + etat.decimal );
+            " valeur=" + etat.valeur + " unite=" + etat.unite + " decimal=" + etat.nb_decimal );
 
     if (visuel.forme == "cadran") { Changer_etat_cadran ( visuel, etat ); return; }
 

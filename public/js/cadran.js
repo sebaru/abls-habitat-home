@@ -97,7 +97,7 @@
 /******************************************************************************************************************************/
  function Changer_etat_cadran ( visuel, etat )
   { visuel.valeur = etat.valeur;
-    console.log("Changer_etat_cadran valeur="+etat.valeur+ " unite " + visuel.unite + " decimal " + visuel.decimal
+    console.log("Changer_etat_cadran valeur="+etat.valeur+ " unite " + visuel.unite + " decimal " + visuel.nb_decimal
                 +" min="+minimum+" max="+maximum
                 +" ntb="+visuel.seuil_ntb+" nb="+visuel.seuil_nb+" nh="+visuel.seuil_nh+" nth="+visuel.seuil_nth);
 
@@ -130,7 +130,7 @@
      }
 
     var idvisueltexte = "wtd-visuel-texte-"+visuel.tech_id+"-"+visuel.acronyme;
-    texte = visuel.valeur.toFixed(visuel.decimal);                                             /* Affiche la valeur non capée */
+    texte = visuel.valeur.toFixed(visuel.nb_decimal);                                             /* Affiche la valeur non capée */
     $('#'+idvisueltexte).text( texte + " " + visuel.unite );
   }
 /*----------------------------------------------------------------------------------------------------------------------------*/
