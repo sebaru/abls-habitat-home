@@ -27,23 +27,20 @@
                            .attr ( "id", id+"-img" )
                            .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"."+Response.extension)
                            .click( function () { Clic_sur_visuel ( Response ); } );
-       if (Response.mode=="hors_comm") contenu.attr("src", "https://static.abls-habitat.fr/img/hors_comm.png");
-       else contenu.attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"."+Response.extension);
+       contenu.attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"."+Response.extension);
      }
     else if (Response.controle=="by_color")
      { contenu = $('<img>').addClass("wtd-visuel")
                            .attr ( "id", id+"-img" )
                            .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.color+"."+Response.extension)
                            .click( function () { Clic_sur_visuel ( Response ); } );
-       if (Response.mode=="hors_comm") contenu.attr("src", "https://static.abls-habitat.fr/img/hors_comm.png");
-       else contenu.attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.color+"."+Response.extension);
+       contenu.attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.color+"."+Response.extension);
      }
     else if (Response.controle=="by_mode_color")
      { contenu = $('<img>').addClass("wtd-visuel")
                            .attr ( "id", id+"-img" )
                            .click( function () { Clic_sur_visuel ( Response ); } );
-       if (Response.mode=="hors_comm") contenu.attr("src", "https://static.abls-habitat.fr/img/hors_comm.png");
-       else contenu.attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"_"+Response.color+"."+Response.extension);
+       contenu.attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"_"+Response.color+"."+Response.extension);
      }
     else if (Response.controle=="complexe" && Response.forme=="cadran")
      { if (Response.mode=="texte")
