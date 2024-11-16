@@ -3,8 +3,8 @@
 /******************************************************************************************************************************/
  function Changer_etat_cadran ( visuel, etat )
   { visuel.valeur = etat.valeur;
-    console.log("Changer_etat_cadran valeur="+etat.valeur+ " unite " + visuel.unite + " nb_decimal " + visuel.nb_decimal
-                +" minimim="+minimum+" maximum="+maximum
+    console.log("Changer_etat_cadran valeur="+etat.valeur+ " unite " + visuel.unite + " mode: " + visuel.mode +
+                " nb_decimal " + visuel.nb_decimal +" minimim="+minimum+" maximum="+maximum
                 +" ntb="+visuel.seuil_ntb+" nb="+visuel.seuil_nb+" nh="+visuel.seuil_nh+" nth="+visuel.seuil_nth);
 
     if (visuel.mode=="texte")
@@ -35,7 +35,7 @@
         {      if ( visuel.valeur<=visuel.seuil_ntb ) { $('#'+idvisuelbarre).addClass("bg-danger"); }
           else if ( visuel.valeur<=visuel.seuil_nb )  { $('#'+idvisuelbarre).addClass("bg-warning"); }
           else if ( visuel.valeur<=visuel.seuil_nh )  { $('#'+idvisuelbarre).addClass("bg-success"); }
-          else if ( visuel.valeur<=visuel.seuil_nth )  { $('#'+idvisuelbarre).addClass("bg-warning"); }
+          else if ( visuel.valeur<=visuel.seuil_nth ) { $('#'+idvisuelbarre).addClass("bg-warning"); }
           else { $('#'+idvisuelbarre).addClass("bg-danger"); }
         }
      }

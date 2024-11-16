@@ -10,7 +10,7 @@
 /******************************************************************************************************************************/
 /* Création d'un visuel sur la page de travail                                                                                */
 /******************************************************************************************************************************/
- function Creer_visuel ( Response )
+ function Creer_light_visuel ( Response )
   { var id = "wtd-visu-"+Response.tech_id+"-"+Response.acronyme;
     var contenu;
 
@@ -62,6 +62,7 @@
                            );
         }
      }
+console.debug ( Response );
     var card = $('<div>').addClass("row bg-transparent mb-3")
                .append( $('<div>').addClass("col text-center mb-1")
                                   .append ( $("<span>").addClass("text-white").text(Response.dls_owner_shortname))
@@ -72,8 +73,9 @@
                       )
                .append( $('<div>').addClass('w-100') )
                .append( $('<div>').addClass("col text-center")
-                                        .append ( $("<span>").addClass("text-white").text(Response.libelle))
-                                        .attr ( "id", id+"-footer-text" )
+                        .append ( $("<span>").addClass("text-white")
+                                  .text( (Response.input_libelle != null ? Response.input_libelle : Response.libelle) ))
+                        .attr ( "id", id+"-footer-text" )
                       )
                .attr ( "id", id );
     return(card);
@@ -90,10 +92,10 @@
 console.log("Changer_etat_visuel " + visuel.controle + " " + visuel.tech_id + ":" + visuel.acronyme +
             " valeur=" + etat.valeur + " unite=" + etat.unite + " decimal=" + etat.nb_decimal );
 
-    if (visuel.forme == "cadran") { Changer_etat_cadran ( visuel, etat ); return; }
-
-    if (Synoptique.mode_affichage == false)
-     { if (visuel.controle=="static")
+    if (Synoptique.mode_affichage == false) /* Affichage léger */
+     { if (visuel.forme == "cadran")
+        { Changer_etat_cadran ( visuel, etat ); }
+       else if (visuel.controle=="static")
         { Changer_etat_visuel_static ( visuel, etat );  }
        else if (visuel.controle=="by_mode")
         { Changer_etat_visuel_by_mode ( visuel, etat );   }
@@ -102,7 +104,7 @@ console.log("Changer_etat_visuel " + visuel.controle + " " + visuel.tech_id + ":
        else if (visuel.controle=="by_mode_color")
         { Changer_etat_visuel_by_mode_color ( visuel, etat );   }
      }
-    else /* by_js && complexe */
+    else /* affichage lourd */
      { console.log ( visuel );
        if (typeof visuel.Set_state === 'function') { visuel.Set_state ( etat ); }
        else { console.log ( "No Set_state for " + visuel );

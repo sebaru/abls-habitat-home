@@ -108,7 +108,7 @@
        idSectionLightSyn.empty();
        if (Synoptique.mode_affichage == false)
         { $.each ( Synoptique.visuels, function (i, visuel)
-                    { var card = Creer_visuel ( visuel );
+                    { var card = Creer_light_visuel ( visuel );
                       idSectionLightSyn.append ( card );
                       Changer_etat_visuel ( visuel );
                     }
