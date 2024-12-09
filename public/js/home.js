@@ -217,8 +217,8 @@
                     { if (item.typologie==0) return("-"); /* etat */
                       if (item.typologie==4) return("-"); /* veille */
                       if (item.typologie==5) return("-"); /* attente */
-                      if (item.nom_ack!=null) return(item.nom_ack);
-                      return( Bouton ( "primary", "Acquitter le message", "Msg_acquitter", item.histo_msg_id, "Acquitter" ) );
+                      if (item.nom_ack!=null) return("<p class="+MSG_TYPOLOGIE[item.typologie].classe+"> "+htmlEncode(item.nom_ack)+"</p>");
+                      return(""); /* by default */
                     }
                 },
               ],
