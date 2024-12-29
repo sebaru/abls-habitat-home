@@ -150,7 +150,7 @@
   }
 /********************************************* Redirige la page ***************************************************************/
  function Redirect ( url )
-  { $('body').fadeOut("normal", function () { window.location.replace(url); } );
+  { /*$('body').fadeOut("normal", function () { */window.location.replace(url);/* } );*/
   }
 /********************************************* Barre de boutons ***************************************************************/
  function Bouton_actions_start ( )

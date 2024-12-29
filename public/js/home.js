@@ -85,7 +85,7 @@
                                                   .attr("data-bs-toggle", "tooltip")
                                                   .attr("data-placement", "bottom")
                                                   .attr("title", syn.libelle)
-                                                  .off("click").on("click", () => { Charger_un_synoptique( syn.page ); } )
+                                                  .off("click").on("click", () => { Redirect( syn.page ); /*Charger_un_synoptique( syn.page );*/ } )
                                                   .addClass("wtd-menu") );
                    $('#idNavSynoptique').prepend ( bread );
                    $('#idNavSynoptique').prepend ( "<span class='navbar-text text-secondary'>></span>" );
@@ -248,7 +248,7 @@
                         .append( $('<div></div>').addClass("d-inline-block wtd-img-container")
                                  .append($('<img>').attr("src", (Response.image=="custom" ? Response.image
                                                                                           : localStorage.getItem("static_data_url")+"/img/"+Response.image) )
-                                                   .off("click").on("click", () => { Charger_un_synoptique( Response.page ); } )
+                                                   .off("click").on("click", () => { Redirect /*Charger_un_synoptique*/( Response.page ); } )
                                                    .attr("id", "idImgSyn_"+Response.syn_id)
                                                    .addClass("wtd-synoptique") )
                                  .append($('<img>').attr("id", "idVignetteComm_"+Response.syn_id)
