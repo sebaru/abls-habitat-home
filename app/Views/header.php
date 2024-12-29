@@ -251,7 +251,7 @@
   <a class="nav-item"><img id="idMasterVignetteSecuBien" class="wtd-menu mr-1" src=""></a>
   <a class="nav-item"><img id="idMasterVignetteSecuPers" class="wtd-menu mr-1" src=""></a>-->
   <ul class="navbar-nav">
-    <a class="nav-item" href="/">
+    <a class="nav-item" href="#">
       <img id ="idNavImgTopSyn" src="" alt=""
            class="wtd-menu" data-bs-toggle='tooltip' data-placement='bottom' title="Aller à l'accueil">
     </a>
