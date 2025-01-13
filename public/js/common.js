@@ -114,7 +114,7 @@
           localStorage.setItem("mqtt_over_ssl",      Response.mqtt_over_ssl );
           sessionStorage.setItem("browser_password", Response.browser_password );
           $("#idNavDomainName").text( localStorage.getItem("domain_name") );
-          if (Response.domain_notification.length) $("#idDomainNotification").text( htmlEncode(Response.domain_notification) ).show();
+          if (Response.domain_notification.length) $("#idDomainNotification").text( Response.domain_notification ).show();
                                               else $("#idDomainNotification").hide();
         }
 
