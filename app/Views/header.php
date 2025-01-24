@@ -39,6 +39,17 @@
            100% { opacity: 1; }
          }
 
+        .wtd-noshow { animation-duration: 0.3s;
+                      animation-name: wtdNoShowFrames;
+                      animation-iteration-count: infinite;
+                      animation-fill-mode: backwards;
+                      transition: none;
+                    }
+        @keyframes wtdNoShowFrames
+         {   0% { visibility: visibility; opacity: 1; }
+           100% { visibility: hidden;     opacity: 0; }
+         }
+
         .card { color: white; }
 
         .wtd-img-grayscale
@@ -50,36 +61,36 @@
           { position: relative;
           }
 
-	       .wtd-img-superpose-milieu
-	         { position: absolute;
-	           left: 50%;
+        .wtd-img-superpose-milieu
+          { position: absolute;
+            left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-	           z-index:2;
+            z-index:2;
           }
 
-	       .wtd-img-superpose-bas-droite
-	         { position: absolute;
-	           bottom: 0px;
+        .wtd-img-superpose-bas-droite
+          { position: absolute;
+            bottom: 0px;
             right: 0px;
             transform: translate(+50%, 0%);
-	           z-index:2;
+            z-index:2;
           }
 
-	       .wtd-img-superpose-haut-droite
-	         { position: absolute;
-	           top: 0px;
+        .wtd-img-superpose-haut-droite
+          { position: absolute;
+            top: 0px;
             right: 0px;
             transform: translate(+50%, 0%);
-	           z-index:2;
+            z-index:2;
           }
 
-	       .wtd-img-superpose-haut-gauche
-	         { position: absolute;
-	           top: 0px;
+        .wtd-img-superpose-haut-gauche
+          { position: absolute;
+            top: 0px;
             left: 0px;
             transform: translate(-50%, 0%);
-	           z-index:2;
+            z-index:2;
           }
 
         .wtd-menu
@@ -102,7 +113,7 @@
                       cursor: pointer;
                     }
 
-	       .wtd-courbe { background-color: white;
+        .wtd-courbe { background-color: white;
                       width: auto;
                       max-width: 100vw;
                       min-height: 600px;
@@ -110,7 +121,7 @@
                       max-height: 100vh;
                     }
 
-	       .wtd-courbe-full-screen
+        .wtd-courbe-full-screen
                     { background-color: white;
                       width: auto;
                       max-width: 100vw;
@@ -245,7 +256,7 @@
 
 <header>
 
-	<nav class="navbar navbar-dark navbar-expand-md fixed-top shadow"> <!-- fixed-top -->
+ <nav class="navbar navbar-dark navbar-expand-md fixed-top shadow"> <!-- fixed-top -->
 
   <!--<a class="nav-item"><img id="idMasterVignetteActivite" class="wtd-menu mr-1" src=""></a>
   <a class="nav-item"><img id="idMasterVignetteSecuBien" class="wtd-menu mr-1" src=""></a>
