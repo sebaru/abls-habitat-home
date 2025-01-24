@@ -68,6 +68,8 @@
                            { visuel.mode = etat.mode;
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
+                             if (etat.noshow) visuel.svggroupe.addClass("wtd-noshow");
+                                         else visuel.svggroupe.removeClass("wtd-noshow");
                            }
        visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
@@ -93,6 +95,8 @@
                               }
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
+                             if (etat.noshow) visuel.svggroupe.addClass("wtd-noshow");
+                                         else visuel.svggroupe.removeClass("wtd-noshow");
                              if (etat.disable==true) visuel.svggroupe.addClass("wtd-img-grayscale");
                                                 else visuel.svggroupe.removeClass("wtd-img-grayscale");
                              visuel.mode    = etat.mode;
@@ -124,6 +128,8 @@
                               }
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
+                             if (etat.noshow) visuel.svggroupe.addClass("wtd-noshow");
+                                         else visuel.svggroupe.removeClass("wtd-noshow");
                              if (etat.disable==true) visuel.svggroupe.addClass("wtd-img-grayscale");
                                                 else visuel.svggroupe.removeClass("wtd-img-grayscale");
                              visuel.mode    = etat.mode;
@@ -155,6 +161,8 @@
                               }
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
+                             if (etat.noshow) visuel.svggroupe.addClass("wtd-noshow");
+                                         else visuel.svggroupe.removeClass("wtd-noshow");
                              if (etat.disable==true) visuel.svggroupe.addClass("wtd-img-grayscale");
                                                 else visuel.svggroupe.removeClass("wtd-img-grayscale");
                              visuel.mode    = etat.mode;
@@ -180,6 +188,8 @@
                    { if (this.InsideSVG_Set_state !== undefined) this.InsideSVG_Set_state(etat);
                      if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                  else visuel.svggroupe.removeClass("wtd-cligno");
+                     if (etat.noshow) visuel.svggroupe.addClass("wtd-noshow");
+                                 else visuel.svggroupe.removeClass("wtd-noshow");
                      if (etat.disable==true) visuel.svggroupe.addClass("wtd-img-grayscale");
                                         else visuel.svggroupe.removeClass("wtd-img-grayscale");
                      visuel.mode    = etat.mode;
@@ -280,7 +290,9 @@
                              texte.text ( etat.libelle ).fill(etat.color);
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
-                           }
+                             if (etat.noshow) visuel.svggroupe.addClass("wtd-noshow");
+                                         else visuel.svggroupe.removeClass("wtd-noshow");
+                          }
 
        visuel.svggroupe.add ( texte );
        visuel.svggroupe.css("cursor", "default")
@@ -308,6 +320,8 @@
                              rectangle.fill(etat.color);
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
+                             if (etat.noshow) visuel.svggroupe.addClass("wtd-noshow");
+                                         else visuel.svggroupe.removeClass("wtd-noshow");
                              /*if (etat.disable==true) visuel.svggroupe.addClass("wtd-img-grayscale");
                                                 else visuel.svggroupe.removeClass("wtd-img-grayscale");*/
                              visuel.mode    = etat.mode;
@@ -351,6 +365,8 @@
                            { rect.stroke( { color: etat.color } ); titre.fill ( etat.color );
                              if (etat.cligno) visuel.svggroupe.addClass("wtd-cligno");
                                          else visuel.svggroupe.removeClass("wtd-cligno");
+                             if (etat.noshow) visuel.svggroupe.addClass("wtd-noshow");
+                                         else visuel.svggroupe.removeClass("wtd-noshow");
                            }
        visuel.Set_state ( visuel );
        this.update_matrice ( visuel );
