@@ -12,12 +12,6 @@
     console.log ("Syn: loading " + vars[1] );
 
     document.addEventListener('pageshow', function () { Charger_un_synoptique ( Synoptique.syn_page ); }, false);
-    Send_to_API ( 'GET', "/domain/image", null, function (Response)
-     { if (Response.image == null) Response.image = "https://static.abls-habitat.fr/img/syn_maison.png";
-       Changer_img_src ( "idNavImgTopSyn", Response.image, false );
-       $("#idNavImgTopSyn").on("click", function () { Charger_un_synoptique(null); } );
-     }, null);
-
     Load_mqtt();                                                                                       /* Charge la websocket */
     Charger_un_synoptique ( syn_page );
   }

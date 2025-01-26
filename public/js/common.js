@@ -105,7 +105,13 @@
        if (Response.default_domain_uuid == null)
         { localStorage.clear(); }
        else
-        { localStorage.setItem("domain_uuid",        Response.default_domain_uuid );/* Positionne les parametres domain par défaut */
+        { Send_to_API ( 'GET', "/domain/image", null, function (Response)
+               { if (Response.image == null) Response.image = "https://static.abls-habitat.fr/img/syn_maison.png";
+                 Changer_img_src ( "idNavImgTopSyn", Response.image, false );
+                 $("#idNavImgTopSyn").on("click", function () { Redirect("/"); } );
+               }, null);
+
+          localStorage.setItem("domain_uuid",        Response.default_domain_uuid );/* Positionne les parametres domain par défaut */
           localStorage.setItem("domain_name",        Response.default_domain_name );
           localStorage.setItem("static_data_url",    Response.static_data_url );
           localStorage.setItem("access_level",       parseInt(Response.access_level) );
