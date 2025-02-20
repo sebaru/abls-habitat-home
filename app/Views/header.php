@@ -258,9 +258,6 @@
 
  <nav class="navbar navbar-dark navbar-expand-md fixed-top shadow"> <!-- fixed-top -->
 
-  <!--<a class="nav-item"><img id="idMasterVignetteActivite" class="wtd-menu mr-1" src=""></a>
-  <a class="nav-item"><img id="idMasterVignetteSecuBien" class="wtd-menu mr-1" src=""></a>
-  <a class="nav-item"><img id="idMasterVignetteSecuPers" class="wtd-menu mr-1" src=""></a>-->
   <ul class="navbar-nav">
     <a class="nav-item" href="#">
       <img id ="idNavImgTopSyn" src="" alt=""
