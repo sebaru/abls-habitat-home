@@ -231,6 +231,7 @@
         { $.each ( Synoptique.tableaux, function (i, tableau)
            { var id = "idTableau-"+tableau.tableau_id;
              idSectionTableaux.append( $("<div></div>").addClass("col")
+                                       .append( $("<h2></h2").addClass("text-white text-center").append (tableau.titre) )
                                        .append( $("<canvas></canvas>").attr("id", id).addClass("wtd-courbe m-1") )
                                      );
              maps = Synoptique.tableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
