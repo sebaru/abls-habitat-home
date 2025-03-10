@@ -229,14 +229,9 @@
        idSectionTableaux.empty();
        if (Synoptique.nbr_tableaux>0)
         { $.each ( Synoptique.tableaux, function (i, tableau)
-           { var id = "idTableau-"+tableau.tableau_id;
-             idSectionTableaux.append( $("<div></div>").addClass("col")
-                                       .append( $("<h2></h2").addClass("text-white text-center").append (tableau.titre) )
-                                       .append( $("<canvas></canvas>").attr("id", id).addClass("wtd-courbe m-1") )
-                                     );
-             maps = Synoptique.tableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
-             Charger_plusieurs_courbes ( id, maps, "HOUR" );
-             $('#'+id).off("click").on("click", function () { Redirect("/tableau/"+tableau.tableau_id+"/HOUR"); } );
+           { maps = Synoptique.tableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
+             if (tableau.mode == 0) Charger_tableau_by_courbe ( "idSectionTableaux", tableau, maps, "HOUR" );
+             if (tableau.mode == 1) Charger_tableau_by_table ( "idSectionTableaux", tableau, maps, "HOUR" );
            });
         }
      }, null );
