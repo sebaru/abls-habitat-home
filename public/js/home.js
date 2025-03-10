@@ -233,10 +233,14 @@
            { maps = Synoptique.tableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
              if (tableau.mode == 0)
               { Charger_tableau_by_courbe ( "idSectionTableaux", tableau, maps, "HOUR" );
-                $('#idSectionTableaux-'+tableau.tableau_id).off("click").on("click", function ()
-                 { $('#idSectionTableaux-'+tableau.tableau_id+"-div").toggleClass("w-100"); } );
+                $('#idTableau-'+tableau.tableau_id).off("click").on("click", function ()
+                 { $('#idTableau-'+tableau.tableau_id+"-div").toggleClass("w-100"); } );
               }
-             if (tableau.mode == 1) Charger_tableau_by_table ( "idSectionTableaux", tableau, maps, "HOUR" );
+             if (tableau.mode == 1)
+              { Charger_tableau_by_table ( "idSectionTableaux", tableau, maps, "HOUR" );
+                $('#idTableau-'+tableau.tableau_id).off("click").on("click", function ()
+                 { $('#idTableau-'+tableau.tableau_id+"-div").toggleClass("w-100"); } );
+              }
            });
         }
      }, null );

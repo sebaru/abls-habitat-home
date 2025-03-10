@@ -428,7 +428,7 @@ console.debug(data);
 /********************************* Chargement d'une courbe dans 1 synoptique **************************************************/
  function Charger_tableau_by_courbe ( idDest, tableau, tableau_map, period )
   { console.debug(tableau);
-    var idTableau = idDest+"-"+tableau.tableau_id;
+    var idTableau = "idTableau-"+tableau.tableau_id;
     var chartElement = document.getElementById(idTableau);                 /* Tableau existant ? Sinon on l'ajoute à l'idDest */
     if (!chartElement)
      { $("#"+idDest).append( $("<div></div>").addClass("col").attr("id", idTableau+"-div")
@@ -504,9 +504,9 @@ console.debug(data);
   { var idTableau = "idTableau-"+tableau.tableau_id;
     var tableElement = document.getElementById(idTableau);                 /* Tableau existant ? Sinon on l'ajoute à l'idDest */
     if (!tableElement)
-     { $("#"+idDest).append( $("<div></div>").addClass("col table-responsive")
+     { $("#"+idDest).append( $("<div></div>").addClass("col table-responsive").attr("id", idTableau+"-div")
                              .append( $("<h2></h2").addClass("text-white text-center").append (tableau.titre) )
-                             .append( $("<table></table>").attr("id", idTableau).addClass("table table-dark w-100") )
+                             .append( $("<table></table>").attr("id", idTableau).addClass("table table-dark") )
                            );
      }
 
@@ -516,6 +516,7 @@ console.debug(data);
                                   { return( { tech_id: item.tech_id, acronyme: item.acronyme } ) } ),
        period : period
      };
+
     var colonnes = [];
     colonnes.push ( { "data": "date", "title":"Date", "className": "text-center" } );
     for (var i=0; i<json_request.courbes.length; i++)
