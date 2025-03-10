@@ -427,17 +427,31 @@ console.debug(data);
   }
 /********************************* Chargement d'une courbe dans 1 synoptique **************************************************/
  function Charger_tableau_by_courbe ( idDest, tableau, tableau_map, period )
-  { var idTableau = "idTableau-"+tableau.tableau_id;
+  { console.debug(tableau);
+    var idTableau = idDest+"-"+tableau.tableau_id;
     var chartElement = document.getElementById(idTableau);                 /* Tableau existant ? Sinon on l'ajoute à l'idDest */
     if (!chartElement)
-     { $("#"+idDest).append( $("<div></div>").addClass("col")
+     { $("#"+idDest).append( $("<div></div>").addClass("col").attr("id", idTableau+"-div")
                              .append( $("<h2></h2").addClass("text-white text-center").append (tableau.titre) )
                              .append( $("<canvas></canvas>").attr("id", idTableau).addClass("wtd-courbe") )
                            );
+
+       Charts[idTableau] = new Object ();
+
+       if (period == "HOUR")
+        { Charts[idTableau].timeout = setTimeout ( function()                                                /* Update graphe */
+           { Charger_tableau_by_courbe ( idDest, tableau, tableau_map, period ); }, 60000 );
+        }
+
+       $(idTableau).on("remove", function ()
+        { Charts[idTableau].ctx.destroy();
+          if (Charts[idTableau].timeout != null) clearTimeout ( Charts[idTableau].timeout );
+          Charts[idTableau] = null;
+        });
      }
 
     var chartElement = document.getElementById(idTableau);                                          /* On récupère le tableau */
-    if (!chartElement) { console.log("Charger_tableau_by_courbe: Erreur chargement chartElement " + idTableau ); return; }
+    if (!chartElement) { console.log("Erreur chargement chartElement " + idTableau ); return; }
 
     if (period===undefined) period="HOUR";
     var json_request =
@@ -449,7 +463,7 @@ console.debug(data);
     Send_to_API ( "POST", "/archive/get", json_request, function(Response)
      { var dates;
        var ctx = chartElement.getContext('2d');
-       if (!ctx) { console.log("Charger_tableau_by_courbe: Erreur chargement context " + json_request ); return; }
+       if (!ctx) { console.log("Erreur chargement context " + json_request ); return; }
 
        if (period=="HOUR") dates = Response.valeurs.map( function(item) { return item.date.split(' ')[1]; } );
                       else dates = Response.valeurs.map( function(item) { return item.date; } );
@@ -476,18 +490,14 @@ console.debug(data);
                                         ]
                                }
                      };
-       if (Charts != null && Charts[idTableau] != null)
-        { Charts[idTableau].ctx.destroy();
-          if (Charts[idTableau].timeout != null) clearTimeout ( Charts[idTableau].timeout );
-        } else Charts[idTableau] = new Object ();
 
-       Charts[idTableau].ctx = new Chart(ctx, { type: 'line', data: data, options: options } );
-       if (period == "HOUR")
-        { Charts[idTableau].timeout = setTimeout ( function()                                                /* Update graphe */
-           { Charger_tableau_by_courbe ( idDest, tableau, tableau_map, period ); }, 60000 );
-        }
+
+
+       if (!Charts[idTableau].ctx)
+        { Charts[idTableau].ctx = new Chart(ctx, { type: 'line', data: data, options: options } ); }
+       else Charts[idTableau].ctx.update();
+
      });
-    $('#'+idTableau).off("click").on("click", function () { Redirect("/tableau/"+tableau.tableau_id+"/HOUR"); } );
   }
 /********************************* Chargement d'une courbe dans 1 synoptique **************************************************/
  function Charger_tableau_by_table ( idDest, tableau, tableau_map, period )

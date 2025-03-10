@@ -1,4 +1,3 @@
-
 /********************************************* Affichage des vignettes ********************************************************/
  function Acquitter_synoptique( )
   { var json_request = { syn_page: Synoptique.page };
@@ -69,7 +68,11 @@
     var idSectionLightSyn    = $('#idSectionLightSyn');
     var idSectionHeavySyn    = $('#idSectionHeavySyn');
     var idSectionTableaux    = $('#idSectionTableaux');
+    var idSectionTableauxFS  = $('#idSectionTableauxFS');
+    var idSectionMessages    = $('#idSectionMessages');
+
     console.log("------------------------------ Chargement synoptique "+syn_page);
+
     Send_to_API ( "GET", "/syn/show", (syn_page ? "syn_page=" + syn_page : null), function(Response)
      { console.log(Response);
        Synoptique = Response;
@@ -172,11 +175,9 @@
                     }
                  );
         }
-
-
 /*---------------------------------------------------- Affichage des messages ------------------------------------------------*/
        if (DataTable.isDataTable('#idTableMessages')) { $('#idTableMessages').DataTable().ajax.reload(null, false); }
-       else $('#idTableMessages').empty().DataTable(
+       else idSectionMessages.empty().DataTable(
         { pageLength : 50,
           fixedHeader: true, paging: false, ordering: true, searching: true,
           ajax: { url : $ABLS_API+"/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
@@ -230,7 +231,11 @@
        if (Synoptique.nbr_tableaux>0)
         { $.each ( Synoptique.tableaux, function (i, tableau)
            { maps = Synoptique.tableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
-             if (tableau.mode == 0) Charger_tableau_by_courbe ( "idSectionTableaux", tableau, maps, "HOUR" );
+             if (tableau.mode == 0)
+              { Charger_tableau_by_courbe ( "idSectionTableaux", tableau, maps, "HOUR" );
+                $('#idSectionTableaux-'+tableau.tableau_id).off("click").on("click", function ()
+                 { $('#idSectionTableaux-'+tableau.tableau_id+"-div").toggleClass("w-100"); } );
+              }
              if (tableau.mode == 1) Charger_tableau_by_table ( "idSectionTableaux", tableau, maps, "HOUR" );
            });
         }
