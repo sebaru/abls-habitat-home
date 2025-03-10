@@ -177,7 +177,7 @@
         }
 /*---------------------------------------------------- Affichage des messages ------------------------------------------------*/
        if (DataTable.isDataTable('#idTableMessages')) { $('#idTableMessages').DataTable().ajax.reload(null, false); }
-       else idSectionMessages.empty().DataTable(
+       else $("#idTableMessages").empty().DataTable(
         { pageLength : 50,
           fixedHeader: true, paging: false, ordering: true, searching: true,
           ajax: { url : $ABLS_API+"/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
