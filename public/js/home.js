@@ -232,7 +232,7 @@
         { $.each ( Synoptique.tableaux, function (i, tableau)
            { maps = Synoptique.tableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
              if (tableau.mode == 0)
-              { Charger_tableau_by_courbe ( "idSectionTableaux", tableau, maps, "HOUR" );
+              { Charger_tableau_by_courbe ( "idSectionTableaux", tableau, maps );
                 $('#idTableau-'+tableau.tableau_id).off("click").on("click", function ()
                  { $('#idTableau-'+tableau.tableau_id+"-div").toggleClass("w-100"); } );
                 $('#idTableau-'+tableau.tableau_id).off("dblclick").on( "dblclick", function ()

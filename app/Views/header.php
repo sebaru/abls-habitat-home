@@ -113,20 +113,11 @@
                       cursor: pointer;
                     }
 
-        .wtd-courbe { background-color: white;
+        .wtd-courbe { background-color: #777;
                       width: auto;
                       max-width: 100vw;
                       min-height: 30vh;
-                      max-height: 60vh;
-                      cursor: pointer;
-                    }
-
-        .wtd-courbe-full-screen
-                    { background-color: white;
-                      width: auto;
-                      max-width: 100vw;
-                      min-height: 30vh;
-                      max-height: 60vh;
+                      max-height: 70vh;
                       cursor: pointer;
                     }
 
@@ -153,7 +144,7 @@
                max-height: 96px;
              }
            .wtd-courbe
-             { min-height: 200px;
+             {
              }
          }
 
