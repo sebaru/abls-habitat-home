@@ -235,6 +235,10 @@
               { Charger_tableau_by_courbe ( "idSectionTableaux", tableau, maps, "HOUR" );
                 $('#idTableau-'+tableau.tableau_id).off("click").on("click", function ()
                  { $('#idTableau-'+tableau.tableau_id+"-div").toggleClass("w-100"); } );
+                $('#idTableau-'+tableau.tableau_id).off("dblclick").on( "dblclick", function ()
+                 { if (!document.fullscreenElement) document.getElementById("idTableau-"+tableau.tableau_id+"-div").requestFullscreen();
+                   else document.exitFullscreen();
+                 });
               }
              if (tableau.mode == 1)
               { Charger_tableau_by_table ( "idSectionTableaux", tableau, maps, "HOUR" );

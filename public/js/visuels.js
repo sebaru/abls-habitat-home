@@ -1,6 +1,6 @@
 /********************************************* Appeler quand l'utilisateur selectionne un motif *******************************/
  function Clic_sur_visuel ( visuel )
-  { console.log(" Clic sur visuel " + visuel.libelle + " mode="+visuel.mode + "disable = "+visuel.disable );
+  { console.log(" Clic sur visuel " + visuel.libelle + " mode="+visuel.mode + " disable = "+visuel.disable );
     if (visuel.disable) return;
     var target = { tech_id : visuel.tech_id,
                    acronyme: visuel.acronyme,
