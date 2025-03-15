@@ -113,13 +113,6 @@
                       cursor: pointer;
                     }
 
-        .wtd-courbe { background-color: #777;
-                      width: auto;
-                      max-width: 100vw;
-                      min-height: 30vh;
-                      max-height: 70vh;
-                      cursor: pointer;
-                    }
 
         .wtd-vignette
           { width: 32px;
@@ -143,9 +136,22 @@
              { max-width: 96px;
                max-height: 96px;
              }
-           .wtd-courbe
-             {
-             }
+         }
+
+        .wtd-courbe { background-color: #777;
+                      width: auto;
+                      max-width: 100vw;
+                      min-height: 30vh;
+                      max-height: 70vh;
+                      cursor: pointer;
+                    }
+
+        @media (orientation: landscape)
+         {
+         }
+
+        @media (orientation: portrait)
+         {
          }
 
         .wtd-img-card { object-fit: contain; height: 196px; max-width: 196px; padding: 10px; }

@@ -370,61 +370,6 @@
     else if (period=="DAY")  setInterval( function() { window.location.reload(); }, 300000);
     else setInterval( function() { window.location.reload(); }, 600000);*/
   }
-
-/********************************* Chargement d'une courbe dans u synoptique 1 au démrrage ************************************/
- function Charger_plusieurs_courbes ( idChart, tableau_map, period )
-  { var chartElement = document.getElementById(idChart);
-    if (!chartElement) { console.log("Charger_plusieurs_courbes: Erreur chargement chartElement " + idChart ); return; }
-
-    if (period===undefined) period="HOUR";
-    var json_request =
-     { courbes: tableau_map.map( function (item)
-                                  { return( { tech_id: item.tech_id, acronyme: item.acronyme } ) } ),
-       period : period
-     };
-
-    Send_to_API ( "POST", "/archive/get", json_request, function(Response)
-     { var dates;
-       var ctx = chartElement.getContext('2d');
-       if (!ctx) { console.log("Charger_plusieurs_courbes: Erreur chargement context " + json_request ); return; }
-
-       if (period=="HOUR") dates = Response.valeurs.map( function(item) { return item.date.split(' ')[1]; } );
-                      else dates = Response.valeurs.map( function(item) { return item.date; } );
-       var data = { labels: dates,
-                    datasets: [],
-                  }
-       for (i=0; i<tableau_map.length; i++)
-        { data.datasets.push ( { label: Response["courbe"+(i+1)].libelle+ " ("+Response["courbe"+(i+1)].unite+")",
-                                 borderColor: tableau_map[i].color,
-                                 /*backgroundColor: "rgba(0, 0, 0, 0.5)",*/
-                                 backgroundColor: tableau_map[i].color,/*"rgba(100, 100, 100, 0.1)",*/
-                                 borderWidth: "1",
-                                 tension: "0.1",
-                                 radius: "1",
-                                 data: Response.valeurs.map( function(item) { return(item["moyenne"+(i+1)]); } ),
-                                 yAxisID: "B",
-                               });
-        }
-console.debug(data);
-       var options = { maintainAspectRatio: false,
-                       scales: { yAxes: [ { id: "B", type: "linear", position: "right",
-                                            scaleLabel: { display: false, labelString: tableau_map[0].unite }
-                                          },
-                                        ]
-                               }
-                     };
-       if (Charts != null && Charts[idChart] != null)
-        { Charts[idChart].ctx.destroy();
-          if (Charts[idChart].timeout != null) clearTimeout ( Charts[idChart].timeout );
-        } else Charts[idChart] = new Object ();
-
-       Charts[idChart].ctx = new Chart(ctx, { type: 'line', data: data, options: options } );
-       if (period == "HOUR")
-        { Charts[idChart].timeout = setTimeout ( function()                                                  /* Update graphe */
-           { Charger_plusieurs_courbes ( idChart, tableau_map, period ); }, 60000 );
-        }
-     });
-  }
 /********************************* Chargement d'une courbe dans 1 synoptique **************************************************/
  function Charger_tableau_by_courbe ( idDest, tableau, tableau_map )
   { console.debug(tableau);
@@ -505,7 +450,7 @@ console.debug(data);
                                });
         }
 console.debug(data);
-       var options = { maintainAspectRatio: true,
+       var options = { maintainAspectRatio: false,
                        scales: { x: { ticks: { color: "white" } },
                                  y: { ticks: { color: "white" } }
                                },
