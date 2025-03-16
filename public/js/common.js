@@ -105,14 +105,8 @@
        if (Response.default_domain_uuid == null)
         { localStorage.clear(); }
        else
-        { Send_to_API ( 'GET', "/domain/image", null, function (Response)
-               { if (Response.image == null) Response.image = "https://static.abls-habitat.fr/img/syn_maison.png";
-                 Changer_img_src ( "idNavImgTopSyn", Response.image, false );
-                 $("#idNavImgTopSyn").on("click", function () { Charger_un_synoptique(null); } );
-               }, null);
-
+        { localStorage.setItem("domain_name",        Response.default_domain_name );
           localStorage.setItem("domain_uuid",        Response.default_domain_uuid );/* Positionne les parametres domain par défaut */
-          localStorage.setItem("domain_name",        Response.default_domain_name );
           localStorage.setItem("static_data_url",    Response.static_data_url );
           localStorage.setItem("access_level",       parseInt(Response.access_level) );
           localStorage.setItem("mqtt_hostname",      Response.mqtt_hostname );
@@ -122,7 +116,13 @@
           $("#idNavDomainName").text( localStorage.getItem("domain_name") );
           if (Response.domain_notification.length) $("#idDomainNotification").text( Response.domain_notification ).show();
                                               else $("#idDomainNotification").hide();
+          Send_to_API ( 'GET', "/domain/image", null, function (Response)
+               { if (Response.image == null) Response.image = "https://static.abls-habitat.fr/img/syn_maison.png";
+                 Changer_img_src ( "idNavImgTopSyn", Response.image, false );
+                 $("#idNavImgTopSyn").on("click", function () { Charger_un_synoptique(null); } );
+               }, null);
         }
+
 
        if (Response.default_domain_uuid == null && window.location.pathname !== "/domains") { Redirect("/domains"); return; }
 
