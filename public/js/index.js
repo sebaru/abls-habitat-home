@@ -13,6 +13,17 @@
 
     document.addEventListener('pageshow', function () { Charger_un_synoptique ( Synoptique.syn_page ); }, false);
     Load_mqtt();                                                                                       /* Charge la websocket */
+    navigator.geolocation.watchPosition(
+      (position) => { Send_to_API ( 'POST', "/user/set_gps", position.coords,
+                                    function () { console.log("GPS success"); },
+                                    function () { console.log("GPS error"); }
+                                  );
+                    },
+      (error)    => { console.error("Erreur de géolocalisation :", error.message); },
+       { enableHighAccuracy: false, // Précision maximale (plus de consommation de batterie)
+         timeout: 10000, // Temps max avant échec (en ms)
+         maximumAge: 600000, //cache de 5 minutes
+       });
     Charger_un_synoptique ( syn_page );
   }
 /*----------------------------------------------------------------------------------------------------------------------------*/
