@@ -409,7 +409,7 @@
                                  data: Response.valeurs.map( function(item) { return(item["moyenne"+(i+1)]); } ),
                                });
         }
-console.debug(data);
+
        var options = { maintainAspectRatio: false,
                        scales: { x: { ticks: { color: "white" } },
                                  y: { ticks: { color: "white" } }
@@ -419,14 +419,14 @@ console.debug(data);
 
                      };
 
-
-     if (!Charts[idTableau].ctx)
-      { Charts[idTableau].ctx = new Chart(ctx, { type: 'line', data: data, options: options } ); }
-     else
-      { Charts[idTableau].ctx.data = data;
-        Charts[idTableau].ctx.options = options;
-        Charts[idTableau].ctx.update();
-      }
+        if (!Charts[idTableau].ctx)
+         { Charts[idTableau].ctx = new Chart(ctx, { type: 'line', data: data, options: options } ); }
+        else
+         { Charts[idTableau].ctx.data = data;
+           Charts[idTableau].ctx.options = options;
+           Charts[idTableau].ctx.update();
+         }
+     });
   }
 /********************************* Chargement d'une courbe dans 1 synoptique **************************************************/
  function Charger_tableau_by_courbe ( idDest, tableau, tableau_map )
@@ -457,7 +457,7 @@ console.debug(data);
     Charts[idTableau].period = "HOUR";
 
     $("#"+idTableau+"-select").off("change").on("change", function ()
-     { var Charts[idTableau].period = $("#"+idTableau+"-select").val()
+     { Charts[idTableau].period = $("#"+idTableau+"-select").val()
        console.log("Change period for "+idTableau+" to " + Charts[idTableau].period);
        Update_tableau_by_courbe ( idDest, tableau, tableau_map )
      });
