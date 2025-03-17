@@ -370,57 +370,17 @@
     else if (period=="DAY")  setInterval( function() { window.location.reload(); }, 300000);
     else setInterval( function() { window.location.reload(); }, 600000);*/
   }
+
 /********************************* Chargement d'une courbe dans 1 synoptique **************************************************/
- function Charger_tableau_by_courbe ( idDest, tableau, tableau_map )
-  { console.debug(tableau);
-    var idTableau = "idTableau-"+tableau.tableau_id;
-    var chartElement = document.getElementById(idTableau);                 /* Tableau existant ? Sinon on l'ajoute à l'idDest */
-    if (!chartElement)
-     { $("#"+idDest).append( $("<div></div>").addClass("col").attr("id", idTableau+"-div")
-                             .append ( $("<div></div").addClass("d-flex align-items-center")
-                                       .append ( $("<h2></h2>").addClass("flex-grow-1 text-white text-center").append (tableau.titre)
-                                               )
-                                       .append ( $("<div></div>").addClass(" w-auto btn-group align-items-center")
-                                                 .append ( $("<i></i>").addClass("fas fa-clock text-primary mr-2" ) )
-                                                 .append ( $( "<select></select" )
-                                                           .attr("id", idTableau+"-select")
-                                                           .addClass("custom-select")
-                                                           .append ( $("<option></option>").attr("value", "HOUR").append("Heure") )
-                                                           .append ( $("<option></option>").attr("value", "DAY").append("Jour") )
-                                                           .append ( $("<option></option>").attr("value", "WEEK").append("Mois") )
-                                                           .append ( $("<option></option>").attr("value", "MONTH").append("Heure") )
-                                                           .append ( $("<option></option>").attr("value", "YEAR").append("Année") )
-                                                           .append ( $("<option></option>").attr("value", "ALL").append("Tout") )
-                                                         )
-                                               )
-                                     )
-                             .append( $("<canvas></canvas>").attr("id", idTableau).addClass("wtd-courbe") )
-                           );
-       Charts[idTableau] = new Object ();
-       Charts[idTableau].period = "HOUR";
-
-       $("#"+idTableau+"-select").off("change").on("change", function ()
-        { var new_period = $("#"+idTableau+"-select").val()
-          console.log("Change period for "+idTableau+" to " + new_period);
-          Charts[idTableau].period = new_period;
-          Charger_tableau_by_courbe ( idDest, tableau, tableau_map )
-        });
-
-       $("#"+idTableau+"-div").on("remove", function ()
-        { Charts[idTableau].ctx.destroy();
-          if (Charts[idTableau].timeout != null) clearTimeout ( Charts[idTableau].timeout );
-          Charts[idTableau] = null;
-        });
+ function Update_tableau_by_courbe ( idDest, tableau, tableau_map )
+  { var idTableau = "idTableau-"+tableau.tableau_id;
+    var chartElement = document.getElementById(idTableau);
+    if (!chartElement)                                                                    /* Le tableau a-t'il été supprimé ? */
+     { Charts[idTableau].ctx.destroy();                                                          /* Si oui, on fait le menage */
+       if (Charts[idTableau].timeout != null) clearTimeout ( Charts[idTableau].timeout );
+       Charts[idTableau] = null;
+       return;
      }
-
-    var chartElement = document.getElementById(idTableau);                                          /* On récupère le tableau */
-    if (!chartElement) { console.log("Erreur chargement chartElement " + idTableau ); return; }
-
-    if (Charts[idTableau].period == "HOUR" && Charts[idTableau].timeout == null)
-        { Charts[idTableau].timeout = setTimeout ( function()                                                /* Update graphe */
-           { Charger_tableau_by_courbe ( idDest, tableau, tableau_map ); }, 60000 );
-        }
-    else if (Charts[idTableau].timeout != null) clearTimeout ( Charts[idTableau].timeout );
 
     var json_request =
      { courbes: tableau_map.map( function (item)
@@ -460,16 +420,58 @@ console.debug(data);
                      };
 
 
+     if (!Charts[idTableau].ctx)
+      { Charts[idTableau].ctx = new Chart(ctx, { type: 'line', data: data, options: options } ); }
+     else
+      { Charts[idTableau].ctx.data = data;
+        Charts[idTableau].ctx.options = options;
+        Charts[idTableau].ctx.update();
+      }
+  }
+/********************************* Chargement d'une courbe dans 1 synoptique **************************************************/
+ function Charger_tableau_by_courbe ( idDest, tableau, tableau_map )
+  { console.debug(tableau);
+    var idTableau = "idTableau-"+tableau.tableau_id;
 
-       if (!Charts[idTableau].ctx)
-        { Charts[idTableau].ctx = new Chart(ctx, { type: 'line', data: data, options: options } ); }
-       else
-        { Charts[idTableau].ctx.data = data;
-          Charts[idTableau].ctx.options = options;
-          Charts[idTableau].ctx.update();
-        }
+    $("#"+idDest).append( $("<div></div>").addClass("col").attr("id", idTableau+"-div")
+                          .append ( $("<div></div").addClass("d-flex align-items-center")
+                                    .append ( $("<h2></h2>").addClass("flex-grow-1 text-white text-center").append (tableau.titre)
+                                            )
+                                    .append ( $("<div></div>").addClass(" w-auto btn-group align-items-center")
+                                              .append ( $("<i></i>").addClass("fas fa-clock text-primary mr-2" ) )
+                                              .append ( $( "<select></select" )
+                                                        .attr("id", idTableau+"-select")
+                                                        .addClass("custom-select")
+                                                        .append ( $("<option></option>").attr("value", "HOUR").append("Heure") )
+                                                        .append ( $("<option></option>").attr("value", "DAY").append("Jour") )
+                                                        .append ( $("<option></option>").attr("value", "WEEK").append("Mois") )
+                                                        .append ( $("<option></option>").attr("value", "MONTH").append("Heure") )
+                                                        .append ( $("<option></option>").attr("value", "YEAR").append("Année") )
+                                                        .append ( $("<option></option>").attr("value", "ALL").append("Tout") )
+                                                      )
+                                            )
+                                  )
+                          .append( $("<canvas></canvas>").attr("id", idTableau).addClass("wtd-courbe") )
+                        );
+    Charts[idTableau] = new Object ();
+    Charts[idTableau].period = "HOUR";
 
+    $("#"+idTableau+"-select").off("change").on("change", function ()
+     { var Charts[idTableau].period = $("#"+idTableau+"-select").val()
+       console.log("Change period for "+idTableau+" to " + Charts[idTableau].period);
+       Update_tableau_by_courbe ( idDest, tableau, tableau_map )
      });
+
+    var chartElement = document.getElementById(idTableau);                                          /* On récupère le tableau */
+    if (!chartElement) { console.log("Erreur chargement chartElement " + idTableau ); return; }
+
+    if (Charts[idTableau].period == "HOUR")
+        { Charts[idTableau].timeout = setTimeout ( function()                                                /* Update graphe */
+           { Update_tableau_by_courbe ( idDest, tableau, tableau_map ); }, 60000 );
+        }
+    else if (Charts[idTableau].timeout != null) clearTimeout ( Charts[idTableau].timeout );            /* Arret timeout sinon */
+
+    Update_tableau_by_courbe ( idDest, tableau, tableau_map );
   }
 /********************************* Chargement d'une courbe dans 1 synoptique **************************************************/
  function Charger_tableau_by_table ( idDest, tableau, tableau_map, period )
