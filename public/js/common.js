@@ -348,16 +348,15 @@
                                   tension: "0.1",
                                   radius: "1",
                                   data: valeurs,
-                                  yAxisID: "B",
                                 },
                               ],
                   }
        var options = { maintainAspectRatio: false,
-                       scales: { yAxes: [ { id: "B", type: "linear", position: "left",
-                                            scaleLabel: { display: true, labelString: json.courbe1.unite }
-                                          }
-                                        ]
-                               }
+                       scales: { x: { ticks: { color: "white" } },
+                                 y: { ticks: { color: "white" } }
+                               },
+                       plugins: { legend: { labels: { color: "white" } }
+                                },
                      };
        var ctx = chartElement.getContext('2d');
        if (!ctx) { console.log("Charger_une_courbe: Erreur chargement context " + json_request ); return; }
@@ -370,7 +369,6 @@
     else if (period=="DAY")  setInterval( function() { window.location.reload(); }, 300000);
     else setInterval( function() { window.location.reload(); }, 600000);*/
   }
-
 /********************************* Chargement d'une courbe dans 1 synoptique **************************************************/
  function Update_tableau_by_courbe ( idDest, tableau, tableau_map )
   { var idTableau = "idTableau-"+tableau.tableau_id;
