@@ -15,6 +15,7 @@
 
     <script src="https://idp.abls-habitat.fr/js/keycloak.js"></script>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="/js/tableau.js" type="text/javascript"></script>
     <script src="/js/common_home.js" type="text/javascript"></script>
     <script src="/js/common.js" type="text/javascript"></script>
     <script src="/js/trame.js" type="text/javascript"></script>
