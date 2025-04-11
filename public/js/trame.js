@@ -249,8 +249,11 @@
                              var heures    = Math.floor(temps / 3600);
                              temps %= 3600;
                              var minutes   = Math.floor(temps / 60);
-                             var secondes  = temps % 60;
-                             var result    = (heures<10 ? "0" : "") + heures + ":" +  ("0"+minutes).slice(-2) + ":" +  ("0"+secondes).slice(-2)
+                             temps %= 60;
+                             var secondes  = Math.floor(temps);
+                             var result    = (heures<10   ? "0" : "") + heures  + ":" +
+                                             (minutes<10  ? "0" : "") + minutes + ":" +
+                                             (secondes<10 ? "0" : "") +secondes + "." + Math.floor(temps-secondes)*10
                              texte.text ( result );
                            }
        visuel.Set_state ( visuel );
