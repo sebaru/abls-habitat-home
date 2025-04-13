@@ -1,4 +1,3 @@
-
 /********************************************* Affichage des vignettes ********************************************************/
  function Acquitter_synoptique( )
   { var json_request = { syn_page: Synoptique.page };
@@ -69,7 +68,11 @@
     var idSectionLightSyn    = $('#idSectionLightSyn');
     var idSectionHeavySyn    = $('#idSectionHeavySyn');
     var idSectionTableaux    = $('#idSectionTableaux');
+    var idSectionTableauxFS  = $('#idSectionTableauxFS');
+    var idSectionMessages    = $('#idSectionMessages');
+
     console.log("------------------------------ Chargement synoptique "+syn_page);
+
     Send_to_API ( "GET", "/syn/show", (syn_page ? "syn_page=" + syn_page : null), function(Response)
      { console.log(Response);
        Synoptique = Response;
@@ -80,9 +83,9 @@
         .prepend( "<a class='nav-link rounded d-none d-sm-inline' href='#'> <span>"+Synoptique.libelle+"</span></a>" );
        $.each ( Response.parent_syns, function (i, syn)
                  { var bread = $('<a>').addClass('nav-item')
-                                .append($('<img>').attr("src", "https://static.abls-habitat.fr/img/"+syn.image)
+                                .append($('<img>').attr("src", localStorage.getItem("static_data_url")+"/img/"+syn.image)
                                                   .attr("alt", syn.libelle)
-                                                  .attr("data-toggle", "tooltip")
+                                                  .attr("data-bs-toggle", "tooltip")
                                                   .attr("data-placement", "bottom")
                                                   .attr("title", syn.libelle)
                                                   .off("click").on("click", () => { Charger_un_synoptique( syn.page ); } )
@@ -108,15 +111,11 @@
        idSectionLightSyn.empty();
        if (Synoptique.mode_affichage == false)
         { $.each ( Synoptique.visuels, function (i, visuel)
-                    { var card = Creer_visuel ( visuel );
+                    { var card = Creer_light_visuel ( visuel );
                       idSectionLightSyn.append ( card );
                       Changer_etat_visuel ( visuel );
                     }
               );
-          $.each ( Synoptique.cadrans, function (i, cadran)
-                    { idSectionPasserelles.append( Creer_cadran ( cadran ) );
-                    }
-                 );
         }
 /*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
        idSectionHeavySyn.empty().css("position","relative");
@@ -133,7 +132,7 @@
                                                            .text ( Synoptique.page + " - " + Synoptique.libelle + "(#" + Synoptique.syn_id + ")" )
                                                          )
                                               )
-                                      .append ( $("<div>").addClass("ml-auto btn-group align-items-center")
+                                      .append ( $("<div>").addClass("col-auto ms-auto btn-group align-items-center")
                                                  .append ( $("<button>").addClass("btn btn-primary")
                                                              .text ( "Acquitter" )
                                                              .on("click", () => { Acquitter_synoptique() } )
@@ -144,12 +143,16 @@
                        { console.log ( "new null at " + visuel.posx + " " + visuel.posy );
                          Trame.new_from_image ( visuel, visuel.icone+".gif" );
                        }
-                      else if (visuel.controle=="complexe" && visuel.forme=="bouton")
-                       { Trame.new_button ( visuel ); }
-                      else if (visuel.controle=="complexe" && visuel.forme=="encadre")
-                       { Trame.new_encadre ( visuel ); }
-                      else if (visuel.controle=="complexe" && visuel.forme=="comment")
-                       { Trame.new_comment ( visuel ); }
+                      else if (visuel.controle=="complexe")
+                       {      if (visuel.forme=="bouton")  { Trame.new_button  ( visuel ); }
+                         else if (visuel.forme=="encadre") { Trame.new_encadre ( visuel ); }
+                         else if (visuel.forme=="comment") { Trame.new_comment ( visuel ); }
+                         else if (visuel.forme=="cadran" && visuel.mode=="horaire") { Trame.new_cadran_horaire ( visuel ); }
+                         else if (visuel.forme=="cadran" && visuel.mode=="texte")   { Trame.new_cadran_texte   ( visuel ); }
+                         else { console.log (" Forme " + visuel.forme + " and mode " + visuel.mode + " inconnu. Dropping.");
+                                visuel.Set_state = new function ( etat ) { console.log("Icon error"); };
+                              }
+                       }
                       else if (visuel.controle=="by_mode")       { Trame.new_by_mode ( visuel );       }
                       else if (visuel.controle=="by_color")      { Trame.new_by_color( visuel );       }
                       else if (visuel.controle=="by_mode_color") { Trame.new_by_mode_color ( visuel ); }
@@ -172,11 +175,9 @@
                     }
                  );
         }
-
-
 /*---------------------------------------------------- Affichage des messages ------------------------------------------------*/
        if (DataTable.isDataTable('#idTableMessages')) { $('#idTableMessages').DataTable().ajax.reload(null, false); }
-       else $('#idTableMessages').empty().DataTable(
+       else $("#idTableMessages").empty().DataTable(
         { pageLength : 50,
           fixedHeader: true, paging: false, ordering: true, searching: true,
           ajax: { url : $ABLS_API+"/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
@@ -189,71 +190,61 @@
                 },
           rowId: "histo_msg_id",
           createdRow: function( row, item, dataIndex )
-              {      if (item.typologie==0) { classe="text-white"; } /* etat */
-                else if (item.typologie==1) { classe="text-warning" } /* alerte */
-                else if (item.typologie==2) { classe="text-warning"; } /* defaut */
-                else if (item.typologie==3) { classe="text-danger"; } /* alarme */
-                else if (item.typologie==4) { classe="text-success"; } /* veille */
-                else if (item.typologie==5) { classe="text-white"; }   /* attente */
-                else if (item.typologie==6) { classe="text-danger"; } /* danger */
-                else if (item.typologie==7) { classe="text-warning"; } /* derangement */
-                else { classe="text-info"; }
-                $(row).addClass( classe ).css("cursor", "pointer");
-                $(row).on("click", function() { Msg_acquitter ( row.id ); } );
+              { $(row).css("cursor", "pointer");
+                $(row).off("click").on("click", function() { Msg_acquitter ( row.id ); } );
               },
              columns:
               [ { "data": null, "title":"-", "className": "align-middle text-center bg-dark d-none d-sm-table-cell ",
                   "render": function (item)
-                    {      if (item.typologie==0) { cligno = false; img = "info.svg"; } /* etat */
-                      else if (item.typologie==1) { cligno = true;  img = "bouclier_orange.svg"; } /* alerte */
-                      else if (item.typologie==2) { cligno = true;  img = "pignon_orange.svg"; } /* defaut */
-                      else if (item.typologie==3) { cligno = true;  img = "pignon_red.svg"; } /* alarme */
-                      else if (item.typologie==4) { cligno = false; img = "bouclier_green.svg"; } /* veille */
-                      else if (item.typologie==5) { cligno = false; img = "notification.svg"; } /* attente */
-                      else if (item.typologie==6) { cligno = true;  img = "croix_red.svg"; } /* danger */
-                      else if (item.typologie==7) { cligno = true;  img = "croix_orange.svg"; } /* derangement */
-                      else { cligno = false; img = "info.svg"; }
-                      var classe = 'wtd-vignette';
-                      if (cligno && item.date_fixe == null) classe = classe + ' wtd-cligno';
-                      return("<img class='"+classe+"' src='https://static.abls-habitat.fr/img/"+img+"'>");
-                    }
+                 { var classe = 'wtd-vignette';
+                   if ( MSG_TYPOLOGIE[item.typologie].cligno && item.date_fixe == null) classe = classe + ' wtd-cligno';
+                   return("<img class='"+classe+"' src='https://static.abls-habitat.fr/img/"+MSG_TYPOLOGIE[item.typologie].img+"'>");
+                 }
                 },
-                { "data": "date_create", "title":"Apparition", "className": "align-middle text-center d-none d-sm-table-cell bg-dark" },
-               /* { "data": null, "title":"Page", "className": "align-middle text-center d-none d-md-table-cell bg-dark",
+                { "data": null, "title":"Apparition", "className": "align-middle text-center d-none d-sm-table-cell bg-dark",
                   "render": function (item)
-                    { return( Lien ( "/"+item.syn_page, "Voir la page", item.syn_page ) ); }
-                },*/
-                { "data": "dls_shortname", "title":"Objet", "className": "align-middle text-center bg-dark" },
+                    { return( "<p class="+MSG_TYPOLOGIE[item.typologie].classe+"> "+htmlEncode(item.date_create)+"</p>" ); }
+                },
+                { "data": null, "title":"Objet", "className": "align-middle text-center bg-dark",
+                  "render": function (item)
+                    { return( "<p class="+MSG_TYPOLOGIE[item.typologie].classe+"> "+htmlEncode(item.dls_shortname)+"</p>" ); }
+                },
                 { "data": null, "title":"Message", "className": "align-middle text-center bg-dark",
                   "render": function (item)
-                    { return( htmlEncode(item.libelle) ); }
+                    { return( "<p class="+MSG_TYPOLOGIE[item.typologie].classe+"> "+htmlEncode(item.libelle)+"</p>" ); }
                 },
-                { "data": null, "title":"Acquit", "className": "align-middle text-center d-none d-lg-table-cell bg-dark",
+                { "data": null, "title":"Acquit", "className": "align-middle text-center text-white d-none d-lg-table-cell bg-dark",
                   "render": function (item)
                     { if (item.typologie==0) return("-"); /* etat */
                       if (item.typologie==4) return("-"); /* veille */
                       if (item.typologie==5) return("-"); /* attente */
-                      if (item.nom_ack!=null) return(item.nom_ack);
-                      return( Bouton ( "primary", "Acquitter le message", "Msg_acquitter", item.histo_msg_id, "Acquitter" ) );
+                      if (item.nom_ack!=null) return("<p class="+MSG_TYPOLOGIE[item.typologie].classe+"> "+htmlEncode(item.nom_ack)+"</p>");
+                      return(""); /* by default */
                     }
                 },
               ],
              order: [ [1, "desc"] ],
              responsive: false,
         });
-       Load_websocket(Synoptique.syn_id);                                                              /* Charge la websocket */
-
 /*---------------------------------------------------- Affichage des tableaux ------------------------------------------------*/
        idSectionTableaux.empty();
        if (Synoptique.nbr_tableaux>0)
         { $.each ( Synoptique.tableaux, function (i, tableau)
-           { var id = "idTableau-"+tableau.tableau_id;
-             idSectionTableaux.append( $("<div></div>").addClass("col")
-                                       .append( $("<canvas></canvas>").attr("id", id).addClass("wtd-courbe m-1") )
-                                     );
-             maps = Synoptique.tableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
-             Charger_plusieurs_courbes ( id, maps, "HOUR" );
-             $('#'+id).off("click").on("click", function () { Redirect("/tableau/"+tableau.tableau_id+"/HOUR"); } );
+           { maps = Synoptique.tableaux_map.filter ( function (item) { return(item.tableau_id==tableau.tableau_id) } );
+             if (tableau.mode == 0)
+              { Charger_tableau_by_courbe ( "idSectionTableaux", tableau, maps );
+                $('#idTableau-'+tableau.tableau_id).off("click").on("click", function ()
+                 { $('#idTableau-'+tableau.tableau_id+"-div").toggleClass("w-100"); } );
+                $('#idTableau-'+tableau.tableau_id).off("dblclick").on( "dblclick", function ()
+                 { if (!document.fullscreenElement) document.getElementById("idTableau-"+tableau.tableau_id+"-div").requestFullscreen();
+                   else document.exitFullscreen();
+                 });
+              }
+             if (tableau.mode == 1)
+              { Charger_tableau_by_table ( "idSectionTableaux", tableau, maps, "HOUR" );
+                $('#idTableau-'+tableau.tableau_id).off("click").on("click", function ()
+                 { $('#idTableau-'+tableau.tableau_id+"-div").toggleClass("w-100"); } );
+              }
            });
         }
      }, null );
@@ -265,7 +256,7 @@
                .append( $('<div></div>').addClass("col text-center mb-1")
                         .append( $('<div></div>').addClass("d-inline-block wtd-img-container")
                                  .append($('<img>').attr("src", (Response.image=="custom" ? Response.image
-                                                                                          : "https://static.abls-habitat.fr/img/"+Response.image) )
+                                                                                          : localStorage.getItem("static_data_url")+"/img/"+Response.image) )
                                                    .off("click").on("click", () => { Charger_un_synoptique( Response.page ); } )
                                                    .attr("id", "idImgSyn_"+Response.syn_id)
                                                    .addClass("wtd-synoptique") )

@@ -12,12 +12,20 @@
     console.log ("Syn: loading " + vars[1] );
 
     document.addEventListener('pageshow', function () { Charger_un_synoptique ( Synoptique.syn_page ); }, false);
-    Send_to_API ( 'GET', "/domain/image", null, function (Response)
-     { if (Response.image == null) Response.image = "https://static.abls-habitat.fr/img/syn_maison.png";
-       Changer_img_src ( "idNavImgTopSyn", Response.image, false );
-       $("#idNavImgTopSyn").on("click", function () { Charger_un_synoptique(null); } );
-     }, null);
-
+    Load_mqtt();                                                                                       /* Charge la websocket */
+    if ( /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) )
+     { navigator.geolocation.watchPosition(
+         (position) => { Send_to_API ( 'POST', "/user/set_gps", position.coords,
+                                       function () { console.log("GPS success"); },
+                                       function () { console.log("GPS error"); }
+                                     );
+                       },
+         (error)    => { console.error("Erreur de géolocalisation :", error.message); },
+          { enableHighAccuracy: false, // Précision maximale (plus de consommation de batterie)
+            timeout: 10000, // Temps max avant échec (en ms)
+            maximumAge: 600000, //cache de 5 minutes
+          });
+     }
     Charger_un_synoptique ( syn_page );
   }
 /*----------------------------------------------------------------------------------------------------------------------------*/

@@ -96,15 +96,6 @@
     input = $('#'+id);
     return ( FormatTag.test(input.val()) )
   }
-/********************************************* Gestion des popovers ***********************************************************/
- function Popover_hide ( element )
-  { element.popover('dispose');
-  }
- function Popover_show ( element, titre, content, place )
-  { Popover_hide ( element );
-    element.popover({ container: 'body', title: titre, content: content});
-    element.popover('show');
-  }
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
  function Load_common ()
   { console.log("debut load_common");
@@ -114,13 +105,24 @@
        if (Response.default_domain_uuid == null)
         { localStorage.clear(); }
        else
-        { localStorage.setItem("domain_uuid", Response.default_domain_uuid );/* Positionne les parametres domain par défaut */
-          localStorage.setItem("domain_name", Response.default_domain_name );
-          localStorage.setItem("access_level", parseInt(Response.access_level) );
+        { localStorage.setItem("domain_name",        Response.default_domain_name );
+          localStorage.setItem("domain_uuid",        Response.default_domain_uuid );/* Positionne les parametres domain par défaut */
+          localStorage.setItem("static_data_url",    Response.static_data_url );
+          localStorage.setItem("access_level",       parseInt(Response.access_level) );
+          localStorage.setItem("mqtt_hostname",      Response.mqtt_hostname );
+          localStorage.setItem("mqtt_port",          parseInt(Response.mqtt_port) );
+          localStorage.setItem("mqtt_over_ssl",      Response.mqtt_over_ssl );
+          sessionStorage.setItem("browser_password", Response.browser_password );
           $("#idNavDomainName").text( localStorage.getItem("domain_name") );
-          if (Response.domain_notification.length) $("#idDomainNotification").text( htmlEncode(Response.domain_notification) ).show();
+          if (Response.domain_notification.length) $("#idDomainNotification").text( Response.domain_notification ).show();
                                               else $("#idDomainNotification").hide();
+          Send_to_API ( 'GET', "/domain/image", null, function (Response)
+               { if (Response.image == null) Response.image = "https://static.abls-habitat.fr/img/syn_maison.png";
+                 Changer_img_src ( "idNavImgTopSyn", Response.image, false );
+                 $("#idNavImgTopSyn").on("click", function () { Charger_un_synoptique(null); } );
+               }, null);
         }
+
 
        if (Response.default_domain_uuid == null && window.location.pathname !== "/domains") { Redirect("/domains"); return; }
 
@@ -154,7 +156,7 @@
   }
 /********************************************* Redirige la page ***************************************************************/
  function Redirect ( url )
-  { $('body').fadeOut("normal", function () { window.location.replace(url); } );
+  { $('body').fadeOut("fast", function () { window.location.replace(url); } );
   }
 /********************************************* Barre de boutons ***************************************************************/
  function Bouton_actions_start ( )
@@ -163,7 +165,7 @@
  function Bouton_actions_add ( color, tooltip, clic_func, key, icone, texte )
   { if (clic_func !== null)
      { result = "<button class='btn btn-"+color+" btn-sm' "+
-                "data-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
+                "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
                 "onclick="+clic_func+"('"+key+"')>"+
                 (icone!==null ? "<i class='fas fa-"+icone+"'></i> " : "") +
                 (texte!==null ? htmlEncode(texte) : "") +
@@ -171,7 +173,7 @@
      }
     else
      { result = "<button class='btn btn-"+color+" btn-sm' disabled "+
-                "data-toggle='tooltip' title='"+htmlEncode(tooltip)+"'> "+
+                "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"'> "+
                 (icone!==null ? "<i class='fas fa-"+icone+"'></i> " : "") +
                 (texte!==null ? htmlEncode(texte) : "") +
                 "</button>";
@@ -186,7 +188,7 @@
   { if (clic_func !== null)
      { result = "<button "+
                 "class='btn btn-"+color+" btn-block btn-sm' "+
-                "data-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
+                "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
                 "onclick="+clic_func+"('"+key+"')>"+
                 "<span id='idButtonSpinner_"+clic_func+"_"+key+"' class='spinner-border spinner-border-sm' style='display:none' "+
                 "role='status' aria-hidden='true'></span> "+
@@ -196,7 +198,7 @@
    else
     { result =  "<button "+
                 "class='btn btn-"+color+" btn-block btn-sm' "+
-                "data-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
+                "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
                 "disabled>"+htmlEncode(texte)+
                 "</button>";
     }
@@ -204,13 +206,13 @@
   }
 
  function Lien ( target, tooltip, texte )
-  { return( "<a href='"+target+"' data-toggle='tooltip' title='"+htmlEncode(tooltip)+"'>"+texte+"</a>" );
+  { return( "<a href='"+target+"' data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"'>"+texte+"</a>" );
   }
 
  function Badge ( color, tooltip, texte )
   { return("<span "+
-           "class='badge badge-"+color+"' "+
-           "data-toggle='tooltip' title='"+htmlEncode(tooltip)+"'>"+htmlEncode(texte)+
+           "class='badge bg-"+color+"' "+
+           "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"'>"+htmlEncode(texte)+
            "</span>" );
   }
 
@@ -346,16 +348,15 @@
                                   tension: "0.1",
                                   radius: "1",
                                   data: valeurs,
-                                  yAxisID: "B",
                                 },
                               ],
                   }
        var options = { maintainAspectRatio: false,
-                       scales: { yAxes: [ { id: "B", type: "linear", position: "left",
-                                            scaleLabel: { display: true, labelString: json.courbe1.unite }
-                                          }
-                                        ]
-                               }
+                       scales: { x: { ticks: { color: "white" } },
+                                 y: { ticks: { color: "white" } }
+                               },
+                       plugins: { legend: { labels: { color: "white" } }
+                                },
                      };
        var ctx = chartElement.getContext('2d');
        if (!ctx) { console.log("Charger_une_courbe: Erreur chargement context " + json_request ); return; }
@@ -367,61 +368,6 @@
     /* if (period=="HOUR") setInterval( function() { window.location.reload(); }, 60000);
     else if (period=="DAY")  setInterval( function() { window.location.reload(); }, 300000);
     else setInterval( function() { window.location.reload(); }, 600000);*/
-  }
-
-/********************************* Chargement d'une courbe dans u synoptique 1 au démrrage ************************************/
- function Charger_plusieurs_courbes ( idChart, tableau_map, period )
-  { var chartElement = document.getElementById(idChart);
-    if (!chartElement) { console.log("Charger_plusieurs_courbes: Erreur chargement chartElement " + idChart ); return; }
-
-    if (period===undefined) period="HOUR";
-    var json_request =
-     { courbes: tableau_map.map( function (item)
-                                  { return( { tech_id: item.tech_id, acronyme: item.acronyme } ) } ),
-       period : period
-     };
-
-    Send_to_API ( "POST", "/archive/get", json_request, function(Response)
-     { var dates;
-       var ctx = chartElement.getContext('2d');
-       if (!ctx) { console.log("Charger_plusieurs_courbes: Erreur chargement context " + json_request ); return; }
-
-       if (period=="HOUR") dates = Response.valeurs.map( function(item) { return item.date.split(' ')[1]; } );
-                      else dates = Response.valeurs.map( function(item) { return item.date; } );
-       var data = { labels: dates,
-                    datasets: [],
-                  }
-       for (i=0; i<tableau_map.length; i++)
-        { data.datasets.push ( { label: Response["courbe"+(i+1)].libelle+ " ("+Response["courbe"+(i+1)].unite+")",
-                                 borderColor: tableau_map[i].color,
-                                 /*backgroundColor: "rgba(0, 0, 0, 0.5)",*/
-                                 backgroundColor: tableau_map[i].color,/*"rgba(100, 100, 100, 0.1)",*/
-                                 borderWidth: "1",
-                                 tension: "0.1",
-                                 radius: "1",
-                                 data: Response.valeurs.map( function(item) { return(item["moyenne"+(i+1)]); } ),
-                                 yAxisID: "B",
-                               });
-        }
-console.debug(data);
-       var options = { maintainAspectRatio: false,
-                       scales: { yAxes: [ { id: "B", type: "linear", position: "right",
-                                            scaleLabel: { display: false, labelString: tableau_map[0].unite }
-                                          },
-                                        ]
-                               }
-                     };
-       if (Charts != null && Charts[idChart] != null)
-        { Charts[idChart].ctx.destroy();
-          if (Charts[idChart].timeout != null) clearTimeout ( Charts[idChart].timeout );
-        } else Charts[idChart] = new Object ();
-
-       Charts[idChart].ctx = new Chart(ctx, { type: 'line', data: data, options: options } );
-       if (period == "HOUR")
-        { Charts[idChart].timeout = setTimeout ( function()                                                  /* Update graphe */
-           { Charger_plusieurs_courbes ( idChart, tableau_map, period ); }, 60000 );
-        }
-     });
   }
 /******************************************************************************************************************************/
 /* Get_url_parameter : Recupere un parametre de recherche dans l'URL                                                          */

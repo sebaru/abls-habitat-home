@@ -11,10 +11,6 @@ class Home extends BaseController
 	   echo view('footer');
   }
 
- public function default()
-  { $this->send_page ("index"); }
-    /*return redirect()->to(base_url("/home"));*/
-
  public function index()        { $this->send_page ("index"); }
  public function test()         { $this->send_page ("test"); }
  public function domains()      { $this->send_page ("domains"); }

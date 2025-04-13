@@ -4,8 +4,8 @@
          <div class="card-header"> <i class="fas fa-history text-primary"></i> <label>Recherche dans l'historique</label> </div>
          <div class="card-body">
 
-           <div class="row form-group">
-             <div class="input-group">
+           <div class="row ">
+             <div class="input-group mb-1">
                <label class="col-4 col-form-label text-right">Recherche</label>
                <input id="idHistoSearchQuery" type="text" class="form-control" placeholder="Recherche a effectuer">
               <button id="idHistoSearch" type="button" class="btn btn-primary ml-1">
@@ -21,7 +21,7 @@
 
    <div class="table-responsive">
      <table id="idTableHISTOS" class='table table-dark table-bordered w-100'>
-       <thead class="thead-dark">
+       <thead class="table-dark">
        </thead>
        <tbody>
        </tbody>

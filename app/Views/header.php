@@ -8,8 +8,8 @@
         <meta name="google" content="notranslate">
         <meta name="robots" content="noindex, nofollow">
         <link rel="icon" href="https://static.abls-habitat.fr/img/abls.svg">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"/>
         <style>
         :root { color-scheme: dark; }
 
@@ -39,6 +39,17 @@
            100% { opacity: 1; }
          }
 
+        .wtd-noshow { animation-duration: 0.3s;
+                      animation-name: wtdNoShowFrames;
+                      animation-iteration-count: infinite;
+                      animation-fill-mode: backwards;
+                      transition: none;
+                    }
+        @keyframes wtdNoShowFrames
+         {   0% { visibility: visibility; opacity: 1; }
+           100% { visibility: hidden;     opacity: 0; }
+         }
+
         .card { color: white; }
 
         .wtd-img-grayscale
@@ -50,36 +61,36 @@
           { position: relative;
           }
 
-	       .wtd-img-superpose-milieu
-	         { position: absolute;
-	           left: 50%;
+        .wtd-img-superpose-milieu
+          { position: absolute;
+            left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-	           z-index:2;
+            z-index:2;
           }
 
-	       .wtd-img-superpose-bas-droite
-	         { position: absolute;
-	           bottom: 0px;
+        .wtd-img-superpose-bas-droite
+          { position: absolute;
+            bottom: 0px;
             right: 0px;
             transform: translate(+50%, 0%);
-	           z-index:2;
+            z-index:2;
           }
 
-	       .wtd-img-superpose-haut-droite
-	         { position: absolute;
-	           top: 0px;
+        .wtd-img-superpose-haut-droite
+          { position: absolute;
+            top: 0px;
             right: 0px;
             transform: translate(+50%, 0%);
-	           z-index:2;
+            z-index:2;
           }
 
-	       .wtd-img-superpose-haut-gauche
-	         { position: absolute;
-	           top: 0px;
+        .wtd-img-superpose-haut-gauche
+          { position: absolute;
+            top: 0px;
             left: 0px;
             transform: translate(-50%, 0%);
-	           z-index:2;
+            z-index:2;
           }
 
         .wtd-menu
@@ -102,22 +113,6 @@
                       cursor: pointer;
                     }
 
-	       .wtd-courbe { background-color: white;
-                      width: auto;
-                      max-width: 100vw;
-                      min-height: 600px;
-                      cursor: pointer;
-                      max-height: 100vh;
-                    }
-
-	       .wtd-courbe-full-screen
-                    { background-color: white;
-                      width: auto;
-                      max-width: 100vw;
-                      min-height: 80vh;
-                      max-height: 100vh;
-                      cursor: pointer;
-                    }
 
         .wtd-vignette
           { width: 32px;
@@ -141,9 +136,22 @@
              { max-width: 96px;
                max-height: 96px;
              }
-           .wtd-courbe
-             { min-height: 300px;
-             }
+         }
+
+        .wtd-courbe { background-color: #777;
+                      width: auto;
+                      max-width: 100vw;
+                      min-height: 30vh;
+                      max-height: 70vh;
+                      cursor: pointer;
+                    }
+
+        @media (orientation: landscape)
+         {
+         }
+
+        @media (orientation: portrait)
+         {
          }
 
         .wtd-img-card { object-fit: contain; height: 196px; max-width: 196px; padding: 10px; }
@@ -176,9 +184,9 @@
 <div class="position-fixed" style="top: 3rem; left: 50%; z-index:9999">
   <div id="idToastStatusOK" data-delay="3000" class="toast hide bg-primary" role="status">
    <div class="toast-header">
-     <strong class="mr-auto"> Résultat de la commande</strong>
+     <strong class="me-auto"> Résultat de la commande</strong>
      <!--<small>11 mins ago</small>-->
-     <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+     <button type="button" class="ml-2 mb-1 close" data-bs-dismiss="toast" aria-label="Close">
        <span aria-hidden="true">&times;</span>
      </button>
    </div>
@@ -191,9 +199,9 @@
 <div class="position-fixed" style="top: 3rem; left: 50%; z-index:9999">
   <div id="idToastStatusKO" data-delay="3000" class="toast hide bg-danger" role="status">
    <div class="toast-header">
-     <strong class="mr-auto"> Résultat de la commande</strong>
+     <strong class="me-auto"> Résultat de la commande</strong>
      <!--<small>11 mins ago</small>-->
-     <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+     <button type="button" class="ml-2 mb-1 close" data-bs-dismiss="toast" aria-label="Close">
        <span aria-hidden="true">&times;</span>
      </button>
    </div>
@@ -209,7 +217,7 @@
     <div class="modal-content ">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title text-justify"><i class="fas fa-trash"></i> <span id="idModalDelTitre"></span></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -217,8 +225,8 @@
         <p id="idModalDelMessage"></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Annuler</button>
-        <button id="idModalDelValider" type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-trash"></i> Valider</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> Annuler</button>
+        <button id="idModalDelValider" type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fas fa-trash"></i> Valider</button>
       </div>
     </div>
   </div>
@@ -229,7 +237,7 @@
     <div class="modal-content">
       <div class="modal-header bg-warning">
         <h5 class="modal-title text-justify"><i class="fas fa-exclamation-circle"></i>Erreur</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -237,7 +245,7 @@
         <p id="idModalDetail">Une erreur est survenue !</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -245,28 +253,25 @@
 
 <header>
 
-	<nav class="navbar navbar-dark navbar-expand-md fixed-top shadow"> <!-- fixed-top -->
+ <nav class="navbar navbar-dark navbar-expand-md fixed-top shadow"> <!-- fixed-top -->
 
-  <!--<a class="nav-item"><img id="idMasterVignetteActivite" class="wtd-menu mr-1" src=""></a>
-  <a class="nav-item"><img id="idMasterVignetteSecuBien" class="wtd-menu mr-1" src=""></a>
-  <a class="nav-item"><img id="idMasterVignetteSecuPers" class="wtd-menu mr-1" src=""></a>-->
   <ul class="navbar-nav">
     <a class="nav-item" href="#">
       <img id ="idNavImgTopSyn" src="" alt=""
-           class="wtd-menu" data-toggle='tooltip' data-placement='bottom' title="Aller à l'accueil">
+           class="wtd-menu" data-bs-toggle='tooltip' data-placement='bottom' title="Aller à l'accueil">
     </a>
   </ul>
-  <ul id="idNavSynoptique" class="navbar-nav d-inline mr-auto"></ul>
+  <ul id="idNavSynoptique" class="navbar-nav d-inline me-auto"></ul>
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-toggled" aria-controls="navbar-toggled" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggled" aria-controls="navbar-toggled" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbar-toggled">
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ms-auto">
       <a id="idAlertConnexionLost" class="nav-link wtd-cligno" style="display: none"><i class="fa-solid fa-link-slash fa-xl text-warning"></i></a>
       <li class="nav-item dropdown">
-        <a class="nav-link rounded align-items-middle dropdown-toggle" href="#" id="navbarUSER" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link rounded align-items-middle dropdown-toggle" href="#" id="navbarUSER" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-user text-white"></i> <span id="idUsername">-</span>
         </a>
 

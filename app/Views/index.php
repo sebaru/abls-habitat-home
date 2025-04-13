@@ -15,7 +15,7 @@
 <section id='idSectionHeavySyn'      class='row mx-1'>
 </section>
 
-<section id='idSectionTableaux'      class='row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-2 justify-content-center'>
+<section id='idSectionTableaux'      class='row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 justify-content-center'>
 </section>
 
 <hr>
@@ -23,7 +23,7 @@
 <section id='idSectionMessages' class='row mx-0'>
    <div class="table-responsive">
      <table id="idTableMessages" class='table table-dark table-bordered w-100'>
-       <thead class="thead-dark">
+       <thead class="table-dark">
        </thead>
        <tbody>
        </tbody>
