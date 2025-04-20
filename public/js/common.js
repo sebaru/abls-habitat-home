@@ -69,7 +69,7 @@
     else xhr.open(method, $ABLS_API+URL, true);
 
     if (ContentType != null) { xhr.setRequestHeader('Content-type', ContentType ); }
-    xhr.timeout = 60000; // durée en millisecondes
+    xhr.timeout = 300000; // durée en millisecondes
     xhr.setRequestHeader("X-ABLS-DOMAIN", localStorage.getItem("domain_uuid") );
     xhr.setRequestHeader("Authorization", "Bearer " + Token );
 
