@@ -41,8 +41,7 @@
        idSectionPasserelles.empty();
        $.each ( Synoptique.child_syns, function (i, syn)
                  { idSectionPasserelles.append ( Creer_passerelle ( syn ) );
-                   if (Synoptique.syn_vars)
-                    { Set_syn_vars ( syn.syn_id, Synoptique.syn_vars.filter ( function(ssitem) { return ssitem.syn_id==syn.syn_id } )[0] ); }
+                   Set_syn_vars ( null, syn );
                  }
               );
        /*Set_syn_vars ( Synoptique.id, Synoptique.syn_vars.filter ( function(ssitem) { return ssitem.id==Response.id } )[0] );*/

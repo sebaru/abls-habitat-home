@@ -6,7 +6,7 @@
     var target_syn = Synoptique.child_syns.filter ( function(child) { return child.syn_id==syn.syn_id } )[0];
     if (target_syn === undefined) { console.log("target_syn " + syn.syn_id + " non trouvé" ); return; }
 
-    target_syn[bit] = syn.etat;                              /* Recopie de l'etat du bit d'anomalie dans la structure interne */
+    if (bit) target_syn[bit] = syn.etat;                     /* Recopie de l'etat du bit d'anomalie dans la structure interne */
 
 /*    if (!syn_vars) return;
     if (syn_vars.bit_comm == false)
