@@ -54,6 +54,7 @@
        $('#idAlertConnexionLost').hide();
        Mqtt_subscribe ( "DLS_VISUEL/#" );
        Mqtt_subscribe ( "DLS_HISTO/#" );
+       Mqtt_subscribe ( "SYN_STATUS/#" );
      });
 
     MQTT_Client.on('disconnect', function ()
@@ -74,6 +75,7 @@
        var tag = topics[2];
        var Response = JSON.parse(message);                                                  /* Pointe sur <synoptique a=1 ..> */
             if (Synoptique && tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
+       else if (tag == "SYN_STATUS") { Set_syn_vars ( topics[3], Response ); }
        else if (tag == "DLS_HISTO")
              { if (DataTable.isDataTable( '#idTableMessages') == false) return;
                if ( Response.alive == true )
