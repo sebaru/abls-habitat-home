@@ -18,7 +18,7 @@
        $('#idVignetteComm_'+syn_id).removeClass("wtd-cligno").fadeTo(0);
      }
 */
-    if (target_syn["MEMSA_DANGER"] == true)
+    if (target_syn["MEMSSP_DANGER"] == true)
      { Changer_img_src ( "idVignette_"+syn.syn_id, "https://static.abls-habitat.fr/img/croix_red.svg", true );
      }
     else if (target_syn["MEMSA_ALERTE"] == true)
@@ -45,7 +45,7 @@
     else if (target_syn["MEMSSP_DANGER_FIXE"] == true)
      { Changer_img_src ( "idVignette_"+syn.syn_id, "https://static.abls-habitat.fr/img/croix_red.svg",false );
      }
-    else if (target_syn["MEMSA_DERANGEMENT_FIXE"] == true)
+    else if (target_syn["MEMSSP_DERANGEMENT_FIXE"] == true)
      { Changer_img_src ( "idVignette_"+syn.syn_id, "https://static.abls-habitat.fr/img/croix_orange.svg", false );
      }
 /*    else if (syn_vars.bit_veille_totale == true)
