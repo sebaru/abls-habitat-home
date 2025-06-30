@@ -20,7 +20,11 @@
 
     var json_request =
      { courbes: tableau_map.map( function (item)
-                                  { return( { tech_id: item.tech_id, acronyme: item.acronyme } ) } ),
+                                  { return( { tech_id : item.tech_id,
+                                              acronyme: item.acronyme,
+                                              methode : item.methode
+                                            } )
+                                  }),
        period : Charts[idTableau].period
      };
 
