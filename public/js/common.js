@@ -69,7 +69,7 @@
     else xhr.open(method, $ABLS_API+URL, true);
 
     if (ContentType != null) { xhr.setRequestHeader('Content-type', ContentType ); }
-    xhr.timeout = 60000; // durée en millisecondes
+    xhr.timeout = 300000; // durée en millisecondes
     xhr.setRequestHeader("X-ABLS-DOMAIN", localStorage.getItem("domain_uuid") );
     xhr.setRequestHeader("Authorization", "Bearer " + Token );
 
@@ -325,7 +325,7 @@
     return(retour);
   }
 /********************************* Chargement d'une courbe dans u synoptique 1 au démrrage ************************************/
- function Charger_une_courbe ( idChart, tech_id, acronyme, period )
+ function Charger_une_courbe ( idChart, tech_id, acronyme, period, methode )
   { var chartElement = document.getElementById(idChart);
     if (!chartElement) { console.log("Charger_une_courbe: Erreur chargement chartElement " + json_request ); return; }
 

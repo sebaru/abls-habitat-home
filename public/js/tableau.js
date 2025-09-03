@@ -12,9 +12,19 @@
        return;
      }
 
+    if (Charts[idTableau].period == "HOUR")
+     { Charts[idTableau].timeout = setTimeout ( function()                                                   /* Update graphe */
+        { Update_tableau_by_courbe ( idDest, tableau, tableau_map ); }, 60000 );
+     }
+    else if (Charts[idTableau].timeout != null) clearTimeout ( Charts[idTableau].timeout );            /* Arret timeout sinon */
+
     var json_request =
      { courbes: tableau_map.map( function (item)
-                                  { return( { tech_id: item.tech_id, acronyme: item.acronyme } ) } ),
+                                  { return( { tech_id : item.tech_id,
+                                              acronyme: item.acronyme,
+                                              methode : item.methode
+                                            } )
+                                  }),
        period : Charts[idTableau].period
      };
 
@@ -96,12 +106,6 @@
 
     var chartElement = document.getElementById(idTableau);                                          /* On récupère le tableau */
     if (!chartElement) { console.log("Erreur chargement chartElement " + idTableau ); return; }
-
-    if (Charts[idTableau].period == "HOUR")
-        { Charts[idTableau].timeout = setTimeout ( function()                                                /* Update graphe */
-           { Update_tableau_by_courbe ( idDest, tableau, tableau_map ); }, 60000 );
-        }
-    else if (Charts[idTableau].timeout != null) clearTimeout ( Charts[idTableau].timeout );            /* Arret timeout sinon */
 
     Update_tableau_by_courbe ( idDest, tableau, tableau_map );
   }
