@@ -325,7 +325,7 @@
     return(retour);
   }
 /********************************* Chargement d'une courbe dans u synoptique 1 au démrrage ************************************/
- function Charger_une_courbe ( idChart, tech_id, acronyme, period )
+ function Charger_une_courbe ( idChart, tech_id, acronyme, period, methode )
   { var chartElement = document.getElementById(idChart);
     if (!chartElement) { console.log("Charger_une_courbe: Erreur chargement chartElement " + json_request ); return; }
 
