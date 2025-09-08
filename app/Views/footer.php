@@ -3,12 +3,15 @@
 <footer class="d-none d-md-block page-footer mt-2 fixed-bottom bg-transparent"> <!-- fixed-bottom-->
 
   <!-- Copyright -->
-  <div class="footer-copyright text-right p-1">
-    <small>
-      <span class="text-secondary"><?php echo getenv("ABLS_API"); ?> -</span>
-      <span class="text-secondary"> © </span>
-      <a href="https://docs.abls-habitat.fr/" target="_blank">Abls-Habitat.fr</a>
-    </small>
+  <div class="row justifiy-content-end mt-2 fixed-bottom p-1">
+    <div class="col-auto ms-auto">
+      <small>
+        <span class="ms-auto text-secondary"><?php echo getenv("ABLS_API"); ?> </span>
+        <span class="text-secondary" id="idAblsApiVersion"></span>
+        <span class="text-secondary"> © </span>
+        <a href="https://docs.abls-habitat.fr/" target="_blank">Abls-Habitat.fr</a>
+      </small>
+    </div>
   </div>
 
 </footer>

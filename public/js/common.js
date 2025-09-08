@@ -113,6 +113,7 @@
           localStorage.setItem("mqtt_port",          parseInt(Response.mqtt_port) );
           localStorage.setItem("mqtt_over_ssl",      Response.mqtt_over_ssl );
           sessionStorage.setItem("browser_password", Response.browser_password );
+          $("#idAblsApiVersion").text ( Response.abls_api_version );
           $("#idNavDomainName").text( localStorage.getItem("domain_name") );
           if (Response.domain_notification.length) $("#idDomainNotification").text( Response.domain_notification ).show();
                                               else $("#idDomainNotification").hide();
@@ -332,7 +333,8 @@
     if (period===undefined) period="HOUR";
     var json_request =
      { courbes: [ { tech_id : tech_id, acronyme : acronyme, } ],
-       period   : period
+       period   : period,
+       methode  : methode
      };
 
     Send_to_API ( "POST", "/archive/get", json_request, function(json)
