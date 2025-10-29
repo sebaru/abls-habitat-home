@@ -1,10 +1,23 @@
 /********************************************* Appeler quand l'utilisateur selectionne un motif *******************************/
- function Clic_sur_visuel ( visuel )
-  { console.log(" Clic sur visuel " + visuel.libelle + " mode="+visuel.mode + " disable = "+visuel.disable );
-    if (visuel.disable) return;
-    var target = { tech_id : visuel.tech_id,
-                   acronyme: visuel.acronyme,
-                 };
+ function Clic_sur_visuel ( event, visuel )
+  { event.preventDefault();
+    if (visuel.clic_inhib == true)                                                                 /* Le clic est-il inhibé ? */
+     { console.log(" Clic sur visuel clic_inhib: " + visuel.libelle );
+       visuel.clic_inhib = false;                                                        /* Le prochain clic n'est pas inhibé */
+       return;
+     }
+    if (visuel.disable) { console.log(" Clic sur visuel disabled: " + visuel.libelle ); return; }
+
+    console.log(" Clic sur visuel " + visuel.libelle + " mode="+visuel.mode );
+    var target = { tech_id : visuel.tech_id, acronyme: visuel.acronyme };
+    Send_to_API ( 'POST', "/syn/clic", target, function () { }, null);
+  }
+/********************************************* Appeler long quand l'utilisateur selectionne un motif **************************/
+ function Long_Clic_sur_visuel ( event, visuel )
+  { event.preventDefault();
+    if (visuel.disable) { console.log(" Clic sur visuel disabled: " + visuel.libelle ); return; }
+    console.log(" Clic long sur visuel " + visuel.libelle + " mode="+visuel.mode + " disable = "+visuel.disable );
+    var target = { tech_id : visuel.tech_id, acronyme: visuel.acronyme, mode: "long" };
     Send_to_API ( 'POST', "/syn/clic", target, function () { }, null);
   }
 /******************************************************************************************************************************/
@@ -18,28 +31,26 @@
          if (Response.controle=="static")
      { contenu = $('<img>').addClass("wtd-visuel p-2")
                            .attr ( "id", id+"-img" )
-                           .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"."+Response.extension)
-                           .click( function () { Clic_sur_visuel ( Response ); } );
+                           .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"."+Response.extension);
      }
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
     else if (Response.controle=="by_mode")
      { contenu = $('<img>').addClass("wtd-visuel")
                            .attr ( "id", id+"-img" )
                            .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"."+Response.extension)
-                           .click( function () { Clic_sur_visuel ( Response ); } );
+                           .append($('<img>').attr("id", id+"_HG") /*.attr("src","")*/
+                                             .addClass("wtd-vignette wtd-img-superpose-haut-gauche").slideUp() );
        contenu.attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"."+Response.extension);
      }
     else if (Response.controle=="by_color")
      { contenu = $('<img>').addClass("wtd-visuel")
                            .attr ( "id", id+"-img" )
-                           .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.color+"."+Response.extension)
-                           .click( function () { Clic_sur_visuel ( Response ); } );
+                           .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.color+"."+Response.extension);
        contenu.attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.color+"."+Response.extension);
      }
     else if (Response.controle=="by_mode_color")
      { contenu = $('<img>').addClass("wtd-visuel")
-                           .attr ( "id", id+"-img" )
-                           .click( function () { Clic_sur_visuel ( Response ); } );
+                           .attr ( "id", id+"-img" );
        contenu.attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"_"+Response.color+"."+Response.extension);
      }
     else if (Response.controle=="complexe" && Response.forme=="cadran")
@@ -61,7 +72,25 @@
                              .attr("id", "wtd-visuel-texte-"+Response.tech_id+"-"+Response.acronyme)
                            );
         }
+       else { console.log ( "Visuel mode unknow for cadran: " + Response.tech_id+"-"+Response.acronyme ); return(null); }
      }
+    else { console.log ( "Visuel unknow : " + Response.tech_id+"-"+Response.acronyme ); return(null); }
+
+    contenu.click( function (event) { Clic_sur_visuel ( event, Response ); } );
+    contenu.on("touchstart mousedown", function(event)                           /* Démarre un timer lors du début de l'appui */
+             { Response.clic_timer = setTimeout(function()
+                { Response.clic_inhib = true;                                                    /* Interdit le prochain clic */
+                  Long_Clic_sur_visuel(event, Response);                                               /* Fonction à exécuter */
+                  clearTimeout(Response.clic_timer);
+                }, 2000);
+             })
+           .on("touchend mouseup touchmove mousemove", function(event)/* Annule le timer si l'appui est relâché avant la fin du délai */
+            { if (Response.clic_timer)
+               { clearTimeout(Response.clic_timer);
+                 Response.clic_timer = null;
+               }
+            });
+
 console.debug ( Response );
     var card = $('<div>').addClass("row bg-transparent mb-3")
                .append( $('<div>').addClass("col text-center mb-1")
@@ -78,6 +107,7 @@ console.debug ( Response );
                         .attr ( "id", id+"-footer-text" )
                       )
                .attr ( "id", id );
+
     return(card);
   }
 /******************************************************************************************************************************/
