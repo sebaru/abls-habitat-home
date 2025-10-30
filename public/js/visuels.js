@@ -17,7 +17,7 @@
   { event.preventDefault();
     if (visuel.disable) { console.log(" Clic sur visuel disabled: " + visuel.libelle ); return; }
     console.log(" Clic long sur visuel " + visuel.libelle + " mode="+visuel.mode + " disable = "+visuel.disable );
-    var target = { tech_id : visuel.tech_id, acronyme: visuel.acronyme, mode: "long" };
+    var target = { tech_id : visuel.tech_id, acronyme: visuel.acronyme, long: true };
     Send_to_API ( 'POST', "/syn/clic", target, function () { }, null);
   }
 /******************************************************************************************************************************/
