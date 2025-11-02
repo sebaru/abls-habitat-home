@@ -25,56 +25,57 @@
 /******************************************************************************************************************************/
  function Creer_light_visuel ( Response )
   { var id = "wtd-visu-"+Response.tech_id+"-"+Response.acronyme;
-    var contenu;
+    var contenu = $('<div></div>').addClass("d-inline-block wtd-img-container");
 
 /*-------------------------------------------------- Visuel mode cadre -------------------------------------------------------*/
          if (Response.controle=="static")
-     { contenu = $('<img>').addClass("wtd-visuel p-2")
-                           .attr ( "id", id+"-img" )
-                           .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"."+Response.extension);
+     { contenu.append($('<img>').addClass("wtd-visuel p-2").attr ( "id", id+"-img" )
+                      .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"."+Response.extension)
+                     );
      }
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
     else if (Response.controle=="by_mode")
-     { contenu = $('<img>').addClass("wtd-visuel")
-                           .attr ( "id", id+"-img" )
-                           .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"."+Response.extension)
-                           .append($('<img>').attr("id", id+"_HG") /*.attr("src","")*/
-                                             .addClass("wtd-vignette wtd-img-superpose-haut-gauche").slideUp() );
-       contenu.attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"."+Response.extension);
+     { contenu.append($('<img>').addClass("wtd-visuel").attr ( "id", id+"-img" )
+                      .attr ("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"."+Response.extension)
+                     );
      }
     else if (Response.controle=="by_color")
-     { contenu = $('<img>').addClass("wtd-visuel")
-                           .attr ( "id", id+"-img" )
-                           .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.color+"."+Response.extension);
-       contenu.attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.color+"."+Response.extension);
+     { contenu.append($('<img>').addClass("wtd-visuel").attr ( "id", id+"-img" )
+                      .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.color+"."+Response.extension)
+                     );
      }
     else if (Response.controle=="by_mode_color")
-     { contenu = $('<img>').addClass("wtd-visuel")
-                           .attr ( "id", id+"-img" );
-       contenu.attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"_"+Response.color+"."+Response.extension);
+     { contenu.append($('<img>').addClass("wtd-visuel").attr ( "id", id+"-img" )
+                      .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"_"+Response.color+"."+Response.extension)
+                     );
      }
     else if (Response.controle=="complexe" && Response.forme=="cadran")
      { if (Response.mode=="texte")
-        { contenu = $('<h4></h4>').addClass("text-center text-white").text( "Loading" )
-                    .attr("id", "wtd-visuel-texte-"+Response.tech_id+"-"+Response.acronyme);
+        { contenu.append($('<h4></h4>').addClass("text-center text-white").text( "Loading" )
+                         .attr("id", "wtd-visuel-texte-"+Response.tech_id+"-"+Response.acronyme)
+                        );
         }
        else if (Response.mode.startsWith("progress"))
-        { contenu = $('<div>')
-                    .append ( $('<div>').addClass("progress my-2")
-                              .append( $('<div>').addClass("progress-bar")
-                                       .attr("id", "wtd-visuel-barre-"+Response.tech_id+"-"+Response.acronyme)
-                                       .attr("role", "progressbar" )
-                                       .attr("aria-valuemin", Response.minimum )
-                                       .attr("aria-valuemax", Response.maximum )
-                                     )
-                            )
-                    .append( $('<h4>').addClass("text-center text-white").text( "Loading" )
-                             .attr("id", "wtd-visuel-texte-"+Response.tech_id+"-"+Response.acronyme)
-                           );
+        { contenu.append($('<div>')
+                         .append ( $('<div>').addClass("progress my-2")
+                                   .append( $('<div>').addClass("progress-bar")
+                                            .attr("id", "wtd-visuel-barre-"+Response.tech_id+"-"+Response.acronyme)
+                                            .attr("role", "progressbar" )
+                                            .attr("aria-valuemin", Response.minimum )
+                                            .attr("aria-valuemax", Response.maximum )
+                                          )
+                                 )
+                         .append( $('<h4>').addClass("text-center text-white").text( "Loading" )
+                                  .attr("id", "wtd-visuel-texte-"+Response.tech_id+"-"+Response.acronyme)
+                                )
+                        );
         }
        else { console.log ( "Visuel mode unknow for cadran: " + Response.tech_id+"-"+Response.acronyme ); return(null); }
      }
     else { console.log ( "Visuel unknow : " + Response.tech_id+"-"+Response.acronyme ); return(null); }
+
+    contenu.append($('<img>').attr("id", id+"-HD")
+                             .addClass("wtd-vignette wtd-img-superpose-haut-droite").slideUp() );
 
     contenu.click( function (event) { Clic_sur_visuel ( event, Response ); } );
     contenu.on("touchstart mousedown", function(event)                           /* Démarre un timer lors du début de l'appui */
@@ -120,7 +121,7 @@ console.debug ( Response );
     visuel = visuels[0];
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
 console.log("Changer_etat_visuel " + visuel.controle + " " + visuel.tech_id + ":" + visuel.acronyme +
-            " valeur=" + etat.valeur + " unite=" + etat.unite + " decimal=" + etat.nb_decimal );
+            " valeur=" + etat.valeur + " unite=" + etat.unite + " decimal=" + etat.nb_decimal + " badge="+etat.badge );
 
     if (Synoptique.mode_affichage == false) /* Affichage léger */
      { if (visuel.forme == "cadran")
@@ -133,6 +134,14 @@ console.log("Changer_etat_visuel " + visuel.controle + " " + visuel.tech_id + ":
         { Changer_etat_visuel_by_color ( visuel, etat );   }
        else if (visuel.controle=="by_mode_color")
         { Changer_etat_visuel_by_mode_color ( visuel, etat );   }
+
+       if (etat.badge === undefined || etat.badge == "none")
+        { Changer_img_src ( "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme+"-HD", null, false ); }
+       else if (etat.badge == "lock")
+        { Changer_img_src ( "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme+"-HD", localStorage.getItem("static_data_url")+"/img/cadenas_ferme.svg", false ); }
+       else if (etat.badge == "manu")
+        { Changer_img_src ( "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme+"-HD", localStorage.getItem("static_data_url")+"/img/auto_manu_manu.svg", false ); }
+
      }
     else /* affichage lourd */
      { console.log ( visuel );
