@@ -12,6 +12,7 @@
     console.log ("Syn: loading " + vars[1] );
 
     document.addEventListener('pageshow', function () { Charger_un_synoptique ( Synoptique.syn_page ); }, false);
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
     Load_mqtt();                                                                                       /* Charge la websocket */
     if ( /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) )
      { navigator.geolocation.watchPosition(
