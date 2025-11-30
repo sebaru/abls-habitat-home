@@ -55,7 +55,7 @@
           order: [ [1, "desc"] ],
           responsive: false,
      });
-    Load_mqtt();
+    Load_mqtt( null );
   }
 /******************************************************************************************************************************/
 /* Load_page: Appelé au chargement de la page                                                                                 */

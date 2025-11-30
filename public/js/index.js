@@ -13,7 +13,7 @@
 
     document.addEventListener('pageshow', function () { Charger_un_synoptique ( Synoptique.syn_page ); }, false);
     document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-    Load_mqtt();                                                                                       /* Charge la websocket */
+    Load_mqtt( syn_page );                                                                             /* Charge la websocket */
     if ( /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) )
      { navigator.geolocation.watchPosition(
          (position) => { Send_to_API ( 'POST', "/user/set_gps", position.coords,

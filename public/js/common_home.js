@@ -37,7 +37,7 @@
 /******************************************************************************************************************************/
 /* Load_mqtt: Appelé pour ouvrir la connexion mqtt                                                                            */
 /******************************************************************************************************************************/
- function Load_mqtt ( syn_id )
+ function Load_mqtt ( syn_page )
   { console.log ("------------------------------ Chargement MQTT" );
     var domain_uuid = localStorage.getItem("domain_uuid");
     var methode;
@@ -52,8 +52,9 @@
     MQTT_Client.on('connect', function ()
      { console.log('MQTT Connected');
        $('#idAlertConnexionLost').hide();
-       Mqtt_subscribe ( "DLS_VISUEL/#" );
-       Mqtt_subscribe ( "DLS_HISTO/#" );
+       if (!syn_page) syn_page = "#";
+       Mqtt_subscribe ( "DLS_VISUEL/"+ syn_page );
+       Mqtt_subscribe ( "DLS_HISTO/"+ syn_page );
        Mqtt_subscribe ( "SYN_STATUS/#" );
      });
 
@@ -73,27 +74,23 @@
        if (topics[0] != domain_uuid) return;
        if (topics[1] != "browsers") return;
        var tag = topics[2];
+       var target = topic[3];
        var Response = JSON.parse(message);                                                  /* Pointe sur <synoptique a=1 ..> */
-            if (Synoptique && tag == "DLS_VISUEL") { Changer_etat_visuel ( Response ); }
+            if (tag == "DLS_VISUEL" && Synoptique) { Changer_etat_visuel ( Response ); }
        else if (tag == "SYN_STATUS") { Set_syn_vars ( topics[3], Response ); }
        else if (tag == "DLS_HISTO")
              { if (DataTable.isDataTable( '#idTableMessages') == false) return;
+               console.debug(Response);
+               console.log("MQTT REMOVE OLD MSG FIRST");
+               $('#idTableMessages').DataTable().rows( function ( index, data, node )
+                { if ( data.tech_id == Response.tech_id && data.acronyme == Response.acronyme ) return(true);
+                  else return(false);
+                }).remove().draw("page");
                if ( Response.alive == true )
                 { console.log("MQTT MSG NEW");
-                  console.debug(Response);
                   if (!Synoptique || (Synoptique && Synoptique.page == Response.syn_page ) )
                    { $('#idTableMessages').DataTable().row.add ( Response ).draw(); }
                 }
-               else
-                { console.log("MQTT REMOVE MSG");
-                  console.debug(Response);
-                  /*$('#idTableMessages').DataTable().row("#"+Response.histo_msg_id).remove().draw();*/
-                  $('#idTableMessages').DataTable().rows( function ( index, data, node )
-                   { if ( data.tech_id == Response.tech_id && data.acronyme == Response.acronyme ) return(true);
-                     else return(false);
-                   }).remove().draw("page");
-                }
-               /*else $('#idTableMSGS').DataTable().ajax.reload( null, false );*/
              }
        else console.log("topic: " + tag + " not known");
      });
