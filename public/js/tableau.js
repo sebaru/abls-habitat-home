@@ -109,16 +109,11 @@
 
     Update_tableau_by_courbe ( idDest, tableau, tableau_map );
   }
+
+
 /********************************* Chargement d'une courbe dans 1 synoptique **************************************************/
- function Charger_tableau_by_table ( idDest, tableau, tableau_map, period )
+ function Update_tableau_by_valeur ( idDest, tableau, tableau_map, period )
   { var idTableau = "idTableau-"+tableau.tableau_id;
-    var tableElement = document.getElementById(idTableau);                 /* Tableau existant ? Sinon on l'ajoute à l'idDest */
-    if (!tableElement)
-     { $("#"+idDest).append( $("<div></div>").addClass("col table-responsive").attr("id", idTableau+"-div")
-                             .append( $("<h2></h2").addClass("text-white text-center").append (tableau.titre) )
-                             .append( $("<table></table>").attr("id", idTableau).addClass("table table-dark") )
-                           );
-     }
 
     if (period===undefined) period="HOUR";
     var json_request =
@@ -132,9 +127,10 @@
     for (var i=0; i<json_request.courbes.length; i++)
      { colonnes.push ( { "data": "moyenne"+(i+1), "title":"Valeur", "className": "text-center" } ); }
 
+
     $('#'+idTableau).DataTable(
-       { pageLength : 25,
-         fixedHeader: true,
+       { destroy: true,
+         fixedHeader: true, searching: false, lengthChange: false,
          ajax: { url : $ABLS_API+"/archive/get", type : "POST", dataSrc: "valeurs", contentType: "application/json",
                  data: function () { return (JSON.stringify(json_request)); },
                  error: function ( xhr, status, error ) { Show_toast_ko(xhr.statusText); },
@@ -149,5 +145,40 @@
          responsive: true,
        }
      );
+  }
+/********************************* Chargement d'une courbe dans 1 synoptique **************************************************/
+ function Charger_tableau_by_table ( idDest, tableau, tableau_map, period )
+  { var idTableau = "idTableau-"+tableau.tableau_id;
+    var tableElement = document.getElementById(idTableau);                 /* Tableau existant ? Sinon on l'ajoute à l'idDest */
+    if (!tableElement)
+     { $("#"+idDest).append( $("<div></div>").addClass("col table-responsive").attr("id", idTableau+"-div")
+                             .append ( $("<div></div").addClass("d-flex align-items-center")
+                                       .append ( $("<h2></h2>").addClass("flex-grow-1 text-white text-center").append (tableau.titre)
+                                               )
+                                       .append ( $("<div></div>").addClass(" w-auto btn-group align-items-center")
+                                                 .append ( $("<i></i>").addClass("fas fa-clock text-primary mr-2" ) )
+                                                 .append ( $( "<select></select" )
+                                                           .attr("id", idTableau+"-select")
+                                                           .addClass("custom-select")
+                                                           .append ( $("<option></option>").attr("value", "HOUR").append("Heure") )
+                                                           .append ( $("<option></option>").attr("value", "DAY").append("Jour") )
+                                                           .append ( $("<option></option>").attr("value", "WEEK").append("Semaine") )
+                                                           .append ( $("<option></option>").attr("value", "MONTH").append("Mois") )
+                                                           .append ( $("<option></option>").attr("value", "YEAR").append("Année") )
+                                                           .append ( $("<option></option>").attr("value", "ALL").append("Tout") )
+                                                         )
+                                               )
+                                     )
+                             .append( $("<table></table>").attr("id", idTableau).addClass("table table-dark") )
+                           );
+     }
+
+    $("#"+idTableau+"-select").off("change").on("change", function ()
+     { period = $("#"+idTableau+"-select").val()
+       console.log("Change period for "+idTableau+" to " + period);
+       Update_tableau_by_valeur ( idDest, tableau, tableau_map, period )
+     });
+
+    Update_tableau_by_valeur ( idDest, tableau, tableau_map, period );
   }
 /*----------------------------------------------------------------------------------------------------------------------------*/
