@@ -18,7 +18,16 @@
 
     Send_to_API ( "GET", "/syn/show", (syn_page ? "syn_page=" + syn_page : null), function(Response)
      { console.log(Response);
+       if (Synoptique && Synoptique.page)
+        { Mqtt_unsubscribe ( "DLS_VISUEL/" + Synoptique.page );
+          Mqtt_unsubscribe ( "DLS_HISTO/"+ Synoptique.page );
+          Mqtt_unsubscribe ( "DLS_HISTO/#" );
+        }
        Synoptique = Response;
+       Mqtt_subscribe ( "DLS_VISUEL/" + Synoptique.page );
+       if (Synoptique.syn_id != 1) Mqtt_subscribe ( "DLS_HISTO/"+ Synoptique.page );
+                              else Mqtt_subscribe ( "DLS_HISTO/#" );
+
        window.history.replaceState( null, "", Response.page );                                  /* Affiche la page dans l'URL */
 /*------------------------------------------------------------ Barre de navigation -------------------------------------------*/
        $('#idNavSynoptique')

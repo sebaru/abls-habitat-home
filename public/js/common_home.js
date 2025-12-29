@@ -29,9 +29,21 @@
  function Mqtt_subscribe ( topic )
   { var domain_uuid = localStorage.getItem("domain_uuid");
     var full_topic = domain_uuid + "/browsers/" + topic;
+    console.log ( "Trying to subscribe to " + full_topic );
     MQTT_Client.subscribe( full_topic, (err) =>
      { if (err) { console.log ( "MQTT Subscribe to " + full_topic + " error: " + err ); }
        else console.log ( "MQTT Subscribed to " + full_topic );
+     });
+  }
+/******************************************************************************************************************************/
+/* Mqtt_unsubsribe: Appelé pour souscrire à un topic                                                                          */
+/******************************************************************************************************************************/
+ function Mqtt_unsubscribe ( topic )
+  { var domain_uuid = localStorage.getItem("domain_uuid");
+    var full_topic = domain_uuid + "/browsers/" + topic;
+    MQTT_Client.unsubscribe( full_topic, (err) =>
+     { if (err) { console.log ( "MQTT Unsubscribe to " + full_topic + " error: " + err ); }
+       else console.log ( "MQTT UnSubscribed to " + full_topic );
      });
   }
 /******************************************************************************************************************************/
@@ -52,9 +64,6 @@
     MQTT_Client.on('connect', function ()
      { console.log('MQTT Connected');
        $('#idAlertConnexionLost').hide();
-       if (!syn_page) syn_page = "#";
-       Mqtt_subscribe ( "DLS_VISUEL/"+ syn_page );
-       Mqtt_subscribe ( "DLS_HISTO/"+ syn_page );
        Mqtt_subscribe ( "SYN_STATUS/#" );
      });
 
@@ -70,6 +79,7 @@
 
     MQTT_Client.on ('message', function (topic, message)
      { $('#idAlertConnexionLost').hide();
+       /*console.log ("MQTT message : "+ topic + " " + message );*/
        var topics = topic.split("/");
        if (topics[0] != domain_uuid) return;
        if (topics[1] != "browsers") return;
@@ -85,7 +95,7 @@
                $('#idTableMessages').DataTable().rows( function ( index, data, node )
                 { if ( data.tech_id == Response.tech_id && data.acronyme == Response.acronyme ) return(true);
                   else return(false);
-                }).remove().draw("page");
+                }).remove().draw(/*"page"*/);
                if ( Response.alive == true )
                 { console.log("MQTT MSG NEW");
                   if (!Synoptique || (Synoptique && Synoptique.page == Response.syn_page ) )
