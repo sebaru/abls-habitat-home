@@ -12,7 +12,7 @@
        return;
      }
 
-    if (Charts[idTableau].period == "HOUR")
+    if (tableau.periode == "HOUR")
      { Charts[idTableau].timeout = setTimeout ( function()                                                   /* Update graphe */
         { Update_tableau_by_courbe ( idDest, tableau, tableau_map ); }, 60000 );
      }
@@ -25,7 +25,7 @@
                                               methode : item.methode
                                             } )
                                   }),
-       period : Charts[idTableau].period
+       period : tableau.periode
      };
 
     Send_to_API ( "POST", "/archive/get", json_request, function(Response)
@@ -33,8 +33,8 @@
        var ctx = chartElement.getContext('2d');
        if (!ctx) { console.log("Erreur chargement context " + json_request ); return; }
 
-       if (Charts[idTableau].period=="HOUR") dates = Response.valeurs.map( function(item) { return item.date.split(' ')[1]; } );
-                                        else dates = Response.valeurs.map( function(item) { return item.date; } );
+       if (tableau.periode=="HOUR") dates = Response.valeurs.map( function(item) { return item.date.split(' ')[1]; } );
+                               else dates = Response.valeurs.map( function(item) { return item.date; } );
        var data = { labels: dates,
                     datasets: [],
                   }
@@ -96,11 +96,12 @@
                           .append( $("<canvas></canvas>").attr("id", idTableau).addClass("wtd-courbe") )
                         );
     Charts[idTableau] = new Object ();
-    Charts[idTableau].period = "HOUR";
+    Charts[idTableau].periode = tableau.periode;
+    $("#"+idTableau+"-select").val ( Charts[idTableau].periode );
 
     $("#"+idTableau+"-select").off("change").on("change", function ()
-     { Charts[idTableau].period = $("#"+idTableau+"-select").val()
-       console.log("Change period for "+idTableau+" to " + Charts[idTableau].period);
+     { tableau.periode = $("#"+idTableau+"-select").val()
+       console.log("Change period for "+idTableau+" to " + Charts[idTableau].periode);
        Update_tableau_by_courbe ( idDest, tableau, tableau_map )
      });
 
@@ -109,17 +110,14 @@
 
     Update_tableau_by_courbe ( idDest, tableau, tableau_map );
   }
-
-
 /********************************* Chargement d'une courbe dans 1 synoptique **************************************************/
- function Update_tableau_by_valeur ( idDest, tableau, tableau_map, period )
+ function Update_tableau_by_valeur ( idDest, tableau, tableau_map )
   { var idTableau = "idTableau-"+tableau.tableau_id;
 
-    if (period===undefined) period="HOUR";
     var json_request =
      { courbes: tableau_map.map( function (item)
                                   { return( { tech_id: item.tech_id, acronyme: item.acronyme } ) } ),
-       period : period
+       period : tableau.periode
      };
 
     var colonnes = [];
@@ -147,7 +145,7 @@
      );
   }
 /********************************* Chargement d'une courbe dans 1 synoptique **************************************************/
- function Charger_tableau_by_table ( idDest, tableau, tableau_map, period )
+ function Charger_tableau_by_table ( idDest, tableau, tableau_map )
   { var idTableau = "idTableau-"+tableau.tableau_id;
     var tableElement = document.getElementById(idTableau);                 /* Tableau existant ? Sinon on l'ajoute à l'idDest */
     if (!tableElement)
@@ -172,13 +170,13 @@
                              .append( $("<table></table>").attr("id", idTableau).addClass("table table-dark") )
                            );
      }
-
+    $("#"+idTableau+"-select").val ( tableau.periode );
     $("#"+idTableau+"-select").off("change").on("change", function ()
-     { period = $("#"+idTableau+"-select").val()
-       console.log("Change period for "+idTableau+" to " + period);
-       Update_tableau_by_valeur ( idDest, tableau, tableau_map, period )
+     { tableau.periode = $("#"+idTableau+"-select").val()
+       console.log("Change period for "+idTableau+" to " + tableau.periode);
+       Update_tableau_by_valeur ( idDest, tableau, tableau_map );
      });
 
-    Update_tableau_by_valeur ( idDest, tableau, tableau_map, period );
+    Update_tableau_by_valeur ( idDest, tableau, tableau_map );
   }
 /*----------------------------------------------------------------------------------------------------------------------------*/

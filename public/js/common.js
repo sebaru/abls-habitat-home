@@ -6,6 +6,14 @@
 
  document.addEventListener('DOMContentLoaded', init, false);
  window.addEventListener("beforeunload", function () { Closing = true; } );
+
+ var PeriodeTableau = [ { valeur : "HOUR",  texte : "Heure" },
+                        { valeur : "DAY",   texte : "Jour" },
+                        { valeur : "WEEK",  texte : "Semaine" },
+                        { valeur : "MONTH", texte : "Mois" },
+                        { valeur : "YEAR",  texte : "Année" },
+                        { valeur : "ALL",   texte : "Tout" },
+                      ];
 /**************************************************** Gère l'ID token *********************************************************/
  function init()
   { let keycloak = new Keycloak( { "realm": $IDP_REALM, "auth-server-url": $IDP_URL, "clientId": $IDP_CLIENT_ID,

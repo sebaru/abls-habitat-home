@@ -192,7 +192,7 @@
                  });
               }
              if (tableau.mode == 1)
-              { Charger_tableau_by_table ( "idSectionTableaux", tableau, maps, "HOUR" );
+              { Charger_tableau_by_table ( "idSectionTableaux", tableau, maps );
                 $('#idTableau-'+tableau.tableau_id).off("click").on("click", function ()
                  { $('#idTableau-'+tableau.tableau_id+"-div").toggleClass("w-100"); } );
               }

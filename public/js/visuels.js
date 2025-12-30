@@ -121,7 +121,7 @@ console.debug ( Response );
     visuel = visuels[0];
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
 console.log("Changer_etat_visuel " + visuel.controle + " " + visuel.tech_id + ":" + visuel.acronyme +
-            " valeur=" + etat.valeur + " unite=" + etat.unite + " decimal=" + etat.nb_decimal + " badge="+etat.badge );
+            " valeur=" + etat.valeur + " unite=" + visuel.unite + " decimal=" + visuel.nb_decimal + " badge="+etat.badge );
 
     if (Synoptique.mode_affichage == false) /* Affichage léger */
      { if (visuel.forme == "cadran")

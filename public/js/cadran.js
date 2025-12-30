@@ -4,8 +4,8 @@
  function Changer_etat_cadran ( visuel, etat )
   { visuel.valeur = etat.valeur;
     console.log("Changer_etat_cadran valeur="+etat.valeur+ " unite " + visuel.unite + " mode: " + visuel.mode +
-                " nb_decimal " + visuel.nb_decimal +" minimim="+minimum+" maximum="+maximum
-                +" ntb="+visuel.seuil_ntb+" nb="+visuel.seuil_nb+" nh="+visuel.seuil_nh+" nth="+visuel.seuil_nth);
+                " nb_decimal " + visuel.nb_decimal +" minimim="+visuel.minimum+" maximum="+visuel.maximum +
+                " ntb="+visuel.seuil_ntb+" nb="+visuel.seuil_nb+" nh="+visuel.seuil_nh+" nth="+visuel.seuil_nth);
 
     if (visuel.mode=="texte")
      {
