@@ -94,7 +94,7 @@
                                   )
                           .append( $("<canvas></canvas>").attr("id", idTableau).addClass("wtd-courbe") )
                         );
-    $('#'+idTableau+"-select").replaceWith ( Select ( idTableau+"-select", null, PeriodeTableau, tableau.periode ) );
+    $("#"+idTableau+"-select").replaceWith ( Select ( idTableau+"-select", null, PeriodeTableau, tableau.periode ) );
     $("#"+idTableau+"-select").off("change").on("change", function ()
      { tableau.periode = $("#"+idTableau+"-select").val()
        console.log("Change period for "+idTableau+" to " + tableau.periode);
@@ -122,7 +122,7 @@
      { colonnes.push ( { "data": "valeur"+(i+1), "title":"Valeur", "className": "text-center" } ); }
 
 
-    $('#'+idTableau).DataTable(
+    $("#"+idTableau).DataTable(
        { destroy: true,
          fixedHeader: true, searching: false, lengthChange: false,
          ajax: { url : $ABLS_API+"/archive/get", type : "POST", dataSrc: "valeurs", contentType: "application/json",
@@ -153,20 +153,13 @@
                                                  .append ( $("<i></i>").addClass("fas fa-clock text-primary mr-2" ) )
                                                  .append ( $( "<select></select" )
                                                            .attr("id", idTableau+"-select")
-                                                           .addClass("custom-select")
-                                                           .append ( $("<option></option>").attr("value", "HOUR").append("Heure") )
-                                                           .append ( $("<option></option>").attr("value", "DAY").append("Jour") )
-                                                           .append ( $("<option></option>").attr("value", "WEEK").append("Semaine") )
-                                                           .append ( $("<option></option>").attr("value", "MONTH").append("Mois") )
-                                                           .append ( $("<option></option>").attr("value", "YEAR").append("Année") )
-                                                           .append ( $("<option></option>").attr("value", "ALL").append("Tout") )
                                                          )
                                                )
                                      )
                              .append( $("<table></table>").attr("id", idTableau).addClass("table table-dark") )
                            );
      }
-    $("#"+idTableau+"-select").val ( tableau.periode );
+    $("#"+idTableau+"-select").replaceWith ( Select ( idTableau+"-select", null, PeriodeTableau, tableau.periode ) );
     $("#"+idTableau+"-select").off("change").on("change", function ()
      { tableau.periode = $("#"+idTableau+"-select").val()
        console.log("Change period for "+idTableau+" to " + tableau.periode);
