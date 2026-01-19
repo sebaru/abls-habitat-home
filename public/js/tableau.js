@@ -33,11 +33,15 @@
        var ctx = chartElement.getContext('2d');
        if (!ctx) { console.log("Erreur chargement context " + json_request ); return; }
 
-       if (tableau.periode=="HOUR") dates = Response.valeurs.map( function(item) { return item.date.split(' ')[1]; } );
-                               else dates = Response.valeurs.map( function(item) { return item.date; } );
-       var data = { labels: dates,
-                    datasets: [],
-                  }
+       if (tableau.periode=="BY_MINUTE" || tableau.periode=="BY_HOUR" )
+            { dates = Response.valeurs.map( function(item) { return item.date.slice (0, -3); } ); }
+       else if (tableau.periode=="BY_DAY" || tableau.periode=="BY_WEEK" )
+            { dates = Response.valeurs.map( function(item) { return item.date.substring (0, 10); } ); }
+       else if (tableau.periode=="BY_MONTH" )
+            { dates = Response.valeurs.map( function(item) { return item.date.slice (0, 7); } ); }
+       else { dates = Response.valeurs.map( function(item) { return item.date; } ); }
+
+       var data = { labels: dates, datasets: [] };
        for (i=0; i<tableau_map.length; i++)
         { data.datasets.push ( { label: Response["courbe"+(i+1)].libelle+ " ("+Response["courbe"+(i+1)].unite+")",
                                  borderColor: tableau_map[i].color,
@@ -47,7 +51,7 @@
                                  tension: "0.1",
                                  radius: "1",
                                  data: Response.valeurs.map( function(item)
-                                  { return( (tableau_map[i].multi*item["moyenne"+(i+1)]) + tableau_map[i].offset);
+                                  { return( (tableau_map[i].multi*item["valeur"+(i+1)]) + tableau_map[i].offset);
                                   }),
                                });
         }
@@ -75,6 +79,8 @@
   { console.debug(tableau);
     var idTableau = "idTableau-"+tableau.tableau_id;
 
+    Charts[idTableau] = new Object ();
+
     $("#"+idDest).append( $("<div></div>").addClass("col").attr("id", idTableau+"-div")
                           .append ( $("<div></div").addClass("d-flex align-items-center")
                                     .append ( $("<h2></h2>").addClass("flex-grow-1 text-white text-center").append (tableau.titre)
@@ -83,25 +89,15 @@
                                               .append ( $("<i></i>").addClass("fas fa-clock text-primary mr-2" ) )
                                               .append ( $( "<select></select" )
                                                         .attr("id", idTableau+"-select")
-                                                        .addClass("custom-select")
-                                                        .append ( $("<option></option>").attr("value", "HOUR").append("Heure") )
-                                                        .append ( $("<option></option>").attr("value", "DAY").append("Jour") )
-                                                        .append ( $("<option></option>").attr("value", "WEEK").append("Semaine") )
-                                                        .append ( $("<option></option>").attr("value", "MONTH").append("Mois") )
-                                                        .append ( $("<option></option>").attr("value", "YEAR").append("Année") )
-                                                        .append ( $("<option></option>").attr("value", "ALL").append("Tout") )
                                                       )
                                             )
                                   )
                           .append( $("<canvas></canvas>").attr("id", idTableau).addClass("wtd-courbe") )
                         );
-    Charts[idTableau] = new Object ();
-    Charts[idTableau].periode = tableau.periode;
-    $("#"+idTableau+"-select").val ( Charts[idTableau].periode );
-
+    $('#'+idTableau+"-select").replaceWith ( Select ( idTableau+"-select", null, PeriodeTableau, tableau.periode ) );
     $("#"+idTableau+"-select").off("change").on("change", function ()
      { tableau.periode = $("#"+idTableau+"-select").val()
-       console.log("Change period for "+idTableau+" to " + Charts[idTableau].periode);
+       console.log("Change period for "+idTableau+" to " + tableau.periode);
        Update_tableau_by_courbe ( idDest, tableau, tableau_map )
      });
 

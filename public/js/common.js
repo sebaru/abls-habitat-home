@@ -7,12 +7,11 @@
  document.addEventListener('DOMContentLoaded', init, false);
  window.addEventListener("beforeunload", function () { Closing = true; } );
 
- var PeriodeTableau = [ { valeur : "HOUR",  texte : "Heure" },
-                        { valeur : "DAY",   texte : "Jour" },
-                        { valeur : "WEEK",  texte : "Semaine" },
-                        { valeur : "MONTH", texte : "Mois" },
-                        { valeur : "YEAR",  texte : "Année" },
-                        { valeur : "ALL",   texte : "Tout" },
+ var PeriodeTableau = [ { valeur : "BY_MINUTE", texte : "Par minute" },
+                        { valeur : "BY_HOUR",   texte : "Par heure" },
+                        { valeur : "BY_DAY",    texte : "Par jour" },
+                        { valeur : "BY_WEEK",   texte : "Par semaine" },
+                        { valeur : "BY_MONTH",  texte : "Par mois" },
                       ];
 /**************************************************** Gère l'ID token *********************************************************/
  function init()
@@ -191,6 +190,33 @@
   }
  function Bouton_actions_end ( )
   { return ("</div>"); }
+
+/********************************************* Barre de boutons déroulant *****************************************************/
+ function Bouton_deroulant_start ( color, texte )
+  { return("<div class='dropdown'>"+
+           "<button type='button' class='btn btn-"+color+" dropdown-toggle' "+
+           "        data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+
+           texte+
+           "</button>"+
+           "<div class='dropdown-menu'> "
+          );
+  }
+
+ function Bouton_deroulant_add ( color, texte, clic_func, key, icone )
+  { result = "<a class='dropdown-item ' href='#' "+
+             (clic_func !== null ? "   onclick="+clic_func+"('"+key+"') " : "")+
+             ">"+
+             (icone!==null ? "<i class='fas fa-"+icone+" text-"+color+"'></i> " : "") +
+             texte +
+             "</a>";
+    return(result);
+  }
+
+ function Bouton_deroulant_add_spacer ( )
+  { return ( "<div class='dropdown-divider'></div>" ); }
+
+ function Bouton_deroulant_end ( )
+  { return ("</div></div>"); }
 
 /********************************************** Bouton unitaire ***************************************************************/
  function Bouton ( color, tooltip, clic_func, key, texte )
