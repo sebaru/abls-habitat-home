@@ -119,7 +119,7 @@
     var colonnes = [];
     colonnes.push ( { "data": "date", "title":"Date", "className": "text-center" } );
     for (var i=0; i<json_request.courbes.length; i++)
-     { colonnes.push ( { "data": "moyenne"+(i+1), "title":"Valeur", "className": "text-center" } ); }
+     { colonnes.push ( { "data": "valeur"+(i+1), "title":"Valeur", "className": "text-center" } ); }
 
 
     $('#'+idTableau).DataTable(
