@@ -112,18 +112,16 @@
 
     var json_request =
      { courbes: tableau_map.map( function (item)
-                                  { return( { tech_id: item.tech_id, acronyme: item.acronyme } ) } ),
+                                  { return( { tech_id: item.tech_id, acronyme: item.acronyme, methode: item.methode } ) } ),
        period : tableau.periode
      };
-
     var colonnes = [];
     colonnes.push ( { "data": "date", "title":"Date", "className": "text-center" } );
     for (var i=0; i<json_request.courbes.length; i++)
      { colonnes.push ( { "data": "valeur"+(i+1), "title":"Valeur", "className": "text-center" } ); }
 
-
     $("#"+idTableau).DataTable(
-       { destroy: true,
+       { destroy: true, pageLength: 15,
          fixedHeader: true, searching: false, lengthChange: false,
          ajax: { url : $ABLS_API+"/archive/get", type : "POST", dataSrc: "valeurs", contentType: "application/json",
                  data: function () { return (JSON.stringify(json_request)); },

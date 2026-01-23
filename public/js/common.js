@@ -12,6 +12,7 @@
                         { valeur : "BY_DAY",    texte : "Par jour" },
                         { valeur : "BY_WEEK",   texte : "Par semaine" },
                         { valeur : "BY_MONTH",  texte : "Par mois" },
+                        { valeur : "BY_YEAR" ,  texte : "Par an" },
                       ];
 /**************************************************** Gère l'ID token *********************************************************/
  function init()
