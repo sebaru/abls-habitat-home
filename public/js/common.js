@@ -365,7 +365,7 @@
   { var chartElement = document.getElementById(idChart);
     if (!chartElement) { console.log("Charger_une_courbe: Erreur chargement chartElement " + json_request ); return; }
 
-    if (period===undefined) period="HOUR";
+    if (period===undefined) period="BY_HOUR";
     var json_request =
      { courbes: [ { tech_id : tech_id, acronyme : acronyme, } ],
        period   : period,
@@ -373,10 +373,8 @@
      };
 
     Send_to_API ( "POST", "/archive/get", json_request, function(json)
-     { var dates;
-       if (period=="HOUR") dates = json.valeurs.map( function(item) { return item.date.split(' ')[1]; } );
-                      else dates = json.valeurs.map( function(item) { return item.date; } );
-       var valeurs = json.valeurs.map( function(item) { return item.moyenne1; } );
+     { var dates = dates = json.valeurs.map( function(item) { return item.date; } );
+       var valeurs = json.valeurs.map( function(item) { return item.valeur1; } );
        var data = { labels: dates,
                     datasets: [ { label: json.courbe1.libelle+ " ("+json.courbe1.unite+")",
                                   borderColor: "rgba(0, 100, 255, 1.0)",

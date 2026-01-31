@@ -12,7 +12,7 @@
        return;
      }
 
-    if (tableau.periode == "HOUR")
+    if (tableau.periode == "BY_HOUR")
      { Charts[idTableau].timeout = setTimeout ( function()                                                   /* Update graphe */
         { Update_tableau_by_courbe ( idDest, tableau, tableau_map ); }, 60000 );
      }
@@ -29,17 +29,10 @@
      };
 
     Send_to_API ( "POST", "/archive/get", json_request, function(Response)
-     { var dates;
-       var ctx = chartElement.getContext('2d');
+     { var ctx = chartElement.getContext('2d');
        if (!ctx) { console.log("Erreur chargement context " + json_request ); return; }
 
-       if (tableau.periode=="BY_MINUTE" || tableau.periode=="BY_HOUR" )
-            { dates = Response.valeurs.map( function(item) { return item.date.slice (0, -3); } ); }
-       else if (tableau.periode=="BY_DAY" || tableau.periode=="BY_WEEK" )
-            { dates = Response.valeurs.map( function(item) { return item.date.substring (0, 10); } ); }
-       else if (tableau.periode=="BY_MONTH" )
-            { dates = Response.valeurs.map( function(item) { return item.date.slice (0, 7); } ); }
-       else { dates = Response.valeurs.map( function(item) { return item.date; } ); }
+       var dates = Response.valeurs.map( function(item) { return item.date; } );
 
        var data = { labels: dates, datasets: [] };
        for (i=0; i<tableau_map.length; i++)
