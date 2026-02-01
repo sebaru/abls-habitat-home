@@ -3,7 +3,8 @@
 /* Appelé au chargement de la page                                                                                            */
 /******************************************************************************************************************************/
  function Load_page_message ()
-  { $('#idTableMessages').DataTable(
+  { Load_mqtt( null );
+    $('#idTableMessages').DataTable(
      { pageLength : 50,
        fixedHeader: true, paging: false, ordering: true, searching: true,
        ajax: { url : $ABLS_API+"/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
@@ -11,8 +12,9 @@
                beforeSend: function (request)
                             { request.setRequestHeader('Authorization', 'Bearer ' + Token);
                               request.setRequestHeader('X-ABLS-DOMAIN', localStorage.getItem('domain_uuid') );
-                            }
+                            },
              },
+       initComplete: function () { Mqtt_subscribe ( "DLS_HISTO/#" ); },
        rowId: "histo_msg_id",
        createdRow: function( row, item, dataIndex )
            { $(row).css("cursor", "pointer");
@@ -55,7 +57,6 @@
           order: [ [1, "desc"] ],
           responsive: false,
      });
-    Load_mqtt( null );
   }
 /******************************************************************************************************************************/
 /* Load_page: Appelé au chargement de la page                                                                                 */
