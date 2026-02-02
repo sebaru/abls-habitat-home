@@ -130,8 +130,12 @@
                  Changer_img_src ( "idNavImgTopSyn", Response.image, false );
                  $("#idNavImgTopSyn").on("click", function () { Charger_un_synoptique(null); } );
                }, null);
-        }
 
+          if (Response.access_level>=6) $("#idHrefConsole").removeClass("d-none").attr("href", Response.console_url );
+          $("#idHrefHome").attr("href", Response.home_url );
+          $("#idHrefProfil").attr("href", Response.console_url+"/user/me" );
+          $("#idHrefAccount").attr("href", Response.idp_url+"/realms/"+Response.idp_realm+"/account/" );
+        }
 
        if (Response.default_domain_uuid == null && window.location.pathname !== "/domains") { Redirect("/domains"); return; }
 
