@@ -79,6 +79,7 @@
                                     .append ( $("<h2></h2>").addClass("flex-grow-1 text-white text-center").append (tableau.titre)
                                             )
                                     .append ( $("<div></div>").addClass(" w-auto btn-group align-items-center")
+                                              .attr("id", idTableau+"-div-select")
                                               .append ( $("<i></i>").addClass("fas fa-clock text-primary mr-2" ) )
                                               .append ( $( "<select></select" )
                                                         .attr("id", idTableau+"-select")
@@ -87,12 +88,14 @@
                                   )
                           .append( $("<canvas></canvas>").attr("id", idTableau).addClass("wtd-courbe") )
                         );
-    $("#"+idTableau+"-select").replaceWith ( Select ( idTableau+"-select", null, PeriodeTableau, tableau.periode ) );
-    $("#"+idTableau+"-select").off("change").on("change", function ()
-     { tableau.periode = $("#"+idTableau+"-select").val()
-       console.log("Change period for "+idTableau+" to " + tableau.periode);
-       Update_tableau_by_courbe ( idDest, tableau, tableau_map )
-     });
+    if (tableau.period_lock == false)
+     { $("#"+idTableau+"-select").replaceWith ( Select ( idTableau+"-select", null, PeriodeTableau, tableau.periode ) );
+       $("#"+idTableau+"-select").off("change").on("change", function ()
+        { tableau.periode = $("#"+idTableau+"-select").val()
+          console.log("Change period for "+idTableau+" to " + tableau.periode);
+          Update_tableau_by_courbe ( idDest, tableau, tableau_map )
+        });
+     } else $("#"+idTableau+"-div-select").hide();
 
     var chartElement = document.getElementById(idTableau);                                          /* On récupère le tableau */
     if (!chartElement) { console.log("Erreur chargement chartElement " + idTableau ); return; }
@@ -141,6 +144,7 @@
                                        .append ( $("<h2></h2>").addClass("flex-grow-1 text-white text-center").append (tableau.titre)
                                                )
                                        .append ( $("<div></div>").addClass(" w-auto btn-group align-items-center")
+                                                 .attr("id", idTableau+"-div-select")
                                                  .append ( $("<i></i>").addClass("fas fa-clock text-primary mr-2" ) )
                                                  .append ( $( "<select></select" )
                                                            .attr("id", idTableau+"-select")
@@ -150,12 +154,15 @@
                              .append( $("<table></table>").attr("id", idTableau).addClass("table table-dark") )
                            );
      }
-    $("#"+idTableau+"-select").replaceWith ( Select ( idTableau+"-select", null, PeriodeTableau, tableau.periode ) );
-    $("#"+idTableau+"-select").off("change").on("change", function ()
-     { tableau.periode = $("#"+idTableau+"-select").val()
-       console.log("Change period for "+idTableau+" to " + tableau.periode);
-       Update_tableau_by_valeur ( idDest, tableau, tableau_map );
-     });
+
+    if (tableau.period_lock == false)
+     { $("#"+idTableau+"-select").replaceWith ( Select ( idTableau+"-select", null, PeriodeTableau, tableau.periode ) );
+       $("#"+idTableau+"-select").off("change").on("change", function ()
+        { tableau.periode = $("#"+idTableau+"-select").val()
+          console.log("Change period for "+idTableau+" to " + tableau.periode);
+          Update_tableau_by_valeur ( idDest, tableau, tableau_map );
+        });
+     } else $("#"+idTableau+"-div-select").hide();
 
     Update_tableau_by_valeur ( idDest, tableau, tableau_map );
   }
