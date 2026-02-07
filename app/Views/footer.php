@@ -16,7 +16,7 @@
 
 </footer>
 
-    <script type="text/javascript" src="https://idp.abls-habitat.fr/js/keycloak.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/keycloak-js/dist/keycloak.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="/js/tableau.js"></script>
     <script type="text/javascript" src="/js/passerelles.js"></script>
     <script type="text/javascript" src="/js/common_home.js"></script>

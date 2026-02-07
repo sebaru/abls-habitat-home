@@ -16,8 +16,7 @@
                       ];
 /**************************************************** Gère l'ID token *********************************************************/
  function init()
-  { let keycloak = new Keycloak( { "realm": $IDP_REALM, "auth-server-url": $IDP_URL, "clientId": $IDP_CLIENT_ID,
-                                   "ssl-required": "external", "public-client": true, "confidential-port": 0 } );
+  { let keycloak = new Keycloak( { "realm": $IDP_REALM, "url": $IDP_URL, "clientId": $IDP_CLIENT_ID } );
 
     keycloak.init( { onLoad: "login-required" } )
             .then((auth) =>
@@ -134,7 +133,7 @@
           if (Response.access_level>=6) $("#idHrefConsole").removeClass("d-none").attr("href", Response.console_url );
           $("#idHrefHome").attr("href", Response.home_url );
           $("#idHrefProfil").attr("href", Response.console_url+"/user/me" );
-          $("#idHrefAccount").attr("href", Response.idp_url+"/realms/"+Response.idp_realm+"/account/" );
+          $("#idHrefVueCliente").attr("href", Response.home_url );
         }
 
        if (Response.default_domain_uuid == null && window.location.pathname !== "/domains") { Redirect("/domains"); return; }
@@ -148,6 +147,7 @@
     else if (TokenParsed.given_name !== null )         $("#idUsername").text(TokenParsed.given_name);
     else if (TokenParsed.email !== null )              $("#idUsername").text(TokenParsed.email);
     else $("#idUsername").text("Unknown");
+    $("#idHrefAccount").attr("href", TokenParsed.iss+"/account/" );
 
     $("body").hide().removeClass("d-none").fadeIn();
   }
