@@ -7,12 +7,14 @@
  document.addEventListener('DOMContentLoaded', init, false);
  window.addEventListener("beforeunload", function () { Closing = true; } );
 
- var PeriodeTableau = [ { valeur : "BY_MINUTE", texte : "Par minute" },
-                        { valeur : "BY_HOUR",   texte : "Par heure" },
-                        { valeur : "BY_DAY",    texte : "Par jour" },
-                        { valeur : "BY_WEEK",   texte : "Par semaine" },
-                        { valeur : "BY_MONTH",  texte : "Par mois" },
-                        { valeur : "BY_YEAR" ,  texte : "Par an" },
+ var PeriodeTableau = [ { valeur : "BY_MINUTE",   texte : "Par minute" },
+                        { valeur : "BY_10_MINUTE", texte : "Par 10 minutes" },
+                        { valeur : "BY_30_MINUTE", texte : "Par 30 minutes" },
+                        { valeur : "BY_HOUR",      texte : "Par heure" },
+                        { valeur : "BY_DAY",       texte : "Par jour" },
+                        { valeur : "BY_WEEK",      texte : "Par semaine" },
+                        { valeur : "BY_MONTH",     texte : "Par mois" },
+                        { valeur : "BY_YEAR" ,     texte : "Par an" },
                       ];
 /**************************************************** Gère l'ID token *********************************************************/
  function init()
