@@ -2,8 +2,10 @@
 /* Changer_etat_cadran: Appeler par la websocket pour changer un visuel d'un cadran                                           */
 /******************************************************************************************************************************/
  function Changer_etat_cadran ( visuel, etat )
-  { visuel.valeur = etat.valeur;
-    console.log("Changer_etat_cadran valeur="+etat.valeur+ " unite " + visuel.unite + " mode: " + visuel.mode +
+  { visuel.valeur     = etat.valeur;
+    visuel.unite      = etat.unite;
+    visuel.nb_decimal = etat.nb_decimal;
+    console.log("Changer_etat_cadran valeur="+visuel.valeur+ " unite " + visuel.unite + " mode: " + visuel.mode +
                 " nb_decimal " + visuel.nb_decimal +" minimim="+visuel.minimum+" maximum="+visuel.maximum +
                 " ntb="+visuel.seuil_ntb+" nb="+visuel.seuil_nb+" nh="+visuel.seuil_nh+" nth="+visuel.seuil_nth);
 

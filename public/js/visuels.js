@@ -120,8 +120,8 @@ console.debug ( Response );
     if (visuels.length!=1) return;
     visuel = visuels[0];
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
-console.log("Changer_etat_visuel " + visuel.controle + " " + visuel.tech_id + ":" + visuel.acronyme +
-            " valeur=" + etat.valeur + " unite=" + visuel.unite + " decimal=" + visuel.nb_decimal + " badge="+etat.badge );
+console.log("Changer_etat_visuel " + visuel.controle + " " + etat.tech_id + ":" + etat.acronyme +
+            " valeur=" + etat.valeur + " unite=" + etat.unite + " decimal=" + etat.nb_decimal + " badge="+etat.badge );
 
     if (Synoptique.mode_affichage == false) /* Affichage léger */
      { if (visuel.forme == "cadran")
