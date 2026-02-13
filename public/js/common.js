@@ -7,15 +7,15 @@
  document.addEventListener('DOMContentLoaded', init, false);
  window.addEventListener("beforeunload", function () { Closing = true; } );
 
- var PeriodeTableau = [ { valeur : "BY_MINUTE_ON_2_HOURS",   texte : "Minute sur 2 heures" },
-                        { valeur : "BY_10_MINUTE_ON_3_DAYS", texte : "Minute sur 3 jours" },
-                        { valeur : "BY_30_MINUTE_ON_1_WEEK", texte : "Minute sur 1 semaine" },
-                        { valeur : "BY_HOUR_ON_2_DAYS",      texte : "Heure sur 2 jours" },
-                        { valeur : "BY_HOUR_ON_2_WEEK",      texte : "Heure sur 2 semaines" },
-                        { valeur : "BY_DAY_ON_2_MONTHS",     texte : "Jour sur 2 mois" },
-                        { valeur : "BY_WEEK_ON_4_MONTHS",    texte : "Semaine sur 4 mois" },
-                        { valeur : "BY_MONTH_ON_12_MONTHS",  texte : "Mois sur 1 an" },
-                        { valeur : "BY_YEAR_ON_2_YEARS" ,    texte : "Année sur 2 ans" },
+ var PeriodeTableau = [ { valeur : "BY_MINUTE_ON_2_HOURS",    texte : "Minute sur 2 heures" },
+                        { valeur : "BY_10_MINUTE_ON_3_DAYS",  texte : "10 Minutes sur 3 jours" },
+                        { valeur : "BY_30_MINUTE_ON_1_WEEKS", texte : "30 Minutes sur 1 semaine" },
+                        { valeur : "BY_HOUR_ON_2_DAYS",       texte : "Heure sur 2 jours" },
+                        { valeur : "BY_HOUR_ON_2_WEEKS",      texte : "Heure sur 2 semaines" },
+                        { valeur : "BY_DAY_ON_2_MONTHS",      texte : "Jour sur 2 mois" },
+                        { valeur : "BY_WEEK_ON_4_MONTHS",     texte : "Semaine sur 4 mois" },
+                        { valeur : "BY_MONTH_ON_12_MONTHS",   texte : "Mois sur 1 an" },
+                        { valeur : "BY_YEAR_ON_2_YEARS" ,     texte : "Année sur 2 ans" },
                       ];
 /**************************************************** Gère l'ID token *********************************************************/
  function init()
