@@ -1,8 +1,9 @@
 
  var Charts = new Array();
- var Token       = null;
- var TokenParsed = null;
- var Closing     = false;
+ var Token        = null;
+ var RefreshToken = null;
+ var TokenParsed  = null;
+ var Closing      = false;
 
  document.addEventListener('DOMContentLoaded', init, false);
  window.addEventListener("beforeunload", function () { Closing = true; } );
@@ -20,7 +21,9 @@
                       ];
 /**************************************************** Gère l'ID token *********************************************************/
  function init()
-  { let keycloak = new Keycloak( { "realm": $IDP_REALM, "url": $IDP_URL, "clientId": $IDP_CLIENT_ID } );
+  { let keycloak = new Keycloak( { "realm": $IDP_REALM, "url": $IDP_URL, "clientId": $IDP_CLIENT_ID,
+                                   "scope": "openid email offline_access phone"
+                                 } );
 
     keycloak.init( { onLoad: "login-required" } )
             .then((auth) =>
@@ -33,9 +36,10 @@
              });
 
     keycloak.onAuthSuccess  = function() { console.log('authenticated');
-                                           TokenParsed = keycloak.tokenParsed;
-                                           Token       = keycloak.token;
-                                           console.debug (TokenParsed); console.debug (Token);
+                                           TokenParsed  = keycloak.tokenParsed;
+                                           Token        = keycloak.token;
+                                           RefreshToken = keycloak.refreshToken;
+                                           console.debug (TokenParsed); console.debug (Token); console.debug (RefreshToken);
                                            Load_common();
                                          }
     keycloak.onAuthLogout   = function() { console.log('logout'); }
@@ -49,6 +53,7 @@
         { if (refreshed) { console.log('Token refreshed' + refreshed);
                            TokenParsed = keycloak.tokenParsed;
                            Token       = keycloak.token;
+                           RefreshToken = keycloak.refreshToken;
                          }
           else
            { console.log ('Token not refreshed, valid for '
