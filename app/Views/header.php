@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-bs-theme="dark">
     <head>
         <meta charset="utf-8">
         <title>Chez moi</title>
@@ -11,8 +11,6 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"/>
         <style>
-        :root { color-scheme: dark; }
-
         body { background-image: url('https://static.abls-habitat.fr/img/fond_home.jpg');
                background-position: center;
                background-size: cover;
@@ -231,6 +229,31 @@
   </div>
 </div>
 
+<div id="idModalInviter" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title"><i class="fas fa-user-friends"></i> Inviter un ami sur le domaine</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <span class="input-group-text">@</span>
+          <input id="idUserInviteEmail" type="email" class="form-control" placeholder="Adresse email de l'invité">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text"><i class="fas fa-star text-primary"></i></span>
+          <select id="idUserInviteAccessLevel" class="form-select"></select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> Annuler</button>
+        <button id="idUserInviteValider" type="button" class="btn btn-primary"><i class="fas fa-user-friends"></i> Inviter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="idModalError" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -278,9 +301,11 @@
           <a class="dropdown-item" href="/messages"> <i class="fas fa-book text-primary"></i> Fil de l'eau</a>
           <a class="dropdown-item" href="/historique"> <i class="fas fa-history text-primary"></i> Historique</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item d-none" href="#" id="idHrefConsole"><i class="fas fa-server text-primary"></i> Console</a>
           <a class="dropdown-item" href="#" id="idHrefProfil"><i class="fas fa-user text-info"></i> Mon Profil</a>
           <a class="dropdown-item" href="#" id="idHrefAccount"><i class="fas fa-user text-info"></i> Mon Compte</a>
+          <a class="dropdown-item" href="#" onclick="Inviter_open()"><i class="fas fa-user-friends text-info"></i> Inviter</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item d-none" href="#" id="idHrefConsole"><i class="fas fa-server text-primary"></i> Console</a>
           <a class="dropdown-item" href="#" onclick="Logout()"><i class="fas fa-sign-out-alt text-danger"></i> <span>Sortir</span> </a>
         </div>
       </li>
