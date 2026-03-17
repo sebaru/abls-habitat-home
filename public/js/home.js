@@ -71,7 +71,7 @@
 /*---------------------------------------------------- Affichage lourd -------------------------------------------------------*/
        idSectionHeavySyn.empty().css("position","relative");
        $("#idSectionHeavySynTitle").empty();
-       if (Synoptique.mode_affichage == true && (Synoptique.nbr_visuels > 0 || Synoptique.nbr_cadrans > 0) )
+       if (Synoptique.mode_affichage == true && (Synoptique.nbr_visuels > 0) )
         { Trame = Trame_new ("idSectionHeavySyn");
           Trame.on( "dblclick", function ()
            { if (!document.fullscreenElement) document.getElementById("idSectionHeavySyn").requestFullscreen();
@@ -115,14 +115,6 @@
                        { visuel.svggroupe.on ( "click", function (event) { Clic_sur_visuel ( event, visuel ) }, false );
                          visuel.svggroupe.add("<title>"+htmlEncode(visuel.libelle)+"</title>");
                        }
-                    }
-                 );
-          $.each ( Synoptique.cadrans, function (i, cadran)
-                    { Trame.new_cadran ( cadran );
-                      cadran.svggroupe.add("<title>"+htmlEncode(cadran.libelle)+"</title>");
-                      /*if (cadran.svggroupe !== undefined)
-                       { cadran.svggroupe.on ( "click", function (event) { Clic_sur_motif ( cadran, event ) }, false);
-                       }*/
                     }
                  );
         }

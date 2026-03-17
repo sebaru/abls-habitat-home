@@ -254,6 +254,25 @@
   </div>
 </div>
 
+<div id="idModalCadran" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-edit"></i> Modifier la valeur</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label for="idModalCadranValeur" class="form-label">Quelle est la nouvelle valeur ?</label>
+        <input id="idModalCadranValeur" type="number" class="form-control" step="any">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> Annuler</button>
+        <button id="idModalCadranValider" type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="fas fa-check"></i> Valider</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="idModalError" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
