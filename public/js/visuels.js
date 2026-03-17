@@ -78,17 +78,33 @@
                              .addClass("wtd-vignette wtd-img-superpose-haut-droite").slideUp() );
 
     contenu.click( function (event) { Clic_sur_visuel ( event, Response ); } );
+    contenu.on("contextmenu", function(event) { event.preventDefault(); })       /* Bloque le menu contextuel natif Android */
     contenu.on("touchstart mousedown", function(event)                           /* Démarre un timer lors du début de l'appui */
-             { Response.clic_timer = setTimeout(function()
+             { event.preventDefault();
+               var touch = event.touches ? event.touches[0] : event;
+               Response.clic_start_x = touch.clientX;
+               Response.clic_start_y = touch.clientY;
+               Response.clic_timer = setTimeout(function()
                 { Response.clic_inhib = true;                                                    /* Interdit le prochain clic */
                   Long_Clic_sur_visuel(event, Response);                                               /* Fonction à exécuter */
                   clearTimeout(Response.clic_timer);
                 }, 2000);
              })
-           .on("touchend mouseup touchmove mousemove", function(event)/* Annule le timer si l'appui est relâché avant la fin du délai */
+           .on("touchend mouseup touchcancel", function(event)         /* Annule le timer si l'appui est relâché avant la fin du délai */
             { if (Response.clic_timer)
                { clearTimeout(Response.clic_timer);
                  Response.clic_timer = null;
+               }
+            })
+           .on("touchmove mousemove", function(event)                  /* Annule le timer si l'utilisateur glisse le doigt */
+            { if (Response.clic_timer)
+               { var touch = event.touches ? event.touches[0] : event;
+                 var dx = touch.clientX - Response.clic_start_x;
+                 var dy = touch.clientY - Response.clic_start_y;
+                 if (Math.sqrt(dx*dx + dy*dy) > 10)
+                  { clearTimeout(Response.clic_timer);
+                    Response.clic_timer = null;
+                  }
                }
             });
 
