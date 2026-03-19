@@ -88,12 +88,13 @@
                 { Response.clic_inhib = true;                                                    /* Interdit le prochain clic */
                   Long_Clic_sur_visuel(event, Response);                                               /* Fonction à exécuter */
                   clearTimeout(Response.clic_timer);
-                }, 2000);
+                }, 1000);
              })
            .on("touchend mouseup touchcancel", function(event)         /* Annule le timer si l'appui est relâché avant la fin du délai */
             { if (Response.clic_timer)
                { clearTimeout(Response.clic_timer);
                  Response.clic_timer = null;
+                 if (event.type === "touchend") { Clic_sur_visuel(event, Response); }   /* Sur mobile, click synthétique jamais déclenché après preventDefault */
                }
             })
            .on("touchmove mousemove", function(event)                  /* Annule le timer si l'utilisateur glisse le doigt */
