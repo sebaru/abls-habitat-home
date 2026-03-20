@@ -7,8 +7,7 @@
   }
 /********************************************* Appelé au chargement de la page ************************************************/
  function Charger_un_synoptique ( syn_page )
-  { var idSectionPasserelles = $('#idSectionPasserelles');
-    var idSectionLightSyn    = $('#idSectionLightSyn');
+  { var idSectionPasserelles = $('#idSectionPasserelles');    var idSectionCameras     = $('#idSectionCameras');    var idSectionLightSyn    = $('#idSectionLightSyn');
     var idSectionHeavySyn    = $('#idSectionHeavySyn');
     var idSectionTableaux    = $('#idSectionTableaux');
     var idSectionTableauxFS  = $('#idSectionTableauxFS');
@@ -56,6 +55,12 @@
        /*Set_syn_vars ( Synoptique.id, Synoptique.syn_vars.filter ( function(ssitem) { return ssitem.id==Response.id } )[0] );*/
        $.each ( Synoptique.horloges, function (i, horloge)
                  { idSectionPasserelles.append ( Creer_horloge ( horloge ) ); }
+              );
+
+/*---------------------------------------------------- Caméras ---------------------------------------------------------------*/
+       idSectionCameras.empty();
+       $.each ( Synoptique.cameras, function (i, camera)
+                 { idSectionCameras.append ( Creer_camera ( camera ) ); }
               );
 
 /*---------------------------------------------------- Affichage léger -------------------------------------------------------*/

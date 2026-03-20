@@ -154,6 +154,13 @@
 
         .wtd-img-card { object-fit: contain; height: 196px; max-width: 196px; padding: 10px; }
 
+        .wtd-camera { width: 100%;
+                      max-width: 320px;
+                      height: auto;
+                      border-radius: 8px;
+                      border: 2px solid rgba(255,255,255,0.2);
+                    }
+
         input:focus { outline: 0 0 0 0  !important;
                       box-shadow: 0 0 0 0 !important;
                     }

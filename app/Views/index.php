@@ -8,6 +8,8 @@
 
 <section id='idSectionPasserelles'   class='row row-cols-2 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 row-cols-xl-6 justify-content-center'>
 </section>
+<section id='idSectionCameras'       class='row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 justify-content-center'>
+</section>
 <section id='idSectionLightSyn'      class='row row-cols-2 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 row-cols-xl-6 justify-content-center'>
 </section>
 <section id='idSectionHeavySynTitle' class='row mx-1'>
@@ -40,3 +42,4 @@
 <script src="/js/index.js" type="text/javascript"></script>
 <script src="/js/home.js" type="text/javascript"></script>
 <script src="/js/horloge.js" type="text/javascript"></script>
+<script src="/js/camera.js" type="text/javascript"></script>
