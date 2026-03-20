@@ -39,13 +39,13 @@
 
         .wtd-noshow { animation-duration: 0.3s;
                       animation-name: wtdNoShowFrames;
-                      animation-iteration-count: infinite;
-                      animation-fill-mode: backwards;
+                      animation-iteration-count: 1;
+                      animation-fill-mode: forwards;
                       transition: none;
                     }
         @keyframes wtdNoShowFrames
-         {   0% { visibility: visibility; opacity: 1; }
-           100% { visibility: hidden;     opacity: 0; }
+         {   0% { opacity: 1; }
+           100% { opacity: 0; }
          }
 
         .card { color: white; }

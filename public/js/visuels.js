@@ -138,7 +138,8 @@ console.debug ( Response );
     visuel = visuels[0];
 /*-------------------------------------------------- Visuel mode inline ------------------------------------------------------*/
 console.log("Changer_etat_visuel " + visuel.controle + " " + etat.tech_id + ":" + etat.acronyme +
-            " valeur=" + etat.valeur + " unite=" + etat.unite + " decimal=" + etat.nb_decimal + " badge="+etat.badge );
+            " valeur=" + etat.valeur + " unite=" + etat.unite + " decimal=" + etat.nb_decimal + " badge="+etat.badge +
+            "noshow=" + etat.noshow + " cligno=" + etat.cligno + " disable=" + etat.disable );
 
     if (Synoptique.mode_affichage == false) /* Affichage léger */
      { if (visuel.forme == "cadran")
@@ -151,6 +152,9 @@ console.log("Changer_etat_visuel " + visuel.controle + " " + etat.tech_id + ":" 
         { Changer_etat_visuel_by_color ( visuel, etat );   }
        else if (visuel.controle=="by_mode_color")
         { Changer_etat_visuel_by_mode_color ( visuel, etat );   }
+
+       if (etat.noshow) $("#wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme).addClass("wtd-noshow");
+                   else $("#wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme).removeClass("wtd-noshow");
 
        if (etat.badge === undefined || etat.badge == "none")
         { Changer_img_src ( "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme+"-HD", null, false ); }
