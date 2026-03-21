@@ -31,7 +31,7 @@
 /*------------------------------------------------------------ Barre de navigation -------------------------------------------*/
        $('#idNavSynoptique')
         .empty()
-        .prepend( "<a class='nav-link rounded d-none d-sm-inline' href='#'> <span>"+Synoptique.libelle+"</span></a>" );
+        .prepend( "<a class='nav-link rounded d-none d-md-inline' href='#'> <span>"+Synoptique.libelle+"</span></a>" );
        $.each ( Response.parent_syns, function (i, syn)
                  { var bread = $('<a>').addClass('nav-item')
                                 .append($('<img>').attr("src", localStorage.getItem("static_data_url")+"/img/"+syn.image)
