@@ -133,6 +133,8 @@
           $("#idNavDomainName").text( localStorage.getItem("domain_name") );
           if (Response.domain_notification.length) $("#idDomainNotification").text( Response.domain_notification ).show();
                                               else $("#idDomainNotification").hide();
+          if (Response.domain_notification_warning.length) $("#idDomainNotificationWarning").text( Response.domain_notification_warning ).show();
+                                                      else $("#idDomainNotificationWarning").hide();
           Send_to_API ( 'GET', "/domain/image", null, function (Response)
                { if (Response.image == null) Response.image = "https://static.abls-habitat.fr/img/syn_maison.png";
                  Changer_img_src ( "idNavImgTopSyn", Response.image, false );
