@@ -19,14 +19,12 @@
 
 <hr>
 
-   <div class="table-responsive">
      <table id="idTableHISTOS" class='table table-dark table-bordered w-100'>
        <thead class="table-dark">
        </thead>
        <tbody>
        </tbody>
      </table>
-   </div>
 
 <!-- Container -->
 </div>

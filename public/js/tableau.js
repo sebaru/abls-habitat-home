@@ -138,7 +138,7 @@
   { var idTableau = "idTableau-"+tableau.tableau_id;
     var tableElement = document.getElementById(idTableau);                 /* Tableau existant ? Sinon on l'ajoute à l'idDest */
     if (!tableElement)
-     { $("#"+idDest).append( $("<div></div>").addClass("col table-responsive").attr("id", idTableau+"-div")
+     { $("#"+idDest).append( $("<div></div>").addClass("col").attr("id", idTableau+"-div")
                              .append ( $("<div></div").addClass("d-flex align-items-center")
                                        .append ( $("<h2></h2>").addClass("flex-grow-1 text-white text-center").append (tableau.titre)
                                                )

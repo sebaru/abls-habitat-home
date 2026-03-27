@@ -6,14 +6,12 @@
 
 <hr>
 
-   <div class="table-responsive">
      <table id="idTableMessages" class='table w-100'>
        <thead class="table-dark">
        </thead>
        <tbody>
        </tbody>
      </table>
-   </div>
 
 <!-- Container -->
 </div>
