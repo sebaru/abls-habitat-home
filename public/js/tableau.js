@@ -130,7 +130,6 @@
          /*rowId: "tableau_id",*/
          columns: colonnes,
          /*order: [ [0, "desc"] ],*/
-         responsive: true,
        }
      );
   }

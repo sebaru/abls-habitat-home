@@ -172,7 +172,6 @@
                 },
               ],
              order: [ [1, "desc"] ],
-             responsive: false,
         });
 /*---------------------------------------------------- Affichage des tableaux ------------------------------------------------*/
        idSectionTableaux.empty();
