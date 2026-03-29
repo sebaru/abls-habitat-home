@@ -58,6 +58,7 @@
               );
 
 /*---------------------------------------------------- Caméras ---------------------------------------------------------------*/
+       if (typeof Arreter_toutes_cameras === "function") Arreter_toutes_cameras();
        idSectionCameras.empty();
        $.each ( Synoptique.cameras, function (i, camera)
                  { idSectionCameras.append ( Creer_camera ( camera ) ); }
