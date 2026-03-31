@@ -72,7 +72,12 @@ function Creer_camera ( Response )
     { var videoEl = document.getElementById(element_id);
       if (!videoEl) return;
       if (typeof Hls !== 'undefined' && Hls.isSupported())
-       { var hls = new Hls();
+       { var hls = new Hls(
+          { xhrSetup: function(xhr)
+             { if (typeof Token !== 'undefined' && Token)
+                { xhr.setRequestHeader("Authorization", "Bearer " + Token); }
+             }
+          });
          hls.loadSource(url);
          hls.attachMedia(videoEl);
          videoEl.hlsInstance = hls;
