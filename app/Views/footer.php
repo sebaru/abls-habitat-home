@@ -23,6 +23,7 @@
     <script type="text/javascript" src="/js/common.js"></script>
     <script type="text/javascript" src="/js/trame.js"></script>
     <script type="text/javascript" src="https://kit.fontawesome.com/1ca1f7ba56.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/hls.js@latest" ></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.1.2/svg.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.10.4/mqtt.min.js" integrity="sha512-U6juml/sd5ivQOO5Nmd3IB8DUgRYRJ3whk/+oxaOJHyA9WtXXl3p42YoevQ7/PnuZR1Oir607H3A/+AjQ/gWug==" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous"></script>

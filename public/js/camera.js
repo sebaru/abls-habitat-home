@@ -26,8 +26,15 @@
  */
 /*----------------------------------------------------------------------------------------------------------------------------*/
 function Camera_fermer_flux ( camera_id )
- { var iframe = document.getElementById("idCamera_"+camera_id);
-   if (iframe) iframe.src = "about:blank";
+ { var video = document.getElementById("idCamera_"+camera_id);
+   if (video)
+    { if (video.hlsInstance)
+       { video.hlsInstance.destroy();
+         video.hlsInstance = null;
+       }
+      video.pause();
+      video.src = "";
+    }
  }
 /*----------------------------------------------------------------------------------------------------------------------------*/
 function Arreter_toutes_cameras ( )
@@ -38,25 +45,41 @@ function Arreter_toutes_cameras ( )
  }
 /*----------------------------------------------------------------------------------------------------------------------------*/
 function Creer_camera ( Response )
- { var camera_id = Response.syn_camera_id;
+ { var camera_id  = Response.syn_camera_id;
    var element_id = "idCamera_"+camera_id;
+   var url        = Response.url;
 
-   var iframe = $('<iframe></iframe>').attr("id", element_id)
-                                     .attr("src", Response.url)
-                                     .attr("title", Response.camera_name)
-                                     .attr("aria-label", Response.camera_name)
-                                     .attr("data-camera-id", camera_id)
-                                     .attr("allowfullscreen", true)
-                                     .addClass("wtd-camera");
+   var video = $('<video></video>').attr("id", element_id)
+                                   .attr("title", Response.camera_name)
+                                   .attr("aria-label", Response.camera_name)
+                                   .attr("data-camera-id", camera_id)
+                                   .attr("controls", true)
+                                   .attr("autoplay", true)
+                                   .attr("muted", true)
+                                   .attr("playsinline", true)
+                                   .addClass("wtd-camera");
 
    var card = $('<div></div>').addClass("row bg-transparent mb-3")
               .append( $('<div></div>').addClass("col text-center mb-1")
-                       .append( iframe )
+                       .append( video )
                      )
               .append( $('<div></div>').addClass('w-100') )
               .append( $('<div></div>').addClass("col text-center")
                        .append( $('<span></span>').addClass("text-white").text(" "+Response.camera_name) )
                      );
+
+   setTimeout(function()
+    { var videoEl = document.getElementById(element_id);
+      if (!videoEl) return;
+      if (typeof Hls !== 'undefined' && Hls.isSupported())
+       { var hls = new Hls();
+         hls.loadSource(url);
+         hls.attachMedia(videoEl);
+         videoEl.hlsInstance = hls;
+       }
+      else if (videoEl.canPlayType('application/vnd.apple.mpegurl'))
+       { videoEl.src = url; }
+    }, 0);
 
    return(card);
  }
