@@ -37,7 +37,7 @@
        Keycloak_client.updateToken(-1)
         .then(function(refreshed)
          { if (refreshed) { Token = Keycloak_client.token; console.log('Token forcé après retour bfcache'); }
-           Charger_un_synoptique(Synoptique ? Synoptique.syn_page : null);
+           Charger_un_synoptique(Synoptique ? Synoptique.page : null);
          })
         .catch(function() { window.location.reload(); });
      }, false);
@@ -47,8 +47,12 @@
        Keycloak_client.updateToken(-1)
         .then(function(refreshed)
          { if (refreshed) { Token = Keycloak_client.token; console.log('Token forcé après retour au premier plan'); }
+           Charger_un_synoptique(Synoptique ? Synoptique.page : null);
          })
-        .catch(function() { window.location.reload(); });
+        .catch(function()
+         { if (!Keycloak_client.isTokenExpired()) return;               /* Token encore valide, erreur réseau transitoire */
+           window.location.reload();
+         });
      }, false);
     document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
     Load_mqtt( syn_page );                                                                             /* Charge la websocket */
