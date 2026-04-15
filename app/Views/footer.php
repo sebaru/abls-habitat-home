@@ -19,6 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/keycloak-js/dist/keycloak.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="/js/tableau.js"></script>
     <script type="text/javascript" src="/js/passerelles.js"></script>
+    <script type="text/javascript" src="/js/camera.js"></script>
     <script type="text/javascript" src="/js/common_home.js"></script>
     <script type="text/javascript" src="/js/common.js"></script>
     <script type="text/javascript" src="/js/trame.js"></script>
