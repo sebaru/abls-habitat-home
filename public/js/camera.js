@@ -47,6 +47,9 @@ function Arreter_toutes_cameras ( )
 function Camera_attacher_hls ( videoEl, url, camera_id )
  { var hls = new Hls(
     { enableWorker: true,
+      liveSyncDurationCount: 5,
+      liveMaxLatencyDurationCount: 10,
+      maxBufferHole: 0.5,
       xhrSetup: function(xhr)
        { if (typeof Token !== 'undefined' && Token)
           { xhr.setRequestHeader("Authorization", "Bearer " + Token); }
@@ -74,30 +77,27 @@ function Camera_attacher_hls ( videoEl, url, camera_id )
        }
     });
 
-   var mediaRecoveryAttempted = false;
    hls.on(Hls.Events.ERROR, function(event, data)
     { if (data.fatal)
        { console.log("Camera " + camera_id + ": erreur fatale HLS " + data.type + " / " + data.details, data);
+         if (data.details === "fragParsingError")
+          { console.log("Camera " + camera_id + ": segment corrompu (live edge), reconnexion dans 3s...");
+            hls.destroy();
+            videoEl.hlsInstance = null;
+            setTimeout(function()
+             { if (document.getElementById(videoEl.id))
+                { Camera_attacher_hls(videoEl, url, camera_id); }
+             }, 3000);
+            return;
+          }
          switch(data.type)
           { case Hls.ErrorTypes.NETWORK_ERROR:
               console.log("Camera " + camera_id + ": tentative de reprise après erreur réseau...");
               hls.startLoad();
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
-              if (!mediaRecoveryAttempted)
-               { console.log("Camera " + camera_id + ": tentative de récupération média...");
-                 mediaRecoveryAttempted = true;
-                 hls.recoverMediaError();
-               }
-              else
-               { console.log("Camera " + camera_id + ": récupération échouée, reconnexion dans 5s...");
-                 hls.destroy();
-                 videoEl.hlsInstance = null;
-                 setTimeout(function()
-                  { if (document.getElementById(videoEl.id))
-                     { Camera_attacher_hls(videoEl, url, camera_id); }
-                  }, 5000);
-               }
+              console.log("Camera " + camera_id + ": tentative de récupération média...");
+              hls.recoverMediaError();
               break;
             default:
               console.log("Camera " + camera_id + ": erreur irrécupérable, reconnexion dans 5s...");
@@ -111,8 +111,6 @@ function Camera_attacher_hls ( videoEl, url, camera_id )
           }
        }
     });
-   hls.on(Hls.Events.FRAG_PARSED, function()
-    { mediaRecoveryAttempted = false; });
  }
 /*----------------------------------------------------------------------------------------------------------------------------*/
 function Creer_camera ( Response )
