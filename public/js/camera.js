@@ -97,7 +97,7 @@ function Camera_attacher_mp4 ( videoEl, url, camera_id )
 
    var src = url + (url.indexOf("?") !== -1 ? "&" : "?") + "t=" + Date.now();
    if (typeof Token !== 'undefined' && Token)
-    { src += "&token=" + encodeURIComponent(Token); }
+    { src += "&access_token=" + encodeURIComponent(Token); }
    videoEl.src = src;
 
    videoEl.addEventListener("loadeddata", function()
