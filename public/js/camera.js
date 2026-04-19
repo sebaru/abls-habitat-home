@@ -62,7 +62,15 @@ function Camera_attacher_hls ( videoEl, url, camera_id )
       var playPromise = videoEl.play();
       if (playPromise !== undefined)
        { playPromise.catch(function(error)
-          { console.log("Camera " + camera_id + ": autoplay bloqué par le navigateur, en attente interaction utilisateur"); });
+          { console.log("Camera " + camera_id + ": play() rejeté: " + error.name + " - " + error.message);
+            if (error.name === "NotAllowedError")
+             { console.log("Camera " + camera_id + ": autoplay bloqué par le navigateur, en attente interaction utilisateur"); }
+            else if (error.name === "AbortError")
+             { console.log("Camera " + camera_id + ": pas assez de données, retry au prochain buffer...");
+               hls.once(Hls.Events.BUFFER_APPENDED, function()
+                { videoEl.play().catch(function(e) { console.log("Camera " + camera_id + ": retry play() échoué: " + e.name); }); });
+             }
+          });
        }
     });
 
