@@ -81,9 +81,45 @@ function Creer_camera ( Response )
          hls.loadSource(url);
          hls.attachMedia(videoEl);
          videoEl.hlsInstance = hls;
+
+         hls.on(Hls.Events.MANIFEST_PARSED, function()
+          { var playPromise = videoEl.play();
+            if (playPromise !== undefined)
+             { playPromise.catch(function(error)
+                { console.log("Camera " + camera_id + ": autoplay bloqué par le navigateur, en attente interaction utilisateur"); });
+             }
+          });
+
+         hls.on(Hls.Events.ERROR, function(event, data)
+          { if (data.fatal)
+             { console.log("Camera " + camera_id + ": erreur fatale HLS " + data.type + " / " + data.details);
+               switch(data.type)
+                { case Hls.ErrorTypes.NETWORK_ERROR:
+                    console.log("Camera " + camera_id + ": tentative de reprise après erreur réseau...");
+                    hls.startLoad();
+                    break;
+                  case Hls.ErrorTypes.MEDIA_ERROR:
+                    console.log("Camera " + camera_id + ": tentative de récupération média...");
+                    hls.recoverMediaError();
+                    break;
+                  default:
+                    console.log("Camera " + camera_id + ": erreur irrécupérable, destruction du flux.");
+                    hls.destroy();
+                    break;
+                }
+             }
+          });
        }
       else if (videoEl.canPlayType('application/vnd.apple.mpegurl'))
-       { videoEl.src = url; }
+       { videoEl.src = url;
+         videoEl.addEventListener('loadedmetadata', function()
+          { var playPromise = videoEl.play();
+            if (playPromise !== undefined)
+             { playPromise.catch(function(error)
+                { console.log("Camera " + camera_id + ": autoplay bloqué (Safari), en attente interaction utilisateur"); });
+             }
+          });
+       }
     }, 0);
 
    return(card);
