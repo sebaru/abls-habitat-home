@@ -56,7 +56,8 @@ function Camera_attacher_hls ( videoEl, url, camera_id )
    videoEl.hlsInstance = hls;
 
    hls.on(Hls.Events.MANIFEST_PARSED, function()
-    { var playPromise = videoEl.play();
+    { videoEl.muted = true;
+      var playPromise = videoEl.play();
       if (playPromise !== undefined)
        { playPromise.catch(function(error)
           { console.log("Camera " + camera_id + ": autoplay bloqué par le navigateur, en attente interaction utilisateur"); });
@@ -115,8 +116,8 @@ function Creer_camera ( Response )
                                    .attr("data-camera-id", camera_id)
                                    .attr("controls", true)
                                    .attr("autoplay", true)
-                                   .attr("muted", true)
                                    .attr("playsinline", true)
+                                   .prop("muted", true)
                                    .addClass("wtd-camera");
 
    var card = $('<div></div>').addClass("row bg-transparent mb-3")
