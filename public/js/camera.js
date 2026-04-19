@@ -90,6 +90,7 @@ function Creer_camera ( Response )
              }
           });
 
+         var mediaRecoveryAttempted = false;
          hls.on(Hls.Events.ERROR, function(event, data)
           { if (data.fatal)
              { console.log("Camera " + camera_id + ": erreur fatale HLS " + data.type + " / " + data.details);
@@ -99,8 +100,16 @@ function Creer_camera ( Response )
                     hls.startLoad();
                     break;
                   case Hls.ErrorTypes.MEDIA_ERROR:
-                    console.log("Camera " + camera_id + ": tentative de récupération média...");
-                    hls.recoverMediaError();
+                    if (!mediaRecoveryAttempted)
+                     { console.log("Camera " + camera_id + ": tentative de récupération média...");
+                       mediaRecoveryAttempted = true;
+                       hls.recoverMediaError();
+                     }
+                    else
+                     { console.log("Camera " + camera_id + ": 2e tentative avec swap codec audio...");
+                       hls.swapAudioCodec();
+                       hls.recoverMediaError();
+                     }
                     break;
                   default:
                     console.log("Camera " + camera_id + ": erreur irrécupérable, destruction du flux.");
@@ -109,6 +118,8 @@ function Creer_camera ( Response )
                 }
              }
           });
+         hls.on(Hls.Events.FRAG_PARSED, function()
+          { mediaRecoveryAttempted = false; });
        }
       else if (videoEl.canPlayType('application/vnd.apple.mpegurl'))
        { videoEl.src = url;
