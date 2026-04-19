@@ -46,11 +46,13 @@ function Arreter_toutes_cameras ( )
 /*----------------------------------------------------------------------------------------------------------------------------*/
 function Camera_attacher_hls ( videoEl, url, camera_id )
  { var hls = new Hls(
-    { xhrSetup: function(xhr)
+    { enableWorker: true,
+      xhrSetup: function(xhr)
        { if (typeof Token !== 'undefined' && Token)
           { xhr.setRequestHeader("Authorization", "Bearer " + Token); }
        }
     });
+   videoEl.muted = true;
    hls.loadSource(url);
    hls.attachMedia(videoEl);
    videoEl.hlsInstance = hls;
@@ -67,7 +69,7 @@ function Camera_attacher_hls ( videoEl, url, camera_id )
    var mediaRecoveryAttempted = false;
    hls.on(Hls.Events.ERROR, function(event, data)
     { if (data.fatal)
-       { console.log("Camera " + camera_id + ": erreur fatale HLS " + data.type + " / " + data.details);
+       { console.log("Camera " + camera_id + ": erreur fatale HLS " + data.type + " / " + data.details, data);
          switch(data.type)
           { case Hls.ErrorTypes.NETWORK_ERROR:
               console.log("Camera " + camera_id + ": tentative de reprise après erreur réseau...");
@@ -110,14 +112,12 @@ function Creer_camera ( Response )
    var element_id = "idCamera_"+camera_id;
    var url        = Response.url;
 
-   var video = $('<video></video>').attr("id", element_id)
+   var video = $('<video muted playsinline></video>')
+                                   .attr("id", element_id)
                                    .attr("title", Response.camera_name)
                                    .attr("aria-label", Response.camera_name)
                                    .attr("data-camera-id", camera_id)
                                    .attr("controls", true)
-                                   .attr("autoplay", true)
-                                   .attr("playsinline", true)
-                                   .prop("muted", true)
                                    .addClass("wtd-camera");
 
    var card = $('<div></div>').addClass("row bg-transparent mb-3")
