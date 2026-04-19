@@ -33,7 +33,8 @@ function Camera_fermer_flux ( camera_id )
          video.hlsInstance = null;
        }
       video.pause();
-      video.src = "";
+      video.removeAttribute("src");
+      video.load();
     }
  }
 /*----------------------------------------------------------------------------------------------------------------------------*/
@@ -43,6 +44,9 @@ function Arreter_toutes_cameras ( )
       if (camera_id) Camera_fermer_flux(camera_id);
     });
  }
+/*----------------------------------------------------------------------------------------------------------------------------*/
+function Camera_is_hls ( url )
+ { return url.indexOf(".m3u8") !== -1; }
 /*----------------------------------------------------------------------------------------------------------------------------*/
 function Camera_attacher_hls ( videoEl, url, camera_id )
  { var destroyed = false;
@@ -88,6 +92,33 @@ function Camera_attacher_hls ( videoEl, url, camera_id )
     });
  }
 /*----------------------------------------------------------------------------------------------------------------------------*/
+function Camera_attacher_mp4 ( videoEl, url, camera_id )
+ { videoEl.muted = true;
+
+   var src = url + (url.indexOf("?") !== -1 ? "&" : "?") + "t=" + Date.now();
+   if (typeof Token !== 'undefined' && Token)
+    { src += "&token=" + encodeURIComponent(Token); }
+   videoEl.src = src;
+
+   videoEl.addEventListener("loadeddata", function()
+    { videoEl.muted = true;
+      videoEl.play().catch(function(error)
+       { if (error.name === "NotAllowedError")
+          { console.log("Camera " + camera_id + ": autoplay bloqué, en attente interaction utilisateur"); }
+       });
+    });
+
+   videoEl.addEventListener("error", function()
+    { console.log("Camera " + camera_id + ": erreur flux MP4, reconnexion dans 5s...");
+      videoEl.removeAttribute("src");
+      videoEl.load();
+      setTimeout(function()
+       { if (document.getElementById(videoEl.id))
+          { Camera_attacher_mp4(videoEl, url, camera_id); }
+       }, 5000);
+    });
+ }
+/*----------------------------------------------------------------------------------------------------------------------------*/
 function Creer_camera ( Response )
  { var camera_id  = Response.syn_camera_id;
    var element_id = "idCamera_"+camera_id;
@@ -113,19 +144,15 @@ function Creer_camera ( Response )
    setTimeout(function()
     { var videoEl = document.getElementById(element_id);
       if (!videoEl) return;
-      if (typeof Hls !== 'undefined' && Hls.isSupported())
-       { Camera_attacher_hls(videoEl, url, camera_id);
-       }
-      else if (videoEl.canPlayType('application/vnd.apple.mpegurl'))
+      if (Camera_is_hls(url) && typeof Hls !== 'undefined' && Hls.isSupported())
+       { Camera_attacher_hls(videoEl, url, camera_id); }
+      else if (Camera_is_hls(url) && videoEl.canPlayType('application/vnd.apple.mpegurl'))
        { videoEl.src = url;
          videoEl.addEventListener('loadedmetadata', function()
-          { var playPromise = videoEl.play();
-            if (playPromise !== undefined)
-             { playPromise.catch(function(error)
-                { console.log("Camera " + camera_id + ": autoplay bloqué (Safari), en attente interaction utilisateur"); });
-             }
-          });
+          { videoEl.play().catch(function() {}); });
        }
+      else
+       { Camera_attacher_mp4(videoEl, url, camera_id); }
     }, 0);
 
    return(card);
