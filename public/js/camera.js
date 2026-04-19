@@ -45,7 +45,8 @@ function Arreter_toutes_cameras ( )
  }
 /*----------------------------------------------------------------------------------------------------------------------------*/
 function Camera_attacher_hls ( videoEl, url, camera_id )
- { var hls = new Hls(
+ { var destroyed = false;
+   var hls = new Hls(
     { enableWorker: true,
       liveSyncDurationCount: 5,
       liveMaxLatencyDurationCount: 10,
@@ -61,54 +62,28 @@ function Camera_attacher_hls ( videoEl, url, camera_id )
    videoEl.hlsInstance = hls;
 
    hls.on(Hls.Events.MANIFEST_PARSED, function()
-    { videoEl.muted = true;
-      var playPromise = videoEl.play();
-      if (playPromise !== undefined)
-       { playPromise.catch(function(error)
-          { console.log("Camera " + camera_id + ": play() rejeté: " + error.name + " - " + error.message);
-            if (error.name === "NotAllowedError")
-             { console.log("Camera " + camera_id + ": autoplay bloqué par le navigateur, en attente interaction utilisateur"); }
-            else if (error.name === "AbortError")
-             { console.log("Camera " + camera_id + ": pas assez de données, retry au prochain buffer...");
-               hls.once(Hls.Events.BUFFER_APPENDED, function()
-                { videoEl.play().catch(function(e) { console.log("Camera " + camera_id + ": retry play() échoué: " + e.name); }); });
-             }
-          });
-       }
+    { if (destroyed) return;
+      videoEl.muted = true;
+      videoEl.play().catch(function(error)
+       { if (destroyed) return;
+         if (error.name === "NotAllowedError")
+          { console.log("Camera " + camera_id + ": autoplay bloqué, en attente interaction utilisateur"); }
+       });
     });
 
    hls.on(Hls.Events.ERROR, function(event, data)
     { if (data.fatal)
        { console.log("Camera " + camera_id + ": erreur fatale HLS " + data.type + " / " + data.details, data);
-         if (data.details === "fragParsingError")
-          { console.log("Camera " + camera_id + ": segment corrompu (live edge), reconnexion dans 3s...");
-            hls.destroy();
-            videoEl.hlsInstance = null;
-            setTimeout(function()
-             { if (document.getElementById(videoEl.id))
-                { Camera_attacher_hls(videoEl, url, camera_id); }
-             }, 3000);
-            return;
-          }
-         switch(data.type)
-          { case Hls.ErrorTypes.NETWORK_ERROR:
-              console.log("Camera " + camera_id + ": tentative de reprise après erreur réseau...");
-              hls.startLoad();
-              break;
-            case Hls.ErrorTypes.MEDIA_ERROR:
-              console.log("Camera " + camera_id + ": tentative de récupération média...");
-              hls.recoverMediaError();
-              break;
-            default:
-              console.log("Camera " + camera_id + ": erreur irrécupérable, reconnexion dans 5s...");
-              hls.destroy();
-              videoEl.hlsInstance = null;
-              setTimeout(function()
-               { if (document.getElementById(videoEl.id))
-                  { Camera_attacher_hls(videoEl, url, camera_id); }
-               }, 5000);
-              break;
-          }
+         destroyed = true;
+         hls.destroy();
+         videoEl.hlsInstance = null;
+
+         var delai = (data.details === "fragParsingError") ? 3000 : 5000;
+         console.log("Camera " + camera_id + ": reconnexion dans " + (delai/1000) + "s...");
+         setTimeout(function()
+          { if (document.getElementById(videoEl.id))
+             { Camera_attacher_hls(videoEl, url, camera_id); }
+          }, delai);
        }
     });
  }
