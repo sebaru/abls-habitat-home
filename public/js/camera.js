@@ -32,6 +32,10 @@ function Camera_fermer_flux ( camera_id )
        { video.hlsInstance.destroy();
          video.hlsInstance = null;
        }
+      if (video.mp4Abort)
+       { video.mp4Abort.abort();
+         video.mp4Abort = null;
+       }
       video.pause();
       video.removeAttribute("src");
       video.load();
@@ -94,29 +98,72 @@ function Camera_attacher_hls ( videoEl, url, camera_id )
 /*----------------------------------------------------------------------------------------------------------------------------*/
 function Camera_attacher_mp4 ( videoEl, url, camera_id )
  { videoEl.muted = true;
+   var abortController = new AbortController();
+   videoEl.mp4Abort = abortController;
+
+   var headers = {};
+   if (typeof Token !== 'undefined' && Token)
+    { headers["Authorization"] = "Bearer " + Token; }
 
    var src = url + (url.indexOf("?") !== -1 ? "&" : "?") + "t=" + Date.now();
-   if (typeof Token !== 'undefined' && Token)
-    { src += "&access_token=" + encodeURIComponent(Token); }
-   videoEl.src = src;
 
-   videoEl.addEventListener("loadeddata", function()
-    { videoEl.muted = true;
-      videoEl.play().catch(function(error)
-       { if (error.name === "NotAllowedError")
-          { console.log("Camera " + camera_id + ": autoplay bloqué, en attente interaction utilisateur"); }
-       });
-    });
+   fetch(src, { headers: headers, signal: abortController.signal })
+    .then(function(response)
+     { if (!response.ok) throw new Error("HTTP " + response.status);
 
-   videoEl.addEventListener("error", function()
-    { console.log("Camera " + camera_id + ": erreur flux MP4, reconnexion dans 5s...");
-      videoEl.removeAttribute("src");
-      videoEl.load();
-      setTimeout(function()
-       { if (document.getElementById(videoEl.id))
-          { Camera_attacher_mp4(videoEl, url, camera_id); }
-       }, 5000);
-    });
+       var mediaSource = new MediaSource();
+       videoEl.src = URL.createObjectURL(mediaSource);
+
+       mediaSource.addEventListener("sourceopen", function()
+        { var mime = 'video/mp4; codecs="avc1.42E01E,mp4a.40.2"';
+          if (!MediaSource.isTypeSupported(mime)) mime = "video/mp4";
+          var sourceBuffer = mediaSource.addSourceBuffer(mime);
+          var reader = response.body.getReader();
+          var queue = [];
+          var appending = false;
+
+          function appendNext()
+           { if (appending || queue.length === 0) return;
+             appending = true;
+             sourceBuffer.appendBuffer(queue.shift());
+           }
+
+          sourceBuffer.addEventListener("updateend", function()
+           { appending = false;
+             if (queue.length > 0) appendNext();
+             if (!videoEl.paused) return;
+             videoEl.muted = true;
+             videoEl.play().catch(function(error)
+              { if (error.name === "NotAllowedError")
+                 { console.log("Camera " + camera_id + ": autoplay bloqué, en attente interaction utilisateur"); }
+              });
+           });
+
+          function pump()
+           { reader.read().then(function(result)
+              { if (result.done)
+                 { if (mediaSource.readyState === "open") mediaSource.endOfStream();
+                   return;
+                 }
+                queue.push(result.value);
+                appendNext();
+                pump();
+              }).catch(function(e)
+              { if (!abortController.signal.aborted)
+                 { console.log("Camera " + camera_id + ": flux MP4 interrompu: " + e.message); }
+              });
+           }
+          pump();
+        });
+     })
+    .catch(function(error)
+     { if (abortController.signal.aborted) return;
+       console.log("Camera " + camera_id + ": erreur flux MP4: " + error.message + ", reconnexion dans 5s...");
+       setTimeout(function()
+        { if (document.getElementById(videoEl.id))
+           { Camera_attacher_mp4(videoEl, url, camera_id); }
+        }, 5000);
+     });
  }
 /*----------------------------------------------------------------------------------------------------------------------------*/
 function Creer_camera ( Response )
