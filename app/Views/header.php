@@ -176,12 +176,6 @@
                           background-color: #48BBC0;
                         }
       </style>
-      <script>
-        var $ABLS_API      = "<?php echo getenv("ABLS_API"); ?>";
-        var $IDP_REALM     = "<?php echo getenv("IDP_REALM"); ?>";
-        var $IDP_URL       = "<?php echo getenv("IDP_URL"); ?>";
-        var $IDP_CLIENT_ID = "<?php echo getenv("IDP_CLIENT_ID"); ?>";
-      </script>
     </head>
 
     <body class="bg-dark" style="display:none">

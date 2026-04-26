@@ -15,10 +15,6 @@
 #--------------------------------------------------------------------
 
 # CI_ENVIRONMENT = production
-ABLS_API = 'https://api.exemple.com'
-IDP_REALM     = "myrealm"
-IDP_URL       = "https://idp.exemple.com"
-IDP_CLIENT_ID = "myclientid"
 
 #--------------------------------------------------------------------
 # APP

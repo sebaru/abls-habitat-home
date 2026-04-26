@@ -6,7 +6,6 @@
   <div class="row justifiy-content-end mt-2 fixed-bottom p-1">
     <div class="col-auto ms-auto">
       <small>
-        <span class="ms-auto text-secondary"><?php echo getenv("ABLS_API"); ?> </span>
         <span class="text-secondary" id="idAblsApiVersion"></span>
         <span class="text-secondary"> © </span>
         <a href="https://docs.abls-habitat.fr/" target="_blank">Abls-Habitat.fr</a>
@@ -16,7 +15,6 @@
 
 </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/keycloak-js/dist/keycloak.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="/js/tableau.js"></script>
     <script type="text/javascript" src="/js/passerelles.js"></script>
     <script type="text/javascript" src="/js/camera.js"></script>

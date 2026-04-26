@@ -1,10 +1,6 @@
 
  var Charts = new Array();
- var Token           = null;
- var RefreshToken    = null;
- var TokenParsed     = null;
  var Closing         = false;
- var Keycloak_client = null;
 
  document.addEventListener('DOMContentLoaded', init, false);
  window.addEventListener("beforeunload", function () { Closing = true; } );
@@ -20,49 +16,9 @@
                         { valeur : "BY_MONTH_ON_12_MONTHS",  texte : "Sur 1 an" },
                         { valeur : "BY_YEAR_ON_2_YEARS" ,    texte : "Sur 2 ans" },
                       ];
-/**************************************************** Gère l'ID token *********************************************************/
+/**************************************************** Initialisation ***********************************************************/
  function init()
-  { Keycloak_client = new Keycloak( { "realm": $IDP_REALM, "url": $IDP_URL, "clientId": $IDP_CLIENT_ID,
-                                   "scope": "openid email offline_access phone"
-                                 } );
-
-    Keycloak_client.init( { onLoad: "login-required" } )
-            .then((auth) =>
-             { if (!auth) { console.log( "not authenticated" ); }
-               else { console.log("Authenticated"); }
-             })
-            .catch((error) =>
-             { console.log("Authenticated Failed");
-               console.debug(error);
-             });
-
-    Keycloak_client.onAuthSuccess  = function() { console.log('authenticated');
-                                           TokenParsed  = Keycloak_client.tokenParsed;
-                                           Token        = Keycloak_client.token;
-                                           RefreshToken = Keycloak_client.refreshToken;
-                                           console.debug (TokenParsed); console.debug (Token); console.debug (RefreshToken);
-                                           Load_common();
-                                         }
-    Keycloak_client.onAuthLogout   = function() { console.log('logout'); }
-    Keycloak_client.onAuthError    = function() { console.log('onAuthError'); }
-    Keycloak_client.onTokenExpired = function() { console.log('onTokenExpired'); }
-
-//Token Refresh
-    setInterval(  () =>
-     { Keycloak_client.updateToken(30)
-       .then((refreshed) =>
-        { if (refreshed) { console.log('Token refreshed' + refreshed);
-                           TokenParsed = Keycloak_client.tokenParsed;
-                           Token       = Keycloak_client.token;
-                           RefreshToken = Keycloak_client.refreshToken;
-                         }
-          else
-           { console.log ('Token not refreshed, valid for '
-               + Math.round(Keycloak_client.tokenParsed.exp + Keycloak_client.timeSkew - new Date().getTime() / 1000) + ' seconds');
-           }
-        })
-        .catch(() => { console.log('Failed to refresh token'); });
-     }, 60000);
+  { Load_common();
   }
 /******************************************************************************************************************************/
  function Show_toast_ok ( message )
@@ -82,13 +38,12 @@
     else ContentType = null;
 
     if ( method == "GET" && parametre !== null )
-     { xhr.open(method, $ABLS_API+URL+"?"+parametre, true); }
-    else xhr.open(method, $ABLS_API+URL, true);
+     { xhr.open(method, "/api"+URL+"?"+parametre, true); }
+    else xhr.open(method, "/api"+URL, true);
 
     if (ContentType != null) { xhr.setRequestHeader('Content-type', ContentType ); }
     xhr.timeout = 300000; // durée en millisecondes
     xhr.setRequestHeader("X-ABLS-DOMAIN", localStorage.getItem("domain_uuid") );
-    xhr.setRequestHeader("Authorization", "Bearer " + Token );
 
     xhr.onreadystatechange = function()
      { if ( xhr.readyState != 4 ) return;
@@ -151,21 +106,26 @@
        if (Response.default_domain_uuid == null && window.location.pathname !== "/domains") { Redirect("/domains"); return; }
 
        if (typeof Load_page === 'function') Load_page();
+
+       var username = null;
+       if (Response.user_name) username = Response.user_name;
+       else if (Response.name) username = Response.name;
+       else if (Response.preferred_username) username = Response.preferred_username;
+       else if (Response.given_name) username = Response.given_name;
+       else if (Response.email) username = Response.email;
+
+       if (username) $("#idUsername").text(username);
+       else $("#idUsername").text("Unknown");
+
+       if (Response.account_url) $("#idHrefAccount").attr("href", Response.account_url);
+       else $("#idHrefAccount").attr("href", "#");
      }, function () { Show_toast_ko ("Unable to request profil."); } );
-
-
-         if (TokenParsed.name !== null )               $("#idUsername").text(TokenParsed.name);
-    else if (TokenParsed.preferred_username !== null ) $("#idUsername").text(TokenParsed.preferred_username);
-    else if (TokenParsed.given_name !== null )         $("#idUsername").text(TokenParsed.given_name);
-    else if (TokenParsed.email !== null )              $("#idUsername").text(TokenParsed.email);
-    else $("#idUsername").text("Unknown");
-    $("#idHrefAccount").attr("href", TokenParsed.iss+"/account/" );
 
     $("body").hide().removeClass("d-none").fadeIn();
   }
 /********************************************* Chargement du synoptique 1 au démarrage ****************************************/
  function Logout ()
-  { Redirect ( $IDP_URL+"/realms/"+$IDP_REALM+"/protocol/openid-connect/logout" ); }
+  { Redirect ( "/logout" ); }
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
  function Show_Error ( message )
   { if (message == "Not Connected") { Logout(); }
@@ -187,11 +147,11 @@
  function Bouton_actions_start ( )
   { return("<div class='btn-group btn-block' role='group' aria-label='ButtonGroup'>"); }
 
- function Bouton_actions_add ( color, tooltip, clic_func, key, icone, texte )
+ function Bouton_actions_add ( color, tooltip, clic_func, key, icone, texte, extra_args )
   { if (clic_func !== null)
      { result = "<button class='btn btn-"+color+" btn-sm' "+
                 "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
-                "onclick="+clic_func+"('"+key+"')>"+
+                "onclick="+clic_func+"('"+key+"'"+(extra_args ? ","+extra_args : "")+")>"+
                 (icone!==null ? "<i class='fas fa-"+icone+"'></i> " : "") +
                 (texte!==null ? htmlEncode(texte) : "") +
                 "</button>";
