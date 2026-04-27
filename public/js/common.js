@@ -79,6 +79,7 @@
        else
         { localStorage.setItem("domain_name",        Response.default_domain_name );
           localStorage.setItem("domain_uuid",        Response.default_domain_uuid );/* Positionne les parametres domain par défaut */
+          localStorage.setItem("user_uuid",          Response.user_uuid );
           localStorage.setItem("static_data_url",    Response.static_data_url );
           localStorage.setItem("access_level",       parseInt(Response.access_level) );
           localStorage.setItem("mqtt_hostname",      Response.mqtt_hostname );
