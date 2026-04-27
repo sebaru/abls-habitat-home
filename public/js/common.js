@@ -108,14 +108,10 @@
        if (typeof Load_page === 'function') Load_page();
 
        var username = null;
-       if (Response.user_name) username = Response.user_name;
-       else if (Response.name) username = Response.name;
-       else if (Response.preferred_username) username = Response.preferred_username;
-       else if (Response.given_name) username = Response.given_name;
+       if (Response.given_name) username = Response.given_name;
        else if (Response.email) username = Response.email;
-
-       if (username) $("#idUsername").text(username);
-       else $("#idUsername").text("Unknown");
+       else username = "Unknown"
+       $("#idUsername").text(username);
 
        if (Response.account_url) $("#idHrefAccount").attr("href", Response.account_url);
        else $("#idHrefAccount").attr("href", "#");
