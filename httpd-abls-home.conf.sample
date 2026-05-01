@@ -2,9 +2,9 @@
   ServerName my-abls-home.mydomain
 
   SSLEngine on
-  SSLCertificateFile /etc/letsencrypt/live/my-abls-console.mydomain/cert.pem
-  SSLCertificateKeyFile /etc/letsencrypt/live/my-abls-console.mydomain/privkey.pem
-  SSLCertificateChainFile /etc/letsencrypt/live/my-abls-console.mydomain/chain.pem
+  SSLCertificateFile /etc/letsencrypt/live/my-abls-home.mydomain/cert.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/my-abls-home.mydomain/privkey.pem
+  SSLCertificateChainFile /etc/letsencrypt/live/my-abls-home.mydomain/chain.pem
   SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
   SSLCompression      off
   SSLSessionTickets   off
@@ -13,11 +13,44 @@
 
   CustomLog "logs/home_access.log" "%v %h %l %u %t \"%r\" %>s %b"
 
-DocumentRoot /var/www/html/abls-console/public
+  ProxyPreserveHost On
+  SSLProxyEngine On
+  SecRuleEngine off
 
-        <Directory "/var/www/html/abls-console/public">
-            AllowOverride All
-            Require all granted
-        </Directory>
+#Protection par authentification OIDC
+  OIDCProviderMetadataURL https://my-idp.abls-habitat.fr/realms/my-realm/.well-known/openid-configuration
+  OIDCClientID my-client-id
+  OIDCClientSecret my-client-secret
+  OIDCRedirectURI https://my-abls-home.mydomain/redirect_uri
+  OIDCCryptoPassphrase change
+  OIDCProviderIssuer https://my-idp.abls-habitat.fr/realms/my-realm
+  OIDCResponseType code
+  OIDCScope "openid profile email"
+  OIDCStripCookies On
+  OIDCPassAccessToken off
+
+# ROUTING (ordre important : le plus spécifique d'abord)
+ProxyPass        /api/ http://my-api:5562/ nocanon upgrade=websocket
+ProxyPassReverse /api/ http://my-api:5562/
+
+#Active l'authentification et passe les tokens
+  <Location /api/>
+    AuthType openid-connect
+    Require valid-user
+    OIDCPassIDTokenAs serialized
+  </Location>
+
+#Au choix: soit en proxy, soit en local
+#  <Location />
+#    AuthType openid-connect
+#    Require valid-user
+#  </Location>
+
+  DocumentRoot /var/www/html/abls-home/public
+  <Directory "/var/www/html/abls-home/public">
+    AuthType openid-connect
+    Require valid-user
+    AllowOverride All
+  </Directory>
 
 </VirtualHost>
