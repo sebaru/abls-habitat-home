@@ -150,8 +150,10 @@
 
        if (Response.default_domain_uuid == null && window.location.pathname !== "/domains") { Redirect("/domains"); return; }
 
-       if (typeof Load_page === 'function') Load_page();
+       window.dispatchEvent(new Event('keycloak-ready'));
      }, function () { Show_toast_ko ("Unable to request profil."); } );
+
+         $('#idAblsApiFooter').text($ABLS_API);
 
 
          if (TokenParsed.name !== null )               $("#idUsername").text(TokenParsed.name);
@@ -181,7 +183,11 @@
   }
 /********************************************* Redirige la page ***************************************************************/
  function Redirect ( url )
-  { $('body').fadeOut("fast", function () { window.location.replace(url); } );
+  { if (url && url.charAt(0) === '/' && url.charAt(1) !== '/')
+     { if (typeof Router !== 'undefined') { Router.push(url); }
+       else { window.location.replace(url); }
+     }
+    else { $('body').fadeOut("fast", function () { window.location.replace(url); } ); }
   }
 /********************************************* Barre de boutons ***************************************************************/
  function Bouton_actions_start ( )

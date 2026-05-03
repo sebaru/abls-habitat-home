@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="fr" data-bs-theme="dark">
+    <head>
+        <meta charset="utf-8">
+        <title>Chez moi</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="google" content="notranslate">
+        <meta name="robots" content="noindex, nofollow">
+        <link rel="icon" href="https://static.abls-habitat.fr/img/abls.svg">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"/>
+        <style>
+        body { background-image: url('https://static.abls-habitat.fr/img/fond_home.jpg');
+               background-position: center;
+               background-size: cover;
+               background-repeat: no-repeat;
+               background-attachment: fixed;
+               height: 100%;
+               background-color: rgba(30,28,56,1.0);
+               padding-top: 80px;
+               padding-bottom: 40px;
+               overflow-y: scroll;
+             }
+
+        h3 { color: white; }
+
+        .wtd-cligno { animation-duration: 1.0s;
+                      animation-name: wtdClignoFrames;
+                      animation-iteration-count: infinite;
+                      animation-fill-mode: backwards;
+                      transition: none;
+                    }
+        @keyframes wtdClignoFrames
+         {   0% { opacity: 1; }
+            30% { opacity: 0; }
+           100% { opacity: 1; }
+         }
+
+        .wtd-noshow { animation-duration: 0.3s;
+                      animation-name: wtdNoShowFrames;
+                      animation-iteration-count: 1;
+                      animation-fill-mode: forwards;
+                      transition: none;
+                    }
+        @keyframes wtdNoShowFrames
+         {   0% { opacity: 1; }
+           100% { opacity: 0; }
+         }
+
+        .card { color: white; }
+
+        .wtd-img-grayscale
+          { filter: grayscale(100%) blur(1px);
+            transition: 2s;
+          }
+
+        .wtd-img-container
+          { position: relative;
+          }
+
+        .wtd-img-superpose-milieu
+          { position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index:2;
+          }
+
+        .wtd-img-superpose-bas-droite
+          { position: absolute;
+            bottom: 0px;
+            right: 0px;
+            transform: translate(+50%, 0%);
+            z-index:2;
+          }
+
+        .wtd-img-superpose-haut-droite
+          { position: absolute;
+            top: 0px;
+            right: 0px;
+            transform: translate(+50%, 0%);
+            z-index:2;
+          }
+
+        .wtd-img-superpose-haut-gauche
+          { position: absolute;
+            top: 0px;
+            left: 0px;
+            transform: translate(-50%, 0%);
+            z-index:2;
+          }
+
+        .wtd-menu
+          { border-radius: 20%;
+            max-width: 48px;
+            max-height: 48px;
+            cursor: pointer;
+          }
+
+        .wtd-synoptique { border-radius: 20%;
+                          width: 128px;
+                          height: auto;
+                          cursor: pointer;
+                        }
+
+        .wtd-visuel { /*border-radius: 20%;*/
+                      width: 128px;
+                      height: auto;
+                      max-height: 128px;
+                      cursor: pointer;
+                    }
+
+
+        .wtd-vignette
+          { width: 32px;
+            height: 32px;
+          }
+
+        @media (max-width: 768px)
+         { .wtd-synoptique
+            { width: 96px;
+              max-height: 96px;
+            }
+           .wtd-vignette
+            { max-width: 24px;
+              max-height: 24px;
+            }
+           .wtd-menu
+             { max-width: 48px;
+               max-height: 48px;
+             }
+           .wtd-visuel
+             { max-width: 96px;
+               max-height: 96px;
+             }
+         }
+
+        .wtd-courbe { background-color: #777;
+                      width: auto;
+                      max-width: 100vw;
+                      min-height: 30vh;
+                      max-height: 70vh;
+                      cursor: pointer;
+                    }
+
+        @media (orientation: landscape)
+         {
+         }
+
+        @media (orientation: portrait)
+         {
+         }
+
+        .wtd-img-card { object-fit: contain; height: 196px; max-width: 196px; padding: 10px; }
+
+        .wtd-camera { width: 100%;
+                      min-width: 320px;
+                      min-height: 240px;
+                      border-radius: 8px;
+                      border: 2px solid rgba(255,255,255,0.2);
+                    }
+
+        input:focus { outline: 0 0 0 0  !important;
+                      box-shadow: 0 0 0 0 !important;
+                    }
+
+
+        .navbar { background-color: rgba(30,28,56,0.95);
+                }
+
+        .nav-link {
+                  }
+
+        .nav-link:hover { color: white !important;
+                          background-color: #48BBC0;
+                        }
+      </style>
+
+      <!-- Variables de configuration (générées par configure.sh depuis les variables d'env) -->
+      <script src="/js/config.js"></script>
+    </head>
+
+    <body class="bg-dark" style="display:none">
+
+<div class="position-fixed" style="top: 3rem; left: 50%; z-index:9999">
+  <div id="idToastStatusOK" data-delay="3000" class="toast hide bg-primary" role="status">
+   <div class="toast-header">
+     <strong class="me-auto"> Résultat de la commande</strong>
+     <button type="button" class="ml-2 mb-1 close" data-bs-dismiss="toast" aria-label="Close">
+       <span aria-hidden="true">&times;</span>
+     </button>
+   </div>
+   <div class="toast-body text-light">
+     <i class="fas fa-check-circle"></i> <span id="idToastStatusOKLabel">Succès !</span>
+   </div>
+  </div>
+</div>
+
+<div class="position-fixed" style="top: 3rem; left: 50%; z-index:9999">
+  <div id="idToastStatusKO" data-delay="3000" class="toast hide bg-danger" role="status">
+   <div class="toast-header">
+     <strong class="me-auto"> Résultat de la commande</strong>
+     <button type="button" class="ml-2 mb-1 close" data-bs-dismiss="toast" aria-label="Close">
+       <span aria-hidden="true">&times;</span>
+     </button>
+   </div>
+   <div class="toast-body text-dark">
+     <i class="fas fa-check-circle"></i> <span id="idToastStatusKOLabel">Erreur !</span>
+   </div>
+  </div>
+</div>
+
+<div id="idModalDel" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content ">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title text-justify"><i class="fas fa-trash"></i> <span id="idModalDelTitre"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="idModalDelMessage"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> Annuler</button>
+        <button id="idModalDelValider" type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fas fa-trash"></i> Valider</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="idModalInviter" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title"><i class="fas fa-user-friends"></i> Inviter un ami sur le domaine</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <span class="input-group-text">@</span>
+          <input id="idUserInviteEmail" type="email" class="form-control" placeholder="Adresse email de l'invité">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text"><i class="fas fa-star text-primary"></i></span>
+          <select id="idUserInviteAccessLevel" class="form-select"></select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> Annuler</button>
+        <button id="idUserInviteValider" type="button" class="btn btn-primary"><i class="fas fa-user-friends"></i> Inviter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="idModalCadran" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-edit"></i> Modifier la valeur</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label for="idModalCadranValeur" class="form-label">Quelle est la nouvelle valeur ?</label>
+        <input id="idModalCadranValeur" type="number" class="form-control" step="any">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> Annuler</button>
+        <button id="idModalCadranValider" type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="fas fa-check"></i> Valider</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="idModalError" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title text-justify"><i class="fas fa-exclamation-circle"></i>Erreur</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="idModalDetail">Une erreur est survenue !</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<header>
+
+ <nav class="navbar navbar-dark navbar-expand-md fixed-top shadow">
+
+  <ul class="navbar-nav">
+    <a class="nav-item" href="#">
+      <img id ="idNavImgTopSyn" src="" alt=""
+           class="wtd-menu" data-bs-toggle='tooltip' data-placement='bottom' title="Aller à l'accueil">
+    </a>
+  </ul>
+  <ul id="idNavSynoptique" class="navbar-nav d-flex flex-row flex-nowrap align-items-center me-auto overflow-hidden"></ul>
+
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggled" aria-controls="navbar-toggled" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbar-toggled">
+    <ul class="navbar-nav ms-auto">
+      <a id="idAlertConnexionLost" class="nav-link wtd-cligno" style="display: none"><i class="fa-solid fa-link-slash fa-xl text-warning"></i></a>
+      <li class="nav-item dropdown">
+        <a class="nav-link rounded align-items-middle dropdown-toggle" href="#" id="navbarUSER" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-user text-white"></i> <span id="idUsername">-</span>
+        </a>
+
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarUSER">
+          <a class="dropdown-item" href="/domains"> <i class="fas fa-globe text-primary"></i> Mes domaines</a>
+          <a class="dropdown-item" href="/messages"> <i class="fas fa-book text-primary"></i> Fil de l'eau</a>
+          <a class="dropdown-item" href="/historique"> <i class="fas fa-history text-primary"></i> Historique</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" id="idHrefProfil"><i class="fas fa-user text-info"></i> Mon Profil</a>
+          <a class="dropdown-item" href="#" id="idHrefAccount"><i class="fas fa-user text-info"></i> Mon Compte</a>
+          <a class="dropdown-item" href="#" onclick="Inviter_open()"><i class="fas fa-user-friends text-info"></i> Inviter</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item d-none" href="#" id="idHrefConsole"><i class="fas fa-server text-primary"></i> Console</a>
+          <a class="dropdown-item" href="#" onclick="Logout()"><i class="fas fa-sign-out-alt text-danger"></i> <span>Sortir</span> </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</nav>
+</header>
+<div id="idDomainNotificationWarning" class='alert alert-warning m-1' style="display:none" role="status"></div>
+<div id="idDomainNotification" class='alert alert-info m-1' style="display:none" role="status"></div>
+
+<!-- Zone de contenu de la page (remplacée par le routeur à chaque navigation) -->
+<div id="app"></div>
+
+<!-- Footer -->
+<footer class="d-none d-md-block page-footer mt-2 fixed-bottom bg-transparent">
+  <div class="row justifiy-content-end mt-2 fixed-bottom p-1">
+    <div class="col-auto ms-auto">
+      <small>
+        <span class="ms-auto text-secondary" id="idAblsApiFooter"></span>
+        <span class="text-secondary" id="idAblsApiVersion"></span>
+        <span class="text-secondary"> © </span>
+        <a href="https://docs.abls-habitat.fr/" target="_blank">Abls-Habitat.fr</a>
+      </small>
+    </div>
+  </div>
+</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/keycloak-js/dist/keycloak.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/js/tableau.js"></script>
+    <script type="text/javascript" src="/js/passerelles.js"></script>
+    <script type="text/javascript" src="/js/camera.js"></script>
+    <script type="text/javascript" src="/js/cadran.js"></script>
+    <script type="text/javascript" src="/js/visuels.js"></script>
+    <script type="text/javascript" src="/js/home.js"></script>
+    <script type="text/javascript" src="/js/horloge.js"></script>
+    <script type="text/javascript" src="/js/common_home.js"></script>
+    <script type="text/javascript" src="/js/common.js"></script>
+    <script type="text/javascript" src="/js/trame.js"></script>
+    <script src="https://kit.fontawesome.com/1ca1f7ba56.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.17/hls.min.js" integrity="sha512-iFmKfXPRVIW5PBZ3gzXSLz/IYtC6BMsIqmY/K42iuykOoUZTChDwR6KYhPcwj5HuE4hNJhZxNPD+ZdHLJvRv8A==" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.1.2/svg.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.10.4/mqtt.min.js" integrity="sha512-U6juml/sd5ivQOO5Nmd3IB8DUgRYRJ3whk/+oxaOJHyA9WtXXl3p42YoevQ7/PnuZR1Oir607H3A/+AjQ/gWug==" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" ></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <!-- Routeur SPA — doit être chargé en dernier -->
+    <script src="/js/router.js" type="text/javascript"></script>
+
+  </body>
+</html>
