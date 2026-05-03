@@ -2,4 +2,3 @@ debugbar*
 .env
 test*
 public/js/config.js
-public/views/
