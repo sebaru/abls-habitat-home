@@ -1,12 +1,8 @@
 
  var Charts = new Array();
- var Token           = null;
- var RefreshToken    = null;
- var TokenParsed     = null;
- var Closing         = false;
- var Keycloak_client = null;
+ var Closing = false;
 
- document.addEventListener('DOMContentLoaded', init, false);
+ document.addEventListener('DOMContentLoaded', Load_common, false);
  window.addEventListener("beforeunload", function () { Closing = true; } );
 
  var PeriodeTableau = [ { valeur : "BY_MINUTE_ON_2_HOURS",   texte : "Sur 2 heures" },
@@ -20,50 +16,6 @@
                         { valeur : "BY_MONTH_ON_12_MONTHS",  texte : "Sur 1 an" },
                         { valeur : "BY_YEAR_ON_2_YEARS" ,    texte : "Sur 2 ans" },
                       ];
-/**************************************************** Gère l'ID token *********************************************************/
- function init()
-  { Keycloak_client = new Keycloak( { "realm": $IDP_REALM, "url": $IDP_URL, "clientId": $IDP_CLIENT_ID,
-                                   "scope": "openid email offline_access phone"
-                                 } );
-
-    Keycloak_client.init( { onLoad: "login-required" } )
-            .then((auth) =>
-             { if (!auth) { console.log( "not authenticated" ); }
-               else { console.log("Authenticated"); }
-             })
-            .catch((error) =>
-             { console.log("Authenticated Failed");
-               console.debug(error);
-             });
-
-    Keycloak_client.onAuthSuccess  = function() { console.log('authenticated');
-                                           TokenParsed  = Keycloak_client.tokenParsed;
-                                           Token        = Keycloak_client.token;
-                                           RefreshToken = Keycloak_client.refreshToken;
-                                           console.debug (TokenParsed); console.debug (Token); console.debug (RefreshToken);
-                                           Load_common();
-                                         }
-    Keycloak_client.onAuthLogout   = function() { console.log('logout'); }
-    Keycloak_client.onAuthError    = function() { console.log('onAuthError'); }
-    Keycloak_client.onTokenExpired = function() { console.log('onTokenExpired'); }
-
-//Token Refresh
-    setInterval(  () =>
-     { Keycloak_client.updateToken(30)
-       .then((refreshed) =>
-        { if (refreshed) { console.log('Token refreshed' + refreshed);
-                           TokenParsed = Keycloak_client.tokenParsed;
-                           Token       = Keycloak_client.token;
-                           RefreshToken = Keycloak_client.refreshToken;
-                         }
-          else
-           { console.log ('Token not refreshed, valid for '
-               + Math.round(Keycloak_client.tokenParsed.exp + Keycloak_client.timeSkew - new Date().getTime() / 1000) + ' seconds');
-           }
-        })
-        .catch(() => { console.log('Failed to refresh token'); });
-     }, 60000);
-  }
 /******************************************************************************************************************************/
  function Show_toast_ok ( message )
   { $('#idToastStatusOKLabel').text(" "+message); $('#idToastStatusOK').toast('show'); }
@@ -82,13 +34,12 @@
     else ContentType = null;
 
     if ( method == "GET" && parametre !== null )
-     { xhr.open(method, $ABLS_API+URL+"?"+parametre, true); }
-    else xhr.open(method, $ABLS_API+URL, true);
+     { xhr.open(method, "/api"+URL+"?"+parametre, true); }
+    else xhr.open(method, "/api"+URL, true);
 
     if (ContentType != null) { xhr.setRequestHeader('Content-type', ContentType ); }
     xhr.timeout = 300000; // durée en millisecondes
     xhr.setRequestHeader("X-ABLS-DOMAIN", localStorage.getItem("domain_uuid") );
-    xhr.setRequestHeader("Authorization", "Bearer " + Token );
 
     xhr.onreadystatechange = function()
      { if ( xhr.readyState != 4 ) return;
@@ -150,24 +101,22 @@
 
        if (Response.default_domain_uuid == null && window.location.pathname !== "/domains") { Redirect("/domains"); return; }
 
+       $('#idAblsApiFooter').text(Response.abls_api_version);
        window.dispatchEvent(new Event('keycloak-ready'));
      }, function () { Show_toast_ko ("Unable to request profil."); } );
 
-         $('#idAblsApiFooter').text($ABLS_API);
-
-
-         if (TokenParsed.name !== null )               $("#idUsername").text(TokenParsed.name);
-    else if (TokenParsed.preferred_username !== null ) $("#idUsername").text(TokenParsed.preferred_username);
-    else if (TokenParsed.given_name !== null )         $("#idUsername").text(TokenParsed.given_name);
-    else if (TokenParsed.email !== null )              $("#idUsername").text(TokenParsed.email);
-    else $("#idUsername").text("Unknown");
-    $("#idHrefAccount").attr("href", TokenParsed.iss+"/account/" );
-
+    fetch('/auth/userinfo')
+      .then(function(r) { return r.json(); })
+      .then(function(userinfo)
+       { var username = userinfo.name || userinfo.preferred_username || userinfo.given_name || userinfo.email || "Unknown";
+         $("#idUsername").text(username);
+         $("#idHrefAccount").attr("href", userinfo.iss+"/account/" );
+       });
     $("body").hide().removeClass("d-none").fadeIn();
   }
 /********************************************* Chargement du synoptique 1 au démarrage ****************************************/
  function Logout ()
-  { Redirect ( $IDP_URL+"/realms/"+$IDP_REALM+"/protocol/openid-connect/logout" ); }
+  { window.location.href = '/auth/callback?logout=' + encodeURIComponent(window.location.origin + '/'); }
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
  function Show_Error ( message )
   { if (message == "Not Connected") { Logout(); }

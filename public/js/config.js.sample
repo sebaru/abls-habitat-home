@@ -1,8 +1,0 @@
-/* config.js — Variables de configuration générées par configure.sh
- * NE PAS commiter ce fichier (config.js) — seul config.js.sample est versionné.
- * Copier ce fichier vers config.js et le remplir, OU utiliser configure.sh. */
-
-var $ABLS_API      = "https://api.example.com";
-var $IDP_REALM     = "abls-habitat";
-var $IDP_URL       = "https://idp.example.com/auth";
-var $IDP_CLIENT_ID = "abls-habitat-home";
