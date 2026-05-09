@@ -129,7 +129,7 @@
        else $("#idTableMessages").empty().DataTable(
         { pageLength : 50,
           fixedHeader: true, paging: false, ordering: true, searching: true,
-          ajax: { url : $ABLS_API+"/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
+          ajax: { url : "/api/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
                   data: function (d) { d.syn_page=Synoptique.page },
                   error: function ( xhr, status, error ) { Show_toast_ko(xhr.statusText); },
                   beforeSend: function (request)
