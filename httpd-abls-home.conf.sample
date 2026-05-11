@@ -49,8 +49,9 @@
   OIDCCookieHTTPOnly On
   OIDCCookieSameSite On
 
-  OIDCScope                    "openid email profile offline_access phone"
-  OIDCSessionInactivityTimeout 3600
+  OIDCScope                    "openid email profile phone"
+  OIDCSessionInactivityTimeout 604500
+  OIDCSessionMaxDuration       31535700
   OIDCPassAccessToken          On
   OIDCRefreshAccessTokenBeforeExpiry 60 logout_on_error
   OIDCPassClaimsAs environment
@@ -78,6 +79,31 @@
     ProxyPass        http://localhost:5562/
     ProxyPassReverse http://localhost:5562/
 
+    Header unset X-Powered-By
+  </Location>
+
+  # ── Proxy media gateway : /camera/* → frontal media / caméras ─────
+  # Variante simple : tout utilisateur HOME authentifié peut lire
+  # les flux publiés sous /camera/ sans token côté JavaScript.
+  #
+  # Recommandation d'architecture:
+  # - le navigateur ne charge que des URLs https://my-abls-home.mydomain/camera/...
+  # - Apache valide la session OIDC puis relaie vers un backend média interne
+  # - le backend média reste privé et non exposé directement à Internet
+  #
+  # Important: pour les flux média, il est préférable de renvoyer 401/403
+  # plutôt qu'une redirection HTML de login en plein chargement HLS/MP4.
+  <Location /camera/>
+    AuthType openid-connect
+    Require valid-user
+
+    # Le frontal média interne peut être un Apache/Nginx dédié, ou un proxy
+    # pointant directement vers les caméras si la volumétrie reste modérée.
+    ProxyPass        http://localhost:8090/ connectiontimeout=5 timeout=300 keepalive=On
+    ProxyPassReverse http://localhost:8090/
+
+    RequestHeader unset Authorization
+    Header set Cache-Control "no-store"
     Header unset X-Powered-By
   </Location>
 
