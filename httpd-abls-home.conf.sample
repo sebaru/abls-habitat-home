@@ -55,6 +55,9 @@
   OIDCPassAccessToken          On
   OIDCRefreshAccessTokenBeforeExpiry 60 logout_on_error
   OIDCPassClaimsAs environment
+  
+  OIDCCacheType memcache
+  OIDCMemCacheServers "localhost:11211"
 
   # ── Assets SPA ───────────────────────────────────────────────
   DocumentRoot /var/www/html/abls-home/public
