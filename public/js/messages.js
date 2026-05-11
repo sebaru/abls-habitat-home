@@ -10,8 +10,7 @@
        ajax: { url : "/api/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
                error: function ( xhr, status, error ) { Show_toast_ko(xhr.statusText); },
                beforeSend: function (request)
-                            { request.setRequestHeader('Authorization', 'Bearer ' + Token);
-                              request.setRequestHeader('X-ABLS-DOMAIN', localStorage.getItem('domain_uuid') );
+                            { request.setRequestHeader('X-ABLS-DOMAIN', localStorage.getItem('domain_uuid') );
                             },
              },
        initComplete: function () { Mqtt_subscribe ( "DLS_HISTO/#" ); },

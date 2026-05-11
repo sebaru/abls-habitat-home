@@ -51,7 +51,8 @@
 
   OIDCScope                    "openid email profile offline_access phone"
   OIDCSessionInactivityTimeout 3600
-
+  OIDCPassAccessToken          On
+  OIDCRefreshAccessTokenBeforeExpiry 60 logout_on_error
   OIDCPassClaimsAs environment
 
   # ── Assets SPA ───────────────────────────────────────────────

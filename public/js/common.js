@@ -1,5 +1,6 @@
 
  var Charts = new Array();
+ var CurrentUserUUID = null;
  var Closing = false;
 
  document.addEventListener('DOMContentLoaded', Load_common, false);
@@ -97,21 +98,17 @@
           $("#idHrefHome").attr("href", Response.home_url );
           $("#idHrefProfil").attr("href", Response.console_url+"/user/me" );
           $("#idHrefVueCliente").attr("href", Response.home_url );
+          $("#idHrefAccount").attr("href", Response.account_url );
         }
 
        if (Response.default_domain_uuid == null && window.location.pathname !== "/domains") { Redirect("/domains"); return; }
 
        $('#idAblsApiFooter').text(Response.abls_api_version);
+       var username = Response.name || Response.preferred_username || Response.given_name || Response.email || "Unknown";
+       $("#idUsername").text(username);
+       CurrentUserUUID = Response.user_uuid;
        window.dispatchEvent(new Event('keycloak-ready'));
      }, function () { Show_toast_ko ("Unable to request profil."); } );
-
-    fetch('/auth/userinfo')
-      .then(function(r) { return r.json(); })
-      .then(function(userinfo)
-       { var username = userinfo.name || userinfo.preferred_username || userinfo.given_name || userinfo.email || "Unknown";
-         $("#idUsername").text(username);
-         $("#idHrefAccount").attr("href", userinfo.iss+"/account/" );
-       });
     $("body").hide().removeClass("d-none").fadeIn();
   }
 /********************************************* Chargement du synoptique 1 au démarrage ****************************************/

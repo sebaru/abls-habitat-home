@@ -123,8 +123,7 @@
                  data: function () { return (JSON.stringify(json_request)); },
                  error: function ( xhr, status, error ) { Show_toast_ko(xhr.statusText); },
                  beforeSend: function (request)
-                              { request.setRequestHeader('Authorization', 'Bearer ' + Token);
-                                request.setRequestHeader('X-ABLS-DOMAIN', localStorage.getItem("domain_uuid") );
+                              { request.setRequestHeader('X-ABLS-DOMAIN', localStorage.getItem("domain_uuid") );
                               }
                },
          /*rowId: "tableau_id",*/
