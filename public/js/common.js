@@ -2,6 +2,7 @@
  var Charts = new Array();
  var CurrentUserUUID = null;
  var Closing = false;
+ var AuthRedirectPending = false;
 
  document.addEventListener('DOMContentLoaded', Load_common, false);
  window.addEventListener("beforeunload", function () { Closing = true; } );
@@ -23,6 +24,24 @@
 /******************************************************************************************************************************/
  function Show_toast_ko ( message )
   { $('#idToastStatusKOLabel').text(" "+message); $('#idToastStatusKO').toast('show'); }
+/******************************************************************************************************************************/
+function Redirect_to_login ()
+ { if (AuthRedirectPending) return;
+   AuthRedirectPending = true;
+
+   var target = window.location.pathname + window.location.search + window.location.hash;
+   $('body').fadeOut("fast", function () { window.location.replace(target); } );
+ }
+/******************************************************************************************************************************/
+function Handle_API_401_unauthorized ( xhr )
+ { if (!xhr || xhr.status != 401) return false;
+   if (AuthRedirectPending) return true;
+
+   console.warn("Session Keycloak invalidee, redirection vers la connexion.");
+   Show_toast_ko("Votre session a expire. Redirection vers la page de connexion...");
+   setTimeout(Redirect_to_login, 500);
+   return true;
+ }
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
  function Send_to_API ( method, URL, parametre, fonction_ok, fonction_nok )
   { var xhr = new XMLHttpRequest;
@@ -51,6 +70,7 @@
 
        if (xhr.status == 200)
         { if (fonction_ok != null) fonction_ok(Response); }        /* Si function exist, on l'appelle, sinon on fait un toast */
+  else if (Handle_API_401_unauthorized(xhr)) return;
        else { if (Response) Show_toast_ko( "Une erreur est survenue: " + Response.api_error );
                        else if (fonction_nok == null) Show_toast_ko( "Une erreur "+ xhr.status + " est survenue: " + xhr.statusText );
               if (fonction_nok != null) fonction_nok(xhr);
@@ -68,6 +88,13 @@
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
  function Load_common ()
   { console.log("debut load_common");
+
+   $.ajaxSetup(
+    { statusCode:
+      { 401: function (xhr)
+        { Handle_API_401_unauthorized(xhr); }
+      }
+    });
 
     Send_to_API ( "GET", "/user/profil", null, function( Response )
      { console.debug(Response);

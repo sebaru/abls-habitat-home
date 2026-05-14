@@ -68,6 +68,7 @@
 
     AuthType openid-connect
     Require valid-user
+    OIDCUnAuthAction auth true
 
     FallbackResource /index.html
   </Directory>
