@@ -38,8 +38,7 @@ function Handle_API_401_unauthorized ( xhr )
    if (AuthRedirectPending) return true;
 
    console.warn("Session Keycloak invalidee, redirection vers la connexion.");
-   Show_toast_ko("Votre session a expire. Redirection vers la page de connexion...");
-   setTimeout(Redirect_to_login, 500);
+   Redirect_to_login();
    return true;
  }
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
