@@ -1,9 +1,9 @@
 
- var Charts = new Array();
- var CurrentUserUUID = null;
+ var Charts  = new Array();
  var Closing = false;
+ var CurrentUserUUID = null;
  var AuthRedirectPending = false;
-
+ 
  document.addEventListener('DOMContentLoaded', Load_common, false);
  window.addEventListener("beforeunload", function () { Closing = true; } );
 
@@ -24,59 +24,56 @@
 /******************************************************************************************************************************/
  function Show_toast_ko ( message )
   { $('#idToastStatusKOLabel').text(" "+message); $('#idToastStatusKO').toast('show'); }
+/********************************************* Chargement du synoptique 1 au démarrage ****************************************/
+ function Logout ()
+  { localStorage.clear();
+    sessionStorage.clear();
+    window.location.replace("/auth/callback?logout=" + encodeURIComponent(window.location.origin + "/home" ) );
+  }
 /******************************************************************************************************************************/
-function Redirect_to_login ()
- { if (AuthRedirectPending) return;
-   AuthRedirectPending = true;
-
-   var target = window.location.pathname + window.location.search + window.location.hash;
-   $('body').fadeOut("fast", function () { window.location.replace(target); } );
- }
-/******************************************************************************************************************************/
-function Handle_API_401_unauthorized ( xhr )
- { if (!xhr || xhr.status != 401) return false;
-   if (AuthRedirectPending) return true;
-
-   console.warn("Session Keycloak invalidee, redirection vers la connexion.");
-   Redirect_to_login();
-   return true;
- }
+ function Redirect_to_login ()
+  { if (AuthRedirectPending) return;
+    AuthRedirectPending = true;
+    $('body').fadeOut("fast", function () { window.location.replace("/home?timestamp=" + Date.now() ); } );
+  }
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
  function Send_to_API ( method, URL, parametre, fonction_ok, fonction_nok )
-  { var xhr = new XMLHttpRequest;
-    $(".ClassLoadingSpinner").show();
-    if (method=="POST" || method=="PUT" || method=="DELETE")
-     { ContentType = 'application/json';
-       if (parametre === null) parametre = new Object();
-     }
-    else if (method=="POSTFILE") { ContentType = 'application/octet-stream'; method = "POST"; }
-    else ContentType = null;
+  { $(".ClassLoadingSpinner").show();
 
-    if ( method == "GET" && parametre !== null )
-     { xhr.open(method, "/api"+URL+"?"+parametre, true); }
-    else xhr.open(method, "/api"+URL, true);
+     var xhr = new XMLHttpRequest;
 
-    if (ContentType != null) { xhr.setRequestHeader('Content-type', ContentType ); }
-    xhr.timeout = 300000; // durée en millisecondes
-    xhr.setRequestHeader("X-ABLS-DOMAIN", localStorage.getItem("domain_uuid") );
+     if (method=="POST" || method=="PUT" || method=="DELETE")
+      { ContentType = 'application/json';
+        if (parametre === null) parametre = new Object();
+      }
+     else if (method=="POSTFILE") { ContentType = 'application/octet-stream'; method = "POST"; }
+     else ContentType = null;
 
-    xhr.onreadystatechange = function()
-     { if ( xhr.readyState != 4 ) return;
-       $(".ClassLoadingSpinner").hide();
+     if ( method == "GET" && parametre !== null )
+      { xhr.open(method, "/api"+URL+"?"+parametre, true); }
+     else xhr.open(method, "/api"+URL, true);
 
-       try { var Response = JSON.parse(xhr.responseText); }
-       catch (error) { Response=undefined; }
+     if (ContentType != null) { xhr.setRequestHeader('Content-type', ContentType ); }
+     xhr.timeout = 300000; // durée en millisecondes
+     xhr.setRequestHeader("X-ABLS-DOMAIN", localStorage.getItem("domain_uuid") );
 
-       if (xhr.status == 200)
-        { if (fonction_ok != null) fonction_ok(Response); }        /* Si function exist, on l'appelle, sinon on fait un toast */
-  else if (Handle_API_401_unauthorized(xhr)) return;
-       else { if (Response) Show_toast_ko( "Une erreur est survenue: " + Response.api_error );
-                       else if (fonction_nok == null) Show_toast_ko( "Une erreur "+ xhr.status + " est survenue: " + xhr.statusText );
-              if (fonction_nok != null) fonction_nok(xhr);
-            }
-     }
-    xhr.ontimeout = function() { console.log("XHR timeout for "+URL); }
-    xhr.send( JSON.stringify(parametre) );
+     xhr.onreadystatechange = function()
+      { if ( xhr.readyState != 4 ) return;
+        $(".ClassLoadingSpinner").hide();
+
+        try { var Response = JSON.parse(xhr.responseText); }
+        catch (error) { Response=undefined; }
+
+        if (xhr.status == 200)
+         { if (fonction_ok != null) fonction_ok(Response); }        /* Si function exist, on l'appelle, sinon on fait un toast */
+        else if (xhr.status == 401) { Redirect_to_login(); return; }
+        else { if (Response) Show_toast_ko( "Une erreur est survenue: " + Response.api_error );
+                else if (fonction_nok == null) Show_toast_ko( "Une erreur "+ xhr.status + " est survenue: " + xhr.statusText );
+                if (fonction_nok != null) fonction_nok(xhr);
+             }
+      }
+     xhr.ontimeout = function() { console.log("XHR timeout for "+URL); }
+     xhr.send( JSON.stringify(parametre) );
   }
 /************************************ Controle de saisie avant envoi **********************************************************/
  function isNum ( id )
@@ -90,9 +87,7 @@ function Handle_API_401_unauthorized ( xhr )
 
    $.ajaxSetup(
     { statusCode:
-      { 401: function (xhr)
-        { Handle_API_401_unauthorized(xhr); }
-      }
+      { 401: function (xhr) { Redirect_to_login(); } }
     });
 
     Send_to_API ( "GET", "/user/profil", null, function( Response )
@@ -132,13 +127,10 @@ function Handle_API_401_unauthorized ( xhr )
        var username = Response.name || Response.preferred_username || Response.given_name || Response.email || "Unknown";
        $("#idUsername").text(username);
        CurrentUserUUID = Response.user_uuid;
+       $("body").hide().removeClass("d-none").fadeIn();
        window.dispatchEvent(new Event('keycloak-ready'));
      }, function () { Show_toast_ko ("Unable to request profil."); } );
-    $("body").hide().removeClass("d-none").fadeIn();
   }
-/********************************************* Chargement du synoptique 1 au démarrage ****************************************/
- function Logout ()
-  { window.location.href = '/auth/callback?logout=' + encodeURIComponent(window.location.origin + '/'); }
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
  function Show_Error ( message )
   { if (message == "Not Connected") { Logout(); }
@@ -164,11 +156,11 @@ function Handle_API_401_unauthorized ( xhr )
  function Bouton_actions_start ( )
   { return("<div class='btn-group btn-block' role='group' aria-label='ButtonGroup'>"); }
 
- function Bouton_actions_add ( color, tooltip, clic_func, key, icone, texte )
+ function Bouton_actions_add ( color, tooltip, clic_func, key, icone, texte, extra_args )
   { if (clic_func !== null)
      { result = "<button class='btn btn-"+color+" btn-sm' "+
                 "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
-                "onclick="+clic_func+"('"+key+"')>"+
+                "onclick="+clic_func+"('"+key+"'"+(extra_args ? ","+extra_args : "")+")>"+
                 (icone!==null ? "<i class='fas fa-"+icone+"'></i> " : "") +
                 (texte!==null ? htmlEncode(texte) : "") +
                 "</button>";
