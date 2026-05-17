@@ -111,7 +111,8 @@
           Send_to_API ( 'GET', "/domain/image", null, function (Response)
                { if (Response.image == null) Response.image = "https://static.abls-habitat.fr/img/syn_maison.png";
                  Changer_img_src ( "idNavImgTopSyn", Response.image, false );
-                 $("#idNavImgTopSyn").on("click", function () { Charger_un_synoptique(null); } );
+                 $("#idNavImgTopSyn").off("click").on("click", Navbar_retour_accueil);
+                 $("#idNavImgTopSyn").closest("a").off("click").on("click", Navbar_retour_accueil);
                }, null);
 
           if (Response.access_level>=6) $("#idHrefConsole").removeClass("d-none").attr("href", Response.console_url );
@@ -151,6 +152,15 @@
        else { window.location.replace(url); }
      }
     else { $('body').fadeOut("fast", function () { window.location.replace(url); } ); }
+  }
+/********************************************* Retour à l'accueil principal **************************************************/
+ function Navbar_retour_accueil ( event )
+  { if (event)
+     { event.preventDefault();
+       event.stopPropagation();
+     }
+    Redirect("/");
+    return(false);
   }
 /********************************************* Barre de boutons ***************************************************************/
  function Bouton_actions_start ( )
@@ -328,10 +338,13 @@
     return ( string.replace(/'/g,'&apos;').replace(/"/g,'&quote;') ).replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 /****************************************** Are you sure **********************************************************************/
- function Show_modal_del ( titre, message, details, fonction )
+ function Show_modal_del ( titre, message, details, fonction, options )
   { $('#idModalDelTitre').html ( htmlEncode(titre) );
     $('#idModalDelMessage').html( htmlEncode(message) );
     $('#idModalDelDetails').html( htmlEncode(details) );
+    $('#idModalDelOptions').empty().addClass("d-none");
+    if (options !== undefined && options !== null && options.html !== undefined)
+     { $('#idModalDelOptions').html(options.html).removeClass("d-none"); }
     $('#idModalDelValider').off("click").on( "click", fonction );
     $('#idModalDel').modal("show");
   }
