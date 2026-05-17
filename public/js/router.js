@@ -11,7 +11,6 @@ var Router = (function () {
     { pattern: /^\/domains$/,     view: 'domains',    script: 'domains'    },
     { pattern: /^\/messages$/,    view: 'messages',   script: 'messages'   },
     { pattern: /^\/historique$/,  view: 'historique', script: 'historique' },
-    { pattern: /^\/test$/,        view: 'index',      script: null         },
     { pattern: /^\/.*$/,          view: 'index',      script: 'index'      },  /* catch-all */
   ];
 
