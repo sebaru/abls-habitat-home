@@ -37,7 +37,7 @@
                                 .append($('<img>').attr("src", localStorage.getItem("static_data_url")+"/img/"+syn.image)
                                                   .attr("alt", syn.libelle)
                                                   .attr("data-bs-toggle", "tooltip")
-                                                  .attr("data-placement", "bottom")
+                                                  .attr("data-bs-placement", "bottom")
                                                   .attr("title", syn.libelle)
                                                   .off("click").on("click", () => { Charger_un_synoptique( syn.page ); } )
                                                   .addClass("wtd-menu") );
