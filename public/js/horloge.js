@@ -139,9 +139,9 @@
                   },
                   { "data": null, "title":"Actions", "orderable": false, "className":"align-middle text-center",
                     "render": function (item)
-                      { boutons = Bouton_actions_start ();
-                        boutons += Bouton_actions_add ( "danger", "Effacer", "Horloge_ticks_del", item.horloge_id+":"+item.id, "trash", null );
-                        boutons += Bouton_actions_end ();
+                      { boutons = Bouton_deroulant_start ();
+                        boutons += Bouton_deroulant_add ( "danger", "Effacer", "Horloge_ticks_del", item.horloge_id+":"+item.id, "trash" );
+                        boutons += Bouton_deroulant_end ();
                         return(boutons);
                       },
                   }

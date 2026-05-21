@@ -19,11 +19,31 @@
                         { valeur : "BY_YEAR_ON_2_YEARS" ,    texte : "Sur 2 ans" },
                       ];
 /******************************************************************************************************************************/
+ function Set_page_context ( context )
+  { if (typeof Router !== 'undefined' && Router.setPageContext)
+     { Router.setPageContext(context); }
+  }
+/******************************************************************************************************************************/
+ var ShellErrorTimer = null;
+/******************************************************************************************************************************/
+ function Hide_shell_error ()
+  { if (ShellErrorTimer) { clearTimeout(ShellErrorTimer); ShellErrorTimer = null; }
+    $('#idShellError').hide().addClass('d-none');
+  }
+/******************************************************************************************************************************/
+ function Show_shell_error ( message )
+  { if (ShellErrorTimer) { clearTimeout(ShellErrorTimer); ShellErrorTimer = null; }
+    $('#idShellErrorText').text(message);
+    var bar = document.getElementById('idShellErrorProgress');
+    if (bar) { bar.style.transition = 'none'; bar.style.width = '100%';
+               bar.offsetWidth; /* force reflow avant animation */
+               bar.style.transition = 'width 5s linear'; bar.style.width = '0%'; }
+    $('#idShellError').removeClass('d-none').show();
+    ShellErrorTimer = setTimeout(Hide_shell_error, 5000);
+  }
+/******************************************************************************************************************************/
  function Show_toast_ok ( message )
   { $('#idToastStatusOKLabel').text(" "+message); $('#idToastStatusOK').toast('show'); }
-/******************************************************************************************************************************/
- function Show_toast_ko ( message )
-  { $('#idToastStatusKOLabel').text(" "+message); $('#idToastStatusKO').toast('show'); }
 /********************************************* Chargement du synoptique 1 au démarrage ****************************************/
  function Logout ()
   { localStorage.clear();
@@ -65,10 +85,10 @@
         catch (error) { Response=undefined; }
 
         if (xhr.status == 200)
-         { if (fonction_ok != null) fonction_ok(Response); }        /* Si function exist, on l'appelle, sinon on fait un toast */
+         { if (fonction_ok != null) fonction_ok(Response); }
         else if (xhr.status == 401) { Redirect_to_login(); return; }
-        else { if (Response) Show_toast_ko( "Une erreur est survenue: " + Response.api_error );
-                else if (fonction_nok == null) Show_toast_ko( "Une erreur "+ xhr.status + " est survenue: " + xhr.statusText );
+        else { if (Response) Show_shell_error( "Une erreur est survenue: " + Response.api_error );
+                else Show_shell_error( "Une erreur "+ xhr.status + " est survenue: " + xhr.statusText );
                 if (fonction_nok != null) fonction_nok(xhr);
              }
       }
@@ -130,15 +150,12 @@
        CurrentUserUUID = Response.user_uuid;
        $("body").hide().removeClass("d-none").fadeIn();
        window.dispatchEvent(new Event('keycloak-ready'));
-     }, function () { Show_toast_ko ("Unable to request profil."); } );
+     }, function () { Show_shell_error ("Unable to request profil."); } );
   }
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
  function Show_Error ( message )
   { if (message == "Not Connected") { Logout(); }
-    else
-     { $('#idModalDetail').html( message );
-       $('#idModalError').modal("show");
-     }
+    else { Show_shell_error(message); }
   }
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
  function Show_Info ( message )
@@ -164,7 +181,7 @@
   }
 /********************************************* Barre de boutons ***************************************************************/
  function Bouton_actions_start ( )
-  { return("<div class='btn-group btn-block' role='group' aria-label='ButtonGroup'>"); }
+  { return("<div class='btn-group w-100' role='group' aria-label='ButtonGroup'>"); }
 
  function Bouton_actions_add ( color, tooltip, clic_func, key, icone, texte, extra_args )
   { if (clic_func !== null)
@@ -188,22 +205,23 @@
   { return ("</div>"); }
 
 /********************************************* Barre de boutons déroulant *****************************************************/
- function Bouton_deroulant_start ( color, texte )
-  { return("<div class='dropdown'>"+
-           "<button type='button' class='btn btn-"+color+" dropdown-toggle' "+
-           "        data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+
-           texte+
-           "</button>"+
-           "<div class='dropdown-menu'> "
-          );
-  }
+    function Bouton_deroulant_start ()
+     { return("<div class='dropdown'>"+
+        "<button type='button' class='btn btn-primary btn-sm dropdown-toggle' "+
+        "        data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+
+        "<i class='fas fa-ellipsis-v'></i> "+
+        "</button>"+
+        "<div class='dropdown-menu'> "
+       );
+     }
 
- function Bouton_deroulant_add ( color, texte, clic_func, key, icone )
-  { result = "<a class='dropdown-item ' href='#' "+
-             (clic_func !== null ? "   onclick="+clic_func+"('"+key+"') " : "")+
+ function Bouton_deroulant_add ( color, texte, clic_func, key, icone, extra_args )
+  { result = "<a class='dropdown-item text-"+(color === "danger" ? "danger" : "white")+(clic_func===null ? " disabled" : "")+"' href='#' "+
+             (clic_func !== null ? "onclick="+clic_func+"('"+key+"'"+(extra_args ? ","+extra_args : "")+"); return(false); "
+                                 : "tabindex='-1' aria-disabled='true' ")+
              ">"+
              (icone!==null ? "<i class='fas fa-"+icone+" text-"+color+"'></i> " : "") +
-             texte +
+             htmlEncode(texte) +
              "</a>";
     return(result);
   }
@@ -218,7 +236,7 @@
  function Bouton ( color, tooltip, clic_func, key, texte )
   { if (clic_func !== null)
      { result = "<button "+
-                "class='btn btn-"+color+" btn-block btn-sm' "+
+                "class='btn btn-"+color+" w-100 btn-sm' "+
                 "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
                 "onclick="+clic_func+"('"+key+"')>"+
                 "<span id='idButtonSpinner_"+clic_func+"_"+key+"' class='spinner-border spinner-border-sm' style='display:none' "+
@@ -228,7 +246,7 @@
      }
    else
     { result =  "<button "+
-                "class='btn btn-"+color+" btn-block btn-sm' "+
+                "class='btn btn-"+color+" w-100 btn-sm' "+
                 "data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"' "+
                 "disabled>"+htmlEncode(texte)+
                 "</button>";
@@ -237,7 +255,7 @@
   }
 
  function Lien ( target, tooltip, texte )
-  { return( "<a href='"+target+"' data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"'>"+texte+"</a>" );
+  { return( "<a href='"+target+"' data-bs-toggle='tooltip' title='"+htmlEncode(tooltip)+"'>"+htmlEncode(texte)+"</a>" );
   }
 
  function Badge ( color, tooltip, texte )
@@ -273,7 +291,7 @@
   { return( Badge ( Access_level_description[level].color, Access_level_description[level].name, level.toString() ) ); }
 /********************************************* Renvoi un Select d'access Level ************************************************/
  function Select ( id, fonction, array, selected )
-  { retour = "<select id='"+id+"' class='custom-select border border-info' ";
+  { retour = "<select id='"+id+"' class='form-select border border-info' ";
     if (fonction) retour += "onchange="+fonction;
     retour+= ">";
     valeur = array.map ( function(item) { return(item.valeur); } );
@@ -285,7 +303,7 @@
   }
 /********************************************* Renvoi un Select d'access Level ************************************************/
  function Select_Access_level ( id, fonction, selected )
-  { retour = "<select id='"+id+"' class='custom-select'"+"onchange="+fonction+">";
+  { retour = "<select id='"+id+"' class='form-select'"+"onchange="+fonction+">";
     for ( i=localStorage.getItem("access_level")-1; i>=0; i-- )
      { retour += "<option value='"+i+"' "+(selected==i ? "selected" : "")+">"+i+" - "+Access_level_description[i].name+"</option>"; }
     retour +="</select>";
