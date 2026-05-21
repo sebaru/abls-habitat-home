@@ -2,8 +2,9 @@
 /******************************************************************************************************************************/
 /* Appelé au chargement de la page                                                                                            */
 /******************************************************************************************************************************/
- function Load_page_message ()
-  { Load_mqtt( null );
+function Load_page_message ()
+  { Synoptique = null;
+    Load_mqtt( null );
     $('#idTableMessages').DataTable(
      { pageLength : 50,
        fixedHeader: true, paging: false, ordering: true, searching: true,
