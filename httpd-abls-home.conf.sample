@@ -44,20 +44,33 @@
 
   OIDCRedirectURI  https://my-abls-home.mydomain/auth/callback
 
-  OIDCCryptoPassphrase <RANDOM_32_CHARS>
+  # Passphrase aléatoire pour chiffrer le cookie de session httpOnly
+  OIDCCryptoPassphrase <RANDOM_32_CHARS_SAME_FOR_ALL_SPA>
 
+  # Cookie httpOnly + SameSite (protège contre XSS et CSRF)
   OIDCCookieHTTPOnly On
   OIDCCookieSameSite On
+  OIDCCookieDomain   mydomain
+
+  OIDCScope          "openid email profile phone"
+  OIDCSessionType client-cookie:persistent
+  OIDCSessionMaxDuration 31536000
+  OIDCSessionInactivityTimeout 86400
+
+  # Expose les claims OIDC comme variables d'environnement Apache
+  # (nécessaire pour injecter OIDC_access_token dans les proxies)
+  OIDCPassClaimsAs environment
+  OIDCRefreshAccessTokenBeforeExpiry 60 logout_on_error
+  OIDCInfoHook remote_user  OIDCCookieSameSite On
+  OIDCCookieDomain   mydomain
 
   OIDCScope                    "openid email profile phone"
-  OIDCSessionInactivityTimeout 604500
-  OIDCSessionMaxDuration       31535700
-  OIDCPassAccessToken          On
-  OIDCRefreshAccessTokenBeforeExpiry 60 logout_on_error
-  OIDCPassClaimsAs environment
-  
-  OIDCCacheType memcache
-  OIDCMemCacheServers "localhost:11211"
+  OIDCSessionType client-cookie:persistent
+  OIDCSessionMaxDuration 31536000
+  OIDCSessionInactivityTimeout 86400
+
+#  OIDCCacheType memcache
+#  OIDCMemCacheServers "localhost:11211"
 
   # ── Assets SPA ───────────────────────────────────────────────
   DocumentRoot /var/www/html/abls-home/public
