@@ -8,11 +8,8 @@ function Load_page_message ()
     $('#idTableMessages').DataTable(
      { pageLength : 50,
        fixedHeader: true, paging: false, ordering: true, searching: true,
-       ajax: { url : "/api/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
-               error: function ( xhr, status, error ) { Show_toast_ko(xhr.statusText); },
-               beforeSend: function (request)
-                            { request.setRequestHeader('X-ABLS-DOMAIN', localStorage.getItem('domain_uuid') );
-                            },
+             ajax: { url : $ABLS_API+"/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
+               error: function ( xhr, status, error ) { Show_toast_ko(xhr.statusText); }
              },
        initComplete: function () { Mqtt_subscribe ( "DLS_HISTO/#" ); },
        rowId: "histo_msg_id",

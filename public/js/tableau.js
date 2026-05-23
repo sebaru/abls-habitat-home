@@ -119,12 +119,9 @@
     $("#"+idTableau).DataTable(
        { destroy: true, pageLength: 15,
          fixedHeader: true, searching: false, lengthChange: false,
-         ajax: { url : "/api/archive/get", type : "POST", dataSrc: "valeurs", contentType: "application/json",
+         ajax: { url : $ABLS_API+"/archive/get", type : "POST", dataSrc: "valeurs", contentType: "application/json",
                  data: function () { return (JSON.stringify(json_request)); },
-                 error: function ( xhr, status, error ) { Show_toast_ko(xhr.statusText); },
-                 beforeSend: function (request)
-                              { request.setRequestHeader('X-ABLS-DOMAIN', localStorage.getItem("domain_uuid") );
-                              }
+                 error: function ( xhr, status, error ) { Show_toast_ko(xhr.statusText); }
                },
          /*rowId: "tableau_id",*/
          columns: colonnes,

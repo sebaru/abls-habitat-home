@@ -129,12 +129,9 @@
        else $("#idTableMessages").empty().DataTable(
         { pageLength : 50,
           fixedHeader: true, paging: false, ordering: true, searching: true,
-          ajax: { url : "/api/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
+          ajax: { url : $ABLS_API+"/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
                   data: function (d) { d.syn_page=Synoptique.page },
-                  error: function ( xhr, status, error ) { Show_toast_ko(xhr.statusText); },
-                  beforeSend: function (request)
-                               { request.setRequestHeader('X-ABLS-DOMAIN', localStorage.getItem('domain_uuid') );
-                               }
+                  error: function ( xhr, status, error ) { Show_toast_ko(xhr.statusText); }
                 },
           rowId: "histo_msg_id",
           createdRow: function( row, item, dataIndex )

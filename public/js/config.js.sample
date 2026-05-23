@@ -1,0 +1,13 @@
+// ============================================================
+// ABLS Habitat Console — Configuration IDP Keycloak
+//
+// Copier ce fichier vers config.js et adapter les valeurs
+// à votre installation Keycloak.
+//
+// Ce fichier doit être chargé avant common.js dans index.html.
+// ============================================================
+
+ var $ABLS_API      = "https://api.exemple.com";
+ var $IDP_REALM     = "abls-habitat";
+ var $IDP_URL       = "https://idp.exemple.com";
+ var $IDP_CLIENT_ID = "abls-habitat-console";

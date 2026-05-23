@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <title>ABLS Console — Configuration manquante</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="https://static.abls-habitat.fr/img/abls.svg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous">
+  </head>
+  <body class="d-flex vh-100 align-items-center justify-content-center">
+    <div class="text-center p-5" style="max-width:640px">
+      <img src="https://static.abls-habitat.fr/img/abls.svg" alt="ABLS" style="width:72px" class="mb-4">
+      <h2 class="mb-3">Configuration manquante</h2>
+      <div class="alert alert-warning text-start" role="alert">
+        <h5 class="alert-heading">&#9888; Le fichier <code>js/config.js</code> est absent ou non configuré.</h5>
+        <hr>
+        <p>Ce fichier est nécessaire pour connecter la console à votre serveur d'authentification Keycloak.</p>
+        <p class="mb-0">Pour l'initialiser, copiez le fichier d'exemple et adaptez les valeurs à votre installation&nbsp;:</p>
+      </div>
+      <pre class="text-start bg-dark text-light p-3 rounded"><code>cp js/config.js.sample js/config.js</code></pre>
+      <pre class="text-start bg-dark text-light p-3 rounded"><code>var $ABLS_API      = "https://api.votre-domaine.com";
+var $IDP_REALM     = "abls-habitat";
+var $IDP_URL       = "https://idp.votre-domaine.com";
+var $IDP_CLIENT_ID = "abls-habitat-console";</code></pre>
+      <a href="/" class="btn btn-primary mt-3">Accéder à l'application</a>
+    </div>
+  </body>
+</html>
