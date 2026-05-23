@@ -1,3 +1,4 @@
 debugbar*
 .env
 test*
+config.js
