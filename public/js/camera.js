@@ -26,19 +26,23 @@
  */
 /*----------------------------------------------------------------------------------------------------------------------------*/
 function Camera_fermer_flux ( camera_id )
- { var video = document.getElementById("idCamera_"+camera_id);
-   if (video)
-    { if (video.hlsInstance)
-       { video.hlsInstance.destroy();
-         video.hlsInstance = null;
+ { var mediaEl = document.getElementById("idCamera_"+camera_id);
+   if (mediaEl)
+    { if (mediaEl.hlsInstance)
+       { mediaEl.hlsInstance.destroy();
+         mediaEl.hlsInstance = null;
        }
-      if (video.mp4Abort)
-       { video.mp4Abort.abort();
-         video.mp4Abort = null;
+      if (mediaEl.mp4Abort)
+       { mediaEl.mp4Abort.abort();
+         mediaEl.mp4Abort = null;
        }
-      video.pause();
-      video.removeAttribute("src");
-      video.load();
+      if (mediaEl.tagName === "VIDEO")
+       { mediaEl.pause();
+         mediaEl.removeAttribute("src");
+         mediaEl.load();
+       }
+      else
+       { mediaEl.removeAttribute("src"); }
     }
  }
 /*----------------------------------------------------------------------------------------------------------------------------*/
@@ -51,6 +55,14 @@ function Arreter_toutes_cameras ( )
 /*----------------------------------------------------------------------------------------------------------------------------*/
 function Camera_is_hls ( url )
  { return url.indexOf(".m3u8") !== -1; }
+/*----------------------------------------------------------------------------------------------------------------------------*/
+function Camera_is_mjpeg ( url )
+ { return (url.indexOf("format=mjpeg") !== -1 ||
+           url.indexOf("format=mjpg") !== -1 ||
+           url.indexOf(".mjpeg") !== -1 ||
+           url.indexOf(".mjpg") !== -1 ||
+           url.indexOf("mjpeg") !== -1);
+ }
 /*----------------------------------------------------------------------------------------------------------------------------*/
 function Camera_attacher_hls ( videoEl, url, camera_id )
  { var destroyed = false;
@@ -162,12 +174,27 @@ function Camera_attacher_mp4 ( videoEl, url, camera_id )
      });
  }
 /*----------------------------------------------------------------------------------------------------------------------------*/
+function Camera_creer_mjpeg ( element_id, camera_name, camera_id, url )
+ { var src = url + (url.indexOf("?") !== -1 ? "&" : "?") + "t=" + Date.now();
+   return $('<img loading="lazy" referrerpolicy="no-referrer" />')
+                                   .attr("id", element_id)
+                                   .attr("title", camera_name)
+                                   .attr("aria-label", camera_name)
+                                   .attr("alt", camera_name)
+                                   .attr("data-camera-id", camera_id)
+                                   .attr("src", src)
+                                   .addClass("wtd-camera");
+ }
+/*----------------------------------------------------------------------------------------------------------------------------*/
 function Creer_camera ( Response )
  { var camera_id  = Response.syn_camera_id;
    var element_id = "idCamera_"+camera_id;
    var url        = Response.url;
+   var is_mjpeg   = Camera_is_mjpeg(url);
 
-   var video = $('<video muted playsinline></video>')
+   var media = is_mjpeg
+              ? Camera_creer_mjpeg(element_id, Response.camera_name, camera_id, url)
+              : $('<video muted playsinline></video>')
                                    .attr("id", element_id)
                                    .attr("title", Response.camera_name)
                                    .attr("aria-label", Response.camera_name)
@@ -177,7 +204,7 @@ function Creer_camera ( Response )
 
    var card = $('<div></div>').addClass("row bg-transparent mb-3")
               .append( $('<div></div>').addClass("col text-center mb-1")
-                       .append( video )
+                       .append( media )
                      )
               .append( $('<div></div>').addClass('w-100') )
               .append( $('<div></div>').addClass("col text-center")
@@ -187,6 +214,7 @@ function Creer_camera ( Response )
    setTimeout(function()
     { var videoEl = document.getElementById(element_id);
       if (!videoEl) return;
+      if (is_mjpeg) return;
       if (Camera_is_hls(url) && typeof Hls !== 'undefined' && Hls.isSupported())
        { Camera_attacher_hls(videoEl, url, camera_id); }
       else if (Camera_is_hls(url) && videoEl.canPlayType('application/vnd.apple.mpegurl'))
