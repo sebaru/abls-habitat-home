@@ -58,7 +58,9 @@ function Camera_attacher_hls ( videoEl, url, camera_id )
     { enableWorker: true,
       liveSyncDurationCount: 5,
       liveMaxLatencyDurationCount: 10,
-    maxBufferHole: 0.5
+      maxBufferHole: 0.5,
+      xhrSetup: function(xhr)
+       { if (Token) xhr.setRequestHeader("Authorization", "Bearer " + Token); }
     });
    videoEl.muted = true;
    hls.loadSource(url);
@@ -98,8 +100,10 @@ function Camera_attacher_mp4 ( videoEl, url, camera_id )
    videoEl.mp4Abort = abortController;
 
    var src = url + (url.indexOf("?") !== -1 ? "&" : "?") + "t=" + Date.now();
+   var fetchOptions = { signal: abortController.signal, headers: {} };
+   if (Token) fetchOptions.headers["Authorization"] = "Bearer " + Token;
 
-  fetch(src, { signal: abortController.signal })
+   fetch(src, fetchOptions)
     .then(function(response)
      { if (!response.ok) throw new Error("HTTP " + response.status);
 

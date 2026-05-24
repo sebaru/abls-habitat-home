@@ -68,9 +68,9 @@
      }, 60000);
   }
 /******************************************************************************************************************************/
- function Set_page_context ( context )
+ function Set_page_context ( lastLabel )
   { if (typeof Router !== 'undefined' && Router.setPageContext)
-     { Router.setPageContext(context); }
+    { Router.setPageContext( lastLabel ); }
   }
 /******************************************************************************************************************************/
  var ShellErrorTimer = null;
