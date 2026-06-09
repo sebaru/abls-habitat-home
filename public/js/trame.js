@@ -224,20 +224,7 @@
                        .cx(0).cy(0).css("cursor", "default");
        visuel.svggroupe.add ( texte );
 
-       if (visuel.rw)
-        { visuel.svggroupe.css("cursor", "pointer");
-          visuel.svggroupe.on("click", function ()
-           { $('#idModalCadranValeur').val("");
-             $('#idModalCadranValider').off("click").on("click", function ()
-              { var nouvelle_valeur = parseFloat($('#idModalCadranValeur').val());
-                if (isNaN(nouvelle_valeur)) return;
-                Send_to_API ( 'POST', "/syn/set_cadran", { tech_id: visuel.tech_id, acronyme: visuel.acronyme, valeur: nouvelle_valeur },
-                              function () { Show_toast_ok("Valeur mise à jour."); },
-                              function () { Show_toast_ko("Erreur lors de la mise à jour de la valeur."); } );
-              });
-             $('#idModalCadran').modal("show");
-           });
-        }
+       if (visuel.rw) { visuel.svggroupe.css("cursor", "pointer"); }
 
        visuel.Set_state = function ( etat )
         { if (etat.valeur === undefined) texte.text("Unknown");
@@ -254,12 +241,15 @@
                      " decimal = " + visuel.nb_decimal );
        visuel.svggroupe = this.group().attr("id", "wtd-visu-"+visuel.tech_id+"-"+visuel.acronyme);
        this.add(visuel.svggroupe);
-       var rectangle = Trame.rect ( 120, 40 ).attr("rx", 10).fill("gray" ).stroke({ width:2, color:"lightgreen" }).cx(0).cy(0);
+       var border_color_horaire = visuel.rw ? "blue" : "lightgreen";
+       var rectangle = Trame.rect ( 120, 40 ).attr("rx", 10).fill("gray" ).stroke({ width:2, color:border_color_horaire }).cx(0).cy(0);
        visuel.svggroupe.add ( rectangle );
 
        var texte = this.text( "- cadran -" ).font ( { family: "arial", size:16, anchor: "middle", variant:"italic" } )
                        .cx(0).cy(0).css("cursor", "default");
        visuel.svggroupe.add ( texte );
+       if (visuel.rw) { visuel.svggroupe.css("cursor", "pointer"); }
+
        visuel.Set_state = function ( etat )
                            { var temps     = etat.valeur/10.0; /* Valeur est en dixième de seconde */
                              var heures    = Math.floor(temps / 3600);

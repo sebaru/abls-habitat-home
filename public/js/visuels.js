@@ -9,6 +9,8 @@
     if (visuel.disable) { console.log(" Clic sur visuel disabled: " + visuel.libelle ); return; }
 
     console.log(" Clic sur visuel " + visuel.libelle + " mode="+visuel.mode );
+    if (visuel.controle == "complexe" && visuel.forme == "cadran" && visuel.rw)
+     { Clic_sur_cadran(visuel); return; }
     var target = { tech_id : visuel.tech_id, acronyme: visuel.acronyme };
     Send_to_API ( 'POST', "/syn/clic", target, function () { }, null);
   }
@@ -49,6 +51,7 @@
                       .attr("src", localStorage.getItem("static_data_url")+"/img/"+Response.forme+"_"+Response.mode+"_"+Response.color+"."+Response.extension)
                      );
      }
+/*-------------------------------------------------- Visuel Cadran -----------------------------------------------------------*/
     else if (Response.controle=="complexe" && Response.forme=="cadran")
      { if (Response.mode=="texte")
         { contenu.append($('<h4></h4>').addClass("text-center text-white").text( "Loading" )
@@ -78,7 +81,7 @@
                              .addClass("wtd-vignette wtd-img-superpose-haut-droite").slideUp() );
 
     contenu.click( function (event) { Clic_sur_visuel ( event, Response ); } );
-    contenu.on("contextmenu", function(event) { event.preventDefault(); })       /* Bloque le menu contextuel natif Android */
+    contenu.on("contextmenu", function(event) { event.preventDefault(); })         /* Bloque le menu contextuel natif Android */
     contenu.on("touchstart mousedown", function(event)                           /* Démarre un timer lors du début de l'appui */
              { event.preventDefault();
                var touch = event.touches ? event.touches[0] : event;
