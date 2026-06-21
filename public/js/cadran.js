@@ -9,46 +9,47 @@
                 " nb_decimal " + visuel.nb_decimal +" minimim="+visuel.minimum+" maximum="+visuel.maximum +
                 " ntb="+visuel.seuil_ntb+" nb="+visuel.seuil_nb+" nh="+visuel.seuil_nh+" nth="+visuel.seuil_nth);
 
+    var minimum = parseFloat(visuel.minimum);
+    var maximum = parseFloat(visuel.maximum);
+    var valeur_capee = visuel.valeur;                                           /* Calcul de la valeur capée pour l'affichage */
+         if (visuel.valeur<minimum) valeur_capee=minimum;
+    else if (visuel.valeur>maximum) valeur_capee=maximum;
+
     if (visuel.mode=="texte")
      {
      }
     else if (visuel.mode.startsWith("progress"))
-     { var minimum = parseFloat(visuel.minimum);
-       var maximum = parseFloat(visuel.maximum);
-       if (visuel.valeur<minimum) visuel.valeur=minimum;
-       if (visuel.valeur>maximum) visuel.valeur=maximum;
-       var position = 100*(visuel.valeur-minimum)/(maximum-minimum);
+     { var position = 100*(valeur_capee-minimum)/(maximum-minimum);
        var idvisuelbarre = "wtd-visuel-barre-"+visuel.tech_id+"-"+visuel.acronyme;
 
        $('#'+idvisuelbarre).css("width", position+"%").attr("aria-valuenow", position);
 
        $('#'+idvisuelbarre).removeClass("bg-danger bg-success bg-warning");
        if (visuel.mode == "progress-rov" )
-        {      if ( visuel.valeur<=visuel.seuil_ntb ) { $('#'+idvisuelbarre).addClass("bg-danger"); }
-          else if ( visuel.valeur<=visuel.seuil_nb )  { $('#'+idvisuelbarre).addClass("bg-warning"); }
+        {      if ( valeur_capee<=visuel.seuil_ntb ) { $('#'+idvisuelbarre).addClass("bg-danger"); }
+          else if ( valeur_capee<=visuel.seuil_nb )  { $('#'+idvisuelbarre).addClass("bg-warning"); }
           else { $('#'+idvisuelbarre).addClass("bg-success"); }
         }
        else if (visuel.mode == "progress-vor" )
-        {      if ( visuel.valeur>=visuel.seuil_nth ) { $('#'+idvisuelbarre).addClass("bg-danger"); }
-          else if ( visuel.valeur>=visuel.seuil_nh )  { $('#'+idvisuelbarre).addClass("bg-warning"); }
+        {      if ( valeur_capee>=visuel.seuil_nth ) { $('#'+idvisuelbarre).addClass("bg-danger"); }
+          else if ( valeur_capee>=visuel.seuil_nh )  { $('#'+idvisuelbarre).addClass("bg-warning"); }
           else { $('#'+idvisuelbarre).addClass("bg-success"); }
         }
        else if (visuel.mode == "progress-rovor" )
-        {      if ( visuel.valeur<=visuel.seuil_ntb ) { $('#'+idvisuelbarre).addClass("bg-danger"); }
-          else if ( visuel.valeur<=visuel.seuil_nb )  { $('#'+idvisuelbarre).addClass("bg-warning"); }
-          else if ( visuel.valeur<=visuel.seuil_nh )  { $('#'+idvisuelbarre).addClass("bg-success"); }
-          else if ( visuel.valeur<=visuel.seuil_nth ) { $('#'+idvisuelbarre).addClass("bg-warning"); }
+        {      if ( valeur_capee<=visuel.seuil_ntb ) { $('#'+idvisuelbarre).addClass("bg-danger"); }
+          else if ( valeur_capee<=visuel.seuil_nb )  { $('#'+idvisuelbarre).addClass("bg-warning"); }
+          else if ( valeur_capee<=visuel.seuil_nh )  { $('#'+idvisuelbarre).addClass("bg-success"); }
+          else if ( valeur_capee<=visuel.seuil_nth ) { $('#'+idvisuelbarre).addClass("bg-warning"); }
           else { $('#'+idvisuelbarre).addClass("bg-danger"); }
         }
      }
 
     var idvisueltexte = "wtd-visuel-texte-"+visuel.tech_id+"-"+visuel.acronyme;
-    texte = visuel.valeur.toFixed(visuel.nb_decimal);                                             /* Affiche la valeur non capée */
+    texte = visuel.valeur.toFixed(visuel.nb_decimal);                                          /* Affiche la valeur non capée */
     $('#'+idvisueltexte).text( texte + " " + visuel.unite );
   }
-/*----------------------------------------------------------------------------------------------------------------------------*/
 /******************************************************************************************************************************/
-/* Clic_sur_cadran: Ouvrir le modal de saisie de valeur / durée selon le type de cadran                                      */
+/* Clic_sur_cadran: Ouvrir le modal de saisie de valeur / durée selon le type de cadran                                       */
 /******************************************************************************************************************************/
  function Clic_sur_cadran ( visuel )
   { if (!visuel.rw) return;
