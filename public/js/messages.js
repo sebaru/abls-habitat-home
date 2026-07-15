@@ -14,8 +14,7 @@ function Load_page_message ()
        initComplete: function () { Mqtt_subscribe ( "DLS_HISTO/#" ); },
        rowId: "histo_msg_id",
        createdRow: function( row, item, dataIndex )
-           { $(row).css("cursor", "pointer");
-             $(row).off("click").on("click", function() { Msg_acquitter ( row.id ); } );
+           {
            },
           columns:
            [ { "data": null, "title":"-", "className": "align-middle text-center d-none d-sm-table-cell bg-dark",
@@ -47,7 +46,7 @@ function Load_page_message ()
                    if (item.typologie==4) return("-"); /* veille */
                    if (item.typologie==5) return("-"); /* attente */
                    if (item.nom_ack!=null) return( "<p class="+MSG_TYPOLOGIE[item.typologie].classe+"> "+htmlEncode(item.nom_ack)+"</p>");
-                   return(""); /* by default */
+                   return("<button class='btn btn-outline-light btn-sm' onclick='Msg_acquitter("+item.histo_msg_id+"); return false;'>Acquit</button>");
                  }
              },
            ],
