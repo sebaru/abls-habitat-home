@@ -18,7 +18,8 @@ var Router = (function () {
   var currentPageScript = null;
 
   function matchRoute(path) {
-    var cleanPath = (path.length > 1) ? path.replace(/\/$/, '') : path;
+    var pathname = path.split('?')[0].split('#')[0];
+    var cleanPath = (pathname.length > 1) ? pathname.replace(/\/$/, '') : pathname;
     for (var i = 0; i < ROUTES.length; i++) {
       if (ROUTES[i].pattern.test(cleanPath)) return ROUTES[i];
     }
