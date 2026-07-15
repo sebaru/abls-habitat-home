@@ -1,7 +1,9 @@
  function HISTO_Rechercher ( )
-  { Send_to_API ( 'GET', "/histo/search", "search="+$("#idHistoSearchQuery").val(), function (Response)
+  { var limit = parseInt ( $("#idHistoSearchLimit").val(), 10 );
+    if (isNaN(limit)) limit = 200;
+    Send_to_API ( 'GET', "/histo/search", "search="+$("#idHistoSearchQuery").val()+"&limit="+limit, function (Response)
      { $('#idTableHISTOS').DataTable(
-        { pageLength : 200, destroy: true,
+        { pageLength : limit, destroy: true,
           fixedHeader: true, paging: false, ordering: true, searching: false,
           data: Response.histo_msgs,
           rowId: "histo_msgs_id",
@@ -50,6 +52,7 @@
   { Synoptique = null;
     $('#idHistoSearch').off("click").on( "click", () => { HISTO_Rechercher(); });
     $('#idHistoSearchQuery').off("enter").on( "enter", () => { HISTO_Rechercher(); });
+    $('#idHistoSearchLimit').val(200);
     var target = Get_url_parameter( "search" );
     if (target!==null) { $("#idHistoSearchQuery").val(target); HISTO_Rechercher(); }
   }
