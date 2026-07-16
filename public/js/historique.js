@@ -1,7 +1,7 @@
  function HISTO_Rechercher ( )
-  { var limit = parseInt ( $("#idHistoSearchLimit").val(), 10 );
-    if (isNaN(limit)) limit = 200;
-    Send_to_API ( 'GET', "/histo/search", "search="+$("#idHistoSearchQuery").val()+"&limit="+limit, function (Response)
+  { var periodMonths = parseInt ( $("#idHistoSearchPeriod").val(), 10 );
+    if (periodMonths!==1 && periodMonths!==3 && periodMonths!==6 && periodMonths!==12) periodMonths = 3;
+    Send_to_API ( 'GET', "/histo/search", "search="+$("#idHistoSearchQuery").val()+"&period_months="+periodMonths, function (Response)
      { $('#idTableHISTOS').DataTable(
         { pageLength : limit, destroy: true,
           fixedHeader: true, paging: false, ordering: true, searching: false,
@@ -52,7 +52,8 @@
   { Synoptique = null;
     $('#idHistoSearch').off("click").on( "click", () => { HISTO_Rechercher(); });
     $('#idHistoSearchQuery').off("enter").on( "enter", () => { HISTO_Rechercher(); });
-    $('#idHistoSearchLimit').val(200);
+    $('#idHistoSearchPeriod').off("change").on( "change", () => { HISTO_Rechercher(); });
+    $('#idHistoSearchPeriod').val(3);
     var target = Get_url_parameter( "search" );
     if (target!==null) { $("#idHistoSearchQuery").val(target); HISTO_Rechercher(); }
   }
