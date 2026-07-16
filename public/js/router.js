@@ -96,13 +96,14 @@ var Router = (function () {
 
     /* Gère les boutons précédent/suivant du navigateur */
     window.addEventListener('popstate', function (e) {
-      navigate(e.state ? e.state.path : window.location.pathname);
+      navigate(e.state ? e.state.path : window.location.pathname + window.location.search + window.location.hash);
     });
 
     /* Première navigation : déclenché par common.js après la connexion Keycloak */
     window.addEventListener('keycloak-ready', function () {
-      history.replaceState({ path: window.location.pathname }, '', window.location.pathname);
-      navigate(window.location.pathname);
+      var currentPath = window.location.pathname + window.location.search + window.location.hash;
+      history.replaceState({ path: currentPath }, '', currentPath);
+      navigate(currentPath);
     });
   }
 

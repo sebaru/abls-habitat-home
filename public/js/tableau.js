@@ -236,7 +236,7 @@ function Tableau_on_export_click ( idTableau, tableau, tableau_map )
                  data: function () { return (JSON.stringify(json_request)); },
                  error: function ( xhr, status, error )
                   { Tableau_export_button_set_enabled(idTableau, false);
-                    Show_toast_ko(xhr.statusText);
+                    Show_shell_error(xhr.statusText);
                   }
                },
          /*rowId: "tableau_id",*/

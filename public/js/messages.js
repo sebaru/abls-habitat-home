@@ -9,7 +9,7 @@ function Load_page_message ()
      { pageLength : 50,
        fixedHeader: true, paging: false, ordering: true, searching: true,
              ajax: { url : $ABLS_API+"/histo/alive", type : "GET", dataSrc: "histo_msgs", contentType: "application/json",
-               error: function ( xhr, status, error ) { Show_toast_ko(xhr.statusText); }
+               error: function ( xhr, status, error ) { Show_shell_error(xhr.statusText); }
              },
        initComplete: function () { Mqtt_subscribe ( "DLS_HISTO/#" ); },
        rowId: "histo_msg_id",

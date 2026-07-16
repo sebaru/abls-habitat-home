@@ -76,7 +76,7 @@
           Send_to_API ( 'POST', "/syn/set_cadran",
                         { tech_id: visuel.tech_id, acronyme: visuel.acronyme, valeur: nouvelle_valeur },
                         function () { Show_toast_ok("Durée mise à jour."); },
-                        function () { Show_toast_ko("Erreur lors de la mise à jour de la durée."); } );
+                        function () { Show_shell_error("Erreur lors de la mise à jour de la durée."); } );
         });
        $('#idModalCadranHoraire').modal("show");
      }
@@ -95,7 +95,7 @@
           Send_to_API ( 'POST', "/syn/set_cadran",
                         { tech_id: visuel.tech_id, acronyme: visuel.acronyme, valeur: nouvelle_valeur },
                         function () { Show_toast_ok("Valeur mise à jour."); },
-                        function () { Show_toast_ko("Erreur lors de la mise à jour de la valeur."); } );
+                        function () { Show_shell_error("Erreur lors de la mise à jour de la valeur."); } );
         });
        $('#idModalCadranTexte').modal("show");
      }
