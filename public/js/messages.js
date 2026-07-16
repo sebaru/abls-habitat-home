@@ -34,7 +34,7 @@ function Load_page_message ()
              },
              { "data": null, "title":"Objet", "className": "align-middle text-center bg-dark",
                "render": function (item)
-                 { return( Lien ( "/historique?search="+item.dls_shortname, "Voir l'historique", item.dls_shortname ) ); }
+                 { return( Lien ( "/historique?search="+encodeURIComponent('"'+item.dls_shortname+'"'), "Voir l'historique", item.dls_shortname ) ); }
              },
              { "data": null, "title":"Message", "className": "align-middle text-center bg-dark",
                "render": function (item)
