@@ -135,7 +135,11 @@
                 },
           rowId: "histo_msg_id",
           createdRow: function( row, item, dataIndex )
-              {
+              { if (item.typologie==0 || item.typologie==4 || item.typologie==5 || item.nom_ack!=null) return;
+                $(row).css( "cursor", "pointer" ).on( "click", function (event)
+                 { if ($(event.target).closest("a, button").length) return; /* Liens et bouton Acquit gérés à part */
+                   Msg_acquitter ( item.histo_msg_id );
+                 });
               },
              columns:
               [ { "data": null, "title":"-", "className": "align-middle text-center bg-dark d-none d-sm-table-cell ",
