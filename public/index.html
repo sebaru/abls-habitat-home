@@ -194,6 +194,20 @@
         .nav-link:hover { color: white !important;
                           background-color: #48BBC0;
                         }
+        .voice-controls { position: fixed;
+                          right: max(1rem, env(safe-area-inset-right));
+                          bottom: max(2.5rem, calc(env(safe-area-inset-bottom) + 1rem));
+                          z-index: 1031;
+                          display: flex;
+                          align-items: center;
+                          gap: .5rem;
+                        }
+        .voice-controls [hidden] { display: none !important; }
+        .voice-button { width: 52px; height: 52px; border-radius: 50%; }
+        .voice-button.voice-recording { background-color: #b02a37; border-color: #b02a37; }
+        .voice-button:focus-visible, .voice-cancel:focus-visible { outline: 3px solid white; outline-offset: 3px; }
+        .voice-elapsed { color: white; background: #212529; padding: .3rem .5rem; border-radius: 4px;
+                         font-variant-numeric: tabular-nums; }
       </style>
 
     </head>
@@ -386,6 +400,17 @@
 <!-- Zone de contenu de la page (remplacée par le routeur à chaque navigation) -->
 <div id="app"></div>
 
+<div class="voice-controls">
+  <span id="idVoiceStatus" class="visually-hidden" role="status" aria-live="polite"></span>
+  <span id="idVoiceElapsed" class="voice-elapsed" aria-hidden="true" hidden>0:00</span>
+  <button id="idVoiceCancel" type="button" class="btn btn-dark voice-button voice-cancel" aria-label="Annuler l’enregistrement" title="Annuler l’enregistrement" hidden>
+    <i class="fas fa-times" aria-hidden="true"></i>
+  </button>
+  <button id="idVoiceButton" type="button" class="btn btn-primary voice-button" aria-label="Démarrer une commande vocale" title="Démarrer une commande vocale">
+    <i id="idVoiceIcon" class="fas fa-microphone" aria-hidden="true"></i>
+  </button>
+</div>
+
 <!-- Footer -->
 <footer class="d-none d-md-block page-footer mt-2 fixed-bottom bg-transparent">
   <div class="row justifiy-content-end mt-2 fixed-bottom p-1">
@@ -411,6 +436,7 @@
     <script type="text/javascript" src="/js/horloge.js"></script>
     <script type="text/javascript" src="/js/common_home.js"></script>
     <script type="text/javascript" src="/js/common.js"></script>
+    <script type="text/javascript" src="/js/voice.js"></script>
     <script type="text/javascript" src="/js/trame.js"></script>
     <script src="https://kit.fontawesome.com/1ca1f7ba56.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.6.16/hls.min.js" integrity="sha512-zAODd1LM+/58SazX5fct5psehCijY60y5rG0BYIzxTXot7ovEo2FhfWTV0mp4oqIef2xriyg4zlrPlmFTDcPXg==" crossorigin="anonymous"></script>

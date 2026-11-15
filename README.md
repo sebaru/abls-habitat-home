@@ -43,3 +43,10 @@ Edit /var/www/html/abls-home/public/js/config.json and change:
 
 * the `api_url` to your own API Instance
 * the `idp_url` to your own OpenID IDP Instance
+
+## Voice commands
+
+Voice recording requires a secure context (HTTPS or localhost), microphone permission,
+and a browser supporting MediaRecorder with WebM/Opus or MP4 audio. HOME sends the
+recorded audio as a binary POST to `/voice` with the recorded Content-Type. The API
+must provide this endpoint and support both formats.
