@@ -194,6 +194,24 @@
         .nav-link:hover { color: white !important;
                           background-color: #48BBC0;
                         }
+        .navbar .wtd-user-avatar
+          { width: 40px;
+            height: 40px;
+            padding: 0;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.15);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            text-decoration: none;
+          }
+        .navbar .wtd-user-avatar:focus-visible
+          { outline: 2px solid #fff;
+            outline-offset: 2px;
+          }
         .voice-controls { position: fixed;
                           right: max(1rem, env(safe-area-inset-right));
                           bottom: max(2.5rem, calc(env(safe-area-inset-bottom) + 1rem));
@@ -371,9 +389,10 @@
     <ul class="navbar-nav ms-auto">
       <a id="idAlertConnexionLost" class="nav-link wtd-cligno" style="display: none"><i class="fa-solid fa-link-slash fa-xl text-warning"></i></a>
       <li class="nav-item dropdown">
-        <a class="nav-link rounded align-items-middle dropdown-toggle" href="#" id="navbarUSER" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-user text-white"></i> <span id="idUsername">-</span>
-        </a>
+        <button type="button" class="nav-link wtd-user-avatar" id="navbarUSER"
+                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Compte utilisateur">
+          <span id="idUsername">-</span>
+        </button>
 
         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUSER">
           <a class="dropdown-item" href="/domains"> <i class="fas fa-globe text-primary"></i> Mes domaines</a>

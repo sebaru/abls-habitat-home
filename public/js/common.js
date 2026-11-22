@@ -141,6 +141,40 @@
     input = $('#'+id);
     return ( FormatTag.test(input.val()) )
   }
+/******************************************************************************************************************************/
+ function Set_user_menu ()
+  { function cleanName ( value )
+     { return typeof value === "string" ? value.trim() : ""; }
+    function firstLetter ( value )
+     { return Array.from(value.normalize("NFC"))[0] || ""; }
+
+    var givenName = cleanName(TokenParsed.given_name);
+    var familyName = cleanName(TokenParsed.family_name);
+    var name = cleanName(TokenParsed.name);
+    var fallback = name || cleanName(TokenParsed.preferred_username) || cleanName(TokenParsed.email);
+    var fullName = givenName && familyName ? givenName + " " + familyName : name || givenName || familyName || fallback;
+    var initials = firstLetter(givenName) + firstLetter(familyName);
+
+    if (!initials && fallback)
+     { var parts = fallback.split(/\s+/);
+       initials = firstLetter(parts[0]);
+       if (parts.length > 1) initials += firstLetter(parts[parts.length - 1]);
+     }
+    if (!fullName) fullName = "Utilisateur inconnu";
+
+    document.getElementById("idUsername").textContent = initials.toLocaleUpperCase() || "?";
+    var userMenu = document.getElementById("navbarUSER");
+    userMenu.setAttribute("aria-label", fullName);
+    var tooltip = bootstrap.Tooltip.getInstance(userMenu);
+    if (!tooltip)
+     { tooltip = new bootstrap.Tooltip(userMenu,
+        { placement: "bottom", trigger: "hover focus",
+          title: function () { return userMenu.getAttribute("aria-label"); }
+        });
+       userMenu.addEventListener("show.bs.dropdown", function () { tooltip.hide(); });
+     }
+    tooltip.setContent({ ".tooltip-inner": fullName });
+  }
 /********************************************* Chargement du synoptique 1 au démrrage *****************************************/
  function Load_common ()
   { console.log("debut load_common");
@@ -187,11 +221,7 @@
        if (Response.default_domain_uuid == null && window.location.pathname !== "/domains") { Redirect("/domains"); return; }
 
        $('#idAblsApiFooter').text(Response.abls_api_version);
-            if (TokenParsed.name !== null )               $("#idUsername").text(TokenParsed.name);
-       else if (TokenParsed.preferred_username !== null ) $("#idUsername").text(TokenParsed.preferred_username);
-       else if (TokenParsed.given_name !== null )         $("#idUsername").text(TokenParsed.given_name);
-       else if (TokenParsed.email !== null )              $("#idUsername").text(TokenParsed.email);
-       else $("#idUsername").text("Unknown");
+       Set_user_menu();
        $("body").hide().removeClass("d-none").fadeIn();
        window.dispatchEvent(new Event('keycloak-ready'));
      }, function () { Show_shell_error ("Unable to request profil."); } );
