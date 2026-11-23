@@ -2,7 +2,7 @@
   { 'use strict';
 
     var maxDuration = 30000;
-    var requestTimeout = 30000;
+    var requestTimeout = 120000;
     var state = 'idle';
     var stream = null;
     var recorder = null;
@@ -79,9 +79,9 @@
            }
           if (localStorage.getItem('domain_uuid') !== recordedDomain)
            throw new Error('Le domaine a changé. La commande vocale n’a pas été envoyée.');
-          var response = await fetch($ABLS_API + '/voice',
+          var response = await fetch($ABLS_API + '/voice/assistant',
            { method: 'POST', headers: { 'Content-Type': blob.type, 'Authorization': 'Bearer ' + Keycloak_client.token,
-                                       'X-ABLS-DOMAIN': recordedDomain },
+                                        'X-ABLS-DOMAIN': recordedDomain },
              body: blob, signal: controller.signal });
           var result = null;
           try { result = await response.json(); }

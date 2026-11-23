@@ -63,7 +63,7 @@ test('records and sends WebM with the current token and domain', async () =>
    await flush();
    assert.equal(app.stopped(), 1);
    assert.equal(app.requests.length, 1);
-   assert.equal(app.requests[0].url, 'https://api.example/voice');
+   assert.equal(app.requests[0].url, 'https://api.example/voice/assistant');
    assert.equal(app.requests[0].request.headers['Content-Type'], 'audio/webm;codecs=opus');
    assert.equal(app.requests[0].request.headers.Authorization, 'Bearer new-token');
    assert.equal(app.requests[0].request.headers['X-ABLS-DOMAIN'], 'domain-1');

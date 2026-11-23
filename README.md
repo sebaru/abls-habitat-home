@@ -50,5 +50,7 @@ Edit /var/www/html/abls-home/public/js/config.json and change:
 
 Voice recording requires a secure context (HTTPS or localhost), microphone permission,
 and a browser supporting MediaRecorder with WebM/Opus or MP4 audio. HOME sends the
-recorded audio as a binary POST to `/voice` with the recorded Content-Type. The API
-must provide this endpoint and support both formats.
+recorded audio as a binary POST to `/voice/assistant` with the recorded Content-Type.
+The API transcribes it with Whisper, asks Ollama for the user's intent, and returns
+`text`, `intent`, `target`, `handled` and `message`; HOME displays `message`.
+Intents are recognized but not executed yet. The request times out after 120 seconds.
