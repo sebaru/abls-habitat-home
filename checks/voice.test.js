@@ -43,7 +43,7 @@ function setup (options = {})
                      setTimeout: callback => { timeouts.push(callback); return timeouts.length; }, clearTimeout () {},
                      localStorage: { getItem: () => domain }, $ABLS_API: 'https://api.example',
                      Keycloak_client: { authenticated: true, token: 'new-token', updateToken: options.updateToken || (async () => true) },
-                     fetch: async (url, request) => { requests.push({ url, request }); return { ok: true, json: async () => ({}) }; },
+                     fetch: async (url, request) => { requests.push({ url, request }); return { ok: true, json: async () => (options.response || {}) }; },
                      Show_shell_error: message => errors.push(message), Show_toast_ok: message => messages.push(message) };
    vm.runInNewContext(source, context);
    documentListeners.DOMContentLoaded();
@@ -66,12 +66,22 @@ test('records and sends WebM with the current token and domain', async () =>
    await flush();
    assert.equal(app.stopped(), 1);
    assert.equal(app.requests.length, 1);
-   assert.equal(app.requests[0].url, 'https://api.example/voice/assistant');
+   assert.equal(app.requests[0].url, 'https://api.example/assistant/voice');
    assert.equal(app.requests[0].request.headers['Content-Type'], 'audio/webm;codecs=opus');
    assert.equal(app.requests[0].request.headers.Authorization, 'Bearer new-token');
    assert.equal(app.requests[0].request.headers['X-ABLS-DOMAIN'], 'domain-1');
    assert.equal(await app.requests[0].request.body.text(), 'audio');
    assert.equal(app.messages.length, 1);
+ });
+
+test('shows the transcribed text returned by the API', async () =>
+ { const app = setup({ response: { text: 'Allume la lumière du salon.' } });
+   press(app);
+   await flush();
+   app.setClock(1000);
+   release(app);
+   await flush();
+   assert.equal(app.messages[0], 'Commande comprise : « Allume la lumière du salon. »');
  });
 
 test('falls back to MP4 and rejects recordings that are too short', async () =>

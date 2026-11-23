@@ -89,7 +89,7 @@
            }
           if (localStorage.getItem('domain_uuid') !== recordedDomain)
            throw new Error('Le domaine a changé. La commande vocale n’a pas été envoyée.');
-          var response = await fetch($ABLS_API + '/voice/assistant',
+          var response = await fetch($ABLS_API + '/assistant/voice',
            { method: 'POST', headers: { 'Content-Type': blob.type, 'Authorization': 'Bearer ' + Keycloak_client.token,
                                         'X-ABLS-DOMAIN': recordedDomain },
              body: blob, signal: controller.signal });
@@ -102,7 +102,8 @@
              throw new Error(result && typeof result.api_error === 'string' ? result.api_error :
                              'La commande vocale a échoué (HTTP ' + response.status + ').');
            }
-          var message = result && typeof result.message === 'string' ? result.message : 'Commande vocale envoyée.';
+          var message = result && typeof result.text === 'string' && result.text !== '' ?
+                        'Commande comprise : « ' + result.text + ' »' : 'Commande vocale envoyée.';
           setState('idle', message);
           Show_toast_ok(message);
         }
