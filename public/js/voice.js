@@ -13,12 +13,15 @@
     var limitTimer = null;
     var generation = 0;
     var domain = null;
+    var activePointer = null;
+    var activeKey = null;
     var button, icon, cancelButton, elapsed, status;
 
     function setState ( next, message )
      { state = next;
-       var labels = { idle: 'Démarrer une commande vocale', requesting: 'Autorisation du microphone en attente',
-                      recording: 'Arrêter et envoyer la commande vocale', sending: 'Envoi de la commande vocale',
+       var labels = { idle: 'Maintenir pour enregistrer une commande vocale',
+                      requesting: 'Autorisation du microphone en attente',
+                      recording: 'Relâcher pour envoyer la commande vocale', sending: 'Envoi de la commande vocale',
                       unavailable: 'Commande vocale indisponible' };
        button.setAttribute('aria-label', labels[next]);
        button.title = labels[next];
@@ -43,12 +46,19 @@
     function cancel ()
      { if (state !== 'requesting' && state !== 'recording') return;
        generation++;
+       activePointer = null;
+       activeKey = null;
        if (recorder && recorder.state !== 'inactive') recorder.stop();
        recorder = null;
        chunks = [];
        releaseStream();
        setState('idle', 'Enregistrement annulé.');
       if (document.activeElement === cancelButton) button.focus();
+     }
+
+    function finishHold ()
+     { if (state === 'requesting') cancel();
+       else if (state === 'recording') stop();
      }
 
     function errorMessage ( error )
@@ -203,9 +213,33 @@
            !window.MediaRecorder || !MediaRecorder.isTypeSupported || !window.AbortController)
         { setState('unavailable', 'La commande vocale nécessite un navigateur compatible et une connexion sécurisée.'); }
        else setState('idle', '');
-       button.addEventListener('click', function ()
-        { if (state === 'unavailable') { Show_shell_error(status.textContent); return; }
-          if (state === 'idle') start(); else if (state === 'recording') stop();
+       button.addEventListener('pointerdown', function (event)
+        { if (state !== 'idle' || activePointer !== null || event.button !== 0) return;
+          activePointer = event.pointerId;
+          if (typeof button.setPointerCapture === 'function') button.setPointerCapture(event.pointerId);
+          start();
+        });
+       document.addEventListener('pointerup', function (event)
+        { if (activePointer !== event.pointerId) return;
+          activePointer = null;
+          finishHold();
+        });
+       document.addEventListener('pointercancel', function (event)
+        { if (activePointer !== event.pointerId) return;
+          activePointer = null;
+          finishHold();
+        });
+       button.addEventListener('keydown', function (event)
+        { if ((event.key !== ' ' && event.key !== 'Enter') || event.repeat ||
+              state !== 'idle' || activeKey !== null || activePointer !== null) return;
+          event.preventDefault();
+          activeKey = event.key;
+          start();
+        });
+       document.addEventListener('keyup', function (event)
+        { if (activeKey !== event.key) return;
+          activeKey = null;
+          finishHold();
         });
        cancelButton.addEventListener('click', cancel);
        document.addEventListener('keydown', function (event)

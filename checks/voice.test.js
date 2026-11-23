@@ -53,13 +53,16 @@ function setup (options = {})
  }
 
 const flush = () => new Promise(resolve => setImmediate(resolve));
+const press = app => app.elements.idVoiceButton.listeners.pointerdown(
+ { pointerId: 1, button: 0, preventDefault () {} });
+const release = app => app.documentListeners.pointerup({ pointerId: 1 });
 
 test('records and sends WebM with the current token and domain', async () =>
  { const app = setup();
-   app.elements.idVoiceButton.listeners.click();
+   press(app);
    await flush();
    app.setClock(1000);
-   app.elements.idVoiceButton.listeners.click();
+   release(app);
    await flush();
    assert.equal(app.stopped(), 1);
    assert.equal(app.requests.length, 1);
@@ -73,11 +76,11 @@ test('records and sends WebM with the current token and domain', async () =>
 
 test('falls back to MP4 and rejects recordings that are too short', async () =>
  { const app = setup({ types: ['audio/mp4'] });
-   app.elements.idVoiceButton.listeners.click();
+   press(app);
    await flush();
    assert.equal(app.recorder().mimeType, 'audio/mp4');
    app.setClock(200);
-   app.elements.idVoiceButton.listeners.click();
+   release(app);
    await flush();
    assert.equal(app.requests.length, 0);
    assert.match(app.errors[0], /trop court/);
@@ -85,10 +88,10 @@ test('falls back to MP4 and rejects recordings that are too short', async () =>
 
 test('uploads MP4 when WebM is unavailable', async () =>
  { const app = setup({ types: ['audio/mp4'] });
-   app.elements.idVoiceButton.listeners.click();
+   press(app);
    await flush();
    app.setClock(1000);
-   app.elements.idVoiceButton.listeners.click();
+   release(app);
    await flush();
    assert.equal(app.requests[0].request.headers['Content-Type'], 'audio/mp4');
  });
@@ -96,10 +99,10 @@ test('uploads MP4 when WebM is unavailable', async () =>
 test('times out a pending token refresh without sending later', async () =>
  { let refresh;
    const app = setup({ updateToken: () => new Promise(resolve => { refresh = resolve; }) });
-   app.elements.idVoiceButton.listeners.click();
+   press(app);
    await flush();
    app.setClock(1000);
-   app.elements.idVoiceButton.listeners.click();
+   release(app);
    await flush();
    app.timeouts[1]();
    await flush();
@@ -112,7 +115,7 @@ test('times out a pending token refresh without sending later', async () =>
 test('cancelled permission request releases a late microphone stream', async () =>
  { let resolveStream;
    const app = setup({ getUserMedia: () => new Promise(resolve => { resolveStream = resolve; }) });
-   app.elements.idVoiceButton.listeners.click();
+   press(app);
    app.elements.idVoiceCancel.listeners.click();
    resolveStream(app.stream);
    await flush();
@@ -123,7 +126,7 @@ test('cancelled permission request releases a late microphone stream', async () 
 
 test('backgrounding cancels recording without uploading', async () =>
  { const app = setup();
-   app.elements.idVoiceButton.listeners.click();
+   press(app);
    await flush();
    app.document.hidden = true;
    app.documentListeners.visibilitychange();
@@ -134,11 +137,11 @@ test('backgrounding cancels recording without uploading', async () =>
 
 test('does not send a command after changing domain', async () =>
  { const app = setup();
-   app.elements.idVoiceButton.listeners.click();
+   press(app);
    await flush();
    app.setDomain('domain-2');
    app.setClock(1000);
-   app.elements.idVoiceButton.listeners.click();
+   release(app);
    await flush();
    assert.equal(app.requests.length, 0);
    assert.match(app.errors[0], /domaine a changé/);
@@ -147,14 +150,14 @@ test('does not send a command after changing domain', async () =>
 test('reports incompatible formats without opening the microphone', () =>
  { let opened = false;
    const app = setup({ types: [], getUserMedia: () => { opened = true; } });
-   app.elements.idVoiceButton.listeners.click();
+   press(app);
    assert.equal(opened, false);
    assert.match(app.errors[0], /formats audio/);
  });
 
 test('does not send a recording stopped unexpectedly', async () =>
  { const app = setup();
-   app.elements.idVoiceButton.listeners.click();
+   press(app);
    await flush();
    app.setClock(1000);
    app.recorder().stop();
@@ -162,4 +165,27 @@ test('does not send a recording stopped unexpectedly', async () =>
    assert.equal(app.requests.length, 0);
    assert.equal(app.stopped(), 1);
    assert.match(app.errors[0], /interrompu/);
+ });
+
+test('releasing while microphone permission is pending cancels the recording', async () =>
+ { let resolveStream;
+   const app = setup({ getUserMedia: () => new Promise(resolve => { resolveStream = resolve; }) });
+   press(app);
+   release(app);
+   resolveStream(app.stream);
+   await flush();
+   assert.equal(app.stopped(), 1);
+   assert.equal(app.recorder(), undefined);
+   assert.equal(app.requests.length, 0);
+ });
+
+test('keyboard recording starts on keydown and stops on keyup', async () =>
+ { const app = setup();
+   app.elements.idVoiceButton.listeners.keydown(
+    { key: ' ', repeat: false, preventDefault () {} });
+   await flush();
+   app.setClock(1000);
+   app.documentListeners.keyup({ key: ' ' });
+   await flush();
+   assert.equal(app.requests.length, 1);
  });
