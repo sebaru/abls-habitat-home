@@ -164,10 +164,11 @@
 
     document.getElementById("idUsername").textContent = initials.toLocaleUpperCase() || "?";
     var userMenu = document.getElementById("navbarUSER");
+    var tooltipTarget = document.getElementById("navbarUSERTooltip");
     userMenu.setAttribute("aria-label", fullName);
-    var tooltip = bootstrap.Tooltip.getInstance(userMenu);
+    var tooltip = bootstrap.Tooltip.getInstance(tooltipTarget);
     if (!tooltip)
-     { tooltip = new bootstrap.Tooltip(userMenu,
+     { tooltip = new bootstrap.Tooltip(tooltipTarget,
         { placement: "bottom", trigger: "hover focus",
           title: function () { return userMenu.getAttribute("aria-label"); }
         });

@@ -389,10 +389,12 @@
     <ul class="navbar-nav ms-auto">
       <a id="idAlertConnexionLost" class="nav-link wtd-cligno" style="display: none"><i class="fa-solid fa-link-slash fa-xl text-warning"></i></a>
       <li class="nav-item dropdown">
-        <button type="button" class="nav-link wtd-user-avatar" id="navbarUSER"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Compte utilisateur">
-          <span id="idUsername">-</span>
-        </button>
+        <span id="navbarUSERTooltip" class="d-inline-block">
+          <button type="button" class="nav-link wtd-user-avatar" id="navbarUSER"
+                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Compte utilisateur">
+            <span id="idUsername">-</span>
+          </button>
+        </span>
 
         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUSER">
           <a class="dropdown-item" href="/domains"> <i class="fas fa-globe text-primary"></i> Mes domaines</a>

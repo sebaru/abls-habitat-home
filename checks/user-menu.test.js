@@ -8,6 +8,7 @@ const source = fs.readFileSync(path.join(__dirname, '../public/js/common.js'), '
 
 function setup ()
  { const initials = { textContent: '' };
+   const tooltipTarget = { tooltip: null };
    const menu = {
      attributes: {}, listeners: {},
      setAttribute (name, value) { this.attributes[name] = value; },
@@ -21,12 +22,15 @@ function setup ()
       hide () { this.hides++; }
     }
    const context = {
-     document: { addEventListener () {}, getElementById: id => id === 'idUsername' ? initials : menu },
+     document: {
+       addEventListener () {},
+       getElementById: id => id === 'idUsername' ? initials : id === 'navbarUSER' ? menu : tooltipTarget
+     },
      window: { addEventListener () {} },
      bootstrap: { Tooltip }
    };
    vm.runInNewContext(source, context);
-   return { initials, menu, render (claims) { context.TokenParsed = claims; context.Set_user_menu(); } };
+   return { initials, menu, tooltipTarget, render (claims) { context.TokenParsed = claims; context.Set_user_menu(); } };
  }
 
 test('shows initials and the full name for accented and compound names', () =>
@@ -34,7 +38,7 @@ test('shows initials and the full name for accented and compound names', () =>
    app.render({ given_name: '  E\u0301lodie-Marie ', family_name: ' du Pont  ' });
    assert.equal(app.initials.textContent, 'ÉD');
    assert.equal(app.menu.getAttribute('aria-label'), 'E\u0301lodie-Marie du Pont');
-   assert.equal(app.menu.tooltip.content, 'E\u0301lodie-Marie du Pont');
+   assert.equal(app.tooltipTarget.tooltip.content, 'E\u0301lodie-Marie du Pont');
  });
 
 test('handles missing name claims and falls back to the available identity', () =>
@@ -51,16 +55,17 @@ test('handles missing name claims and falls back to the available identity', () 
     { app.render(claims);
       assert.equal(app.initials.textContent, initials);
       assert.equal(app.menu.getAttribute('aria-label'), name);
-      assert.equal(app.menu.tooltip.content, name);
+      assert.equal(app.tooltipTarget.tooltip.content, name);
     }
  });
 
 test('refreshes the existing tooltip and hides it when the dropdown opens', () =>
  { const app = setup();
    app.render({ given_name: 'Anne', family_name: 'Martin' });
-   const tooltip = app.menu.tooltip;
+   const tooltip = app.tooltipTarget.tooltip;
    app.render({ given_name: 'Luc', family_name: 'Durand' });
-   assert.equal(app.menu.tooltip, tooltip);
+   assert.equal(app.tooltipTarget.tooltip, tooltip);
+   assert.equal(app.menu.tooltip, undefined);
    assert.equal(tooltip.options.title(), 'Luc Durand');
    assert.equal(tooltip.content, 'Luc Durand');
    assert.equal(app.menu.listeners['show.bs.dropdown'].length, 1);
