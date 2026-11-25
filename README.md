@@ -18,6 +18,8 @@ Have a good day, Sebaru.
 This component is the frontend of my project.
 
 The user menu in the top navigation shows the user's initials; hovering or focusing it reveals their full name.
+Keep the dropdown button and menu as siblings inside the tooltip container so Bootstrap's
+delegated click and keyboard handlers can find the menu. No custom click handler is needed.
 
 ## Installation with apache Httpd
 

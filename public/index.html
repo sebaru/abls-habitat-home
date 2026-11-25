@@ -389,24 +389,24 @@
     <ul class="navbar-nav ms-auto">
       <a id="idAlertConnexionLost" class="nav-link wtd-cligno" style="display: none"><i class="fa-solid fa-link-slash fa-xl text-warning"></i></a>
       <li class="nav-item dropdown">
-        <span id="navbarUSERTooltip" class="d-inline-block">
+        <div id="navbarUSERTooltip" class="d-inline-block">
           <button type="button" class="nav-link wtd-user-avatar" id="navbarUSER"
                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Compte utilisateur">
             <span id="idUsername">-</span>
           </button>
-        </span>
 
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUSER">
-          <a class="dropdown-item" href="/domains"> <i class="fas fa-globe text-primary"></i> Mes domaines</a>
-          <a class="dropdown-item" href="/messages"> <i class="fas fa-book text-primary"></i> Fil de l'eau</a>
-          <a class="dropdown-item" href="/historique"> <i class="fas fa-history text-primary"></i> Historique</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" id="idHrefProfil"><i class="fas fa-user text-info"></i> Mon Profil</a>
-          <a class="dropdown-item" href="#" id="idHrefAccount"><i class="fas fa-user text-info"></i> Mon Compte</a>
-          <a class="dropdown-item" href="#" onclick="Inviter_open()"><i class="fas fa-user-friends text-info"></i> Inviter</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item d-none" href="#" id="idHrefConsole"><i class="fas fa-server text-primary"></i> Console</a>
-          <a class="dropdown-item" href="#" onclick="Logout()"><i class="fas fa-sign-out-alt text-danger"></i> <span>Sortir</span> </a>
+          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUSER">
+            <a class="dropdown-item" href="/domains"> <i class="fas fa-globe text-primary"></i> Mes domaines</a>
+            <a class="dropdown-item" href="/messages"> <i class="fas fa-book text-primary"></i> Fil de l'eau</a>
+            <a class="dropdown-item" href="/historique"> <i class="fas fa-history text-primary"></i> Historique</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" id="idHrefProfil"><i class="fas fa-user text-info"></i> Mon Profil</a>
+            <a class="dropdown-item" href="#" id="idHrefAccount"><i class="fas fa-user text-info"></i> Mon Compte</a>
+            <a class="dropdown-item" href="#" onclick="Inviter_open()"><i class="fas fa-user-friends text-info"></i> Inviter</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item d-none" href="#" id="idHrefConsole"><i class="fas fa-server text-primary"></i> Console</a>
+            <a class="dropdown-item" href="#" onclick="Logout()"><i class="fas fa-sign-out-alt text-danger"></i> <span>Sortir</span> </a>
+          </div>
         </div>
       </li>
     </ul>

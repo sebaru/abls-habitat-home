@@ -172,7 +172,8 @@
         { placement: "bottom", trigger: "hover focus",
           title: function () { return userMenu.getAttribute("aria-label"); }
         });
-       userMenu.addEventListener("show.bs.dropdown", function () { tooltip.hide(); });
+       userMenu.addEventListener("show.bs.dropdown", function () { tooltip.hide(); tooltip.disable(); });
+       userMenu.addEventListener("hidden.bs.dropdown", function () { tooltip.enable(); });
      }
     tooltip.setContent({ ".tooltip-inner": fullName });
   }

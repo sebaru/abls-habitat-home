@@ -6,6 +6,11 @@ const vm = require('node:vm');
 
 const source = fs.readFileSync(path.join(__dirname, '../public/js/common.js'), 'utf8');
 
+test('keeps the dropdown menu next to its toggle inside the tooltip container', () =>
+ { const html = fs.readFileSync(path.join(__dirname, '../public/index.html'), 'utf8');
+   assert.match(html, /<div\b[^>]*id="navbarUSERTooltip"[^>]*>\s*<button\b[^>]*id="navbarUSER"[^>]*data-bs-toggle="dropdown"[^>]*>[\s\S]*?<\/button>\s*<div\b[^>]*class="dropdown-menu dropdown-menu-end"[^>]*aria-labelledby="navbarUSER"/);
+ });
+
 function setup ()
  { const initials = { textContent: '' };
    const tooltipTarget = { tooltip: null };
@@ -16,10 +21,12 @@ function setup ()
      addEventListener (name, callback) { (this.listeners[name] ||= []).push(callback); }
    };
    class Tooltip
-    { constructor (element, options) { element.tooltip = this; this.options = options; this.hides = 0; }
+    { constructor (element, options) { element.tooltip = this; this.options = options; this.hides = 0; this.enabled = true; }
       static getInstance (element) { return element.tooltip || null; }
       setContent (content) { this.content = content['.tooltip-inner']; }
       hide () { this.hides++; }
+      disable () { this.enabled = false; }
+      enable () { this.enabled = true; }
     }
    const context = {
      document: {
@@ -59,7 +66,7 @@ test('handles missing name claims and falls back to the available identity', () 
     }
  });
 
-test('refreshes the existing tooltip and hides it when the dropdown opens', () =>
+test('refreshes the existing tooltip and disables it while the dropdown is open', () =>
  { const app = setup();
    app.render({ given_name: 'Anne', family_name: 'Martin' });
    const tooltip = app.tooltipTarget.tooltip;
@@ -71,4 +78,7 @@ test('refreshes the existing tooltip and hides it when the dropdown opens', () =
    assert.equal(app.menu.listeners['show.bs.dropdown'].length, 1);
    app.menu.listeners['show.bs.dropdown'][0]();
    assert.equal(tooltip.hides, 1);
+   assert.equal(tooltip.enabled, false);
+   app.menu.listeners['hidden.bs.dropdown'][0]();
+   assert.equal(tooltip.enabled, true);
  });
